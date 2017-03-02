@@ -1,5 +1,10 @@
 
 
+import java.util.ArrayList;
+
+import javax.swing.plaf.ButtonUI;
+
+import lejos.nxt.Button;
 import lejos.robotics.RangeFinder;
 import rp.robotics.mapping.GridMap;
 import rp.robotics.navigation.GridPilot;
@@ -16,12 +21,17 @@ public class Controller implements StoppableRunnable{
 	private final RangeFinder m_ranger;
 	private final MovableRobot m_robot;
 	
+	private Path path;
+	private String currentJob;
+	
+	
 	public Controller(MovableRobot _robot, GridMap _map, GridPose _start,
 			RangeFinder _ranger) {
 		m_map = _map;
 		m_pilot = new GridPilot(_robot.getPilot(), _map, _start);
 		m_ranger = _ranger;
 		m_robot = _robot;
+		
 	}
 	
 	private boolean enoughSpace() {
@@ -71,43 +81,66 @@ public class Controller implements StoppableRunnable{
 		}
 	}
 
-	@Override
-	public void run() {
+	public void followPath(Path path){
 		
-		GridPose goalPose = new GridPose(3 * (m_pilot.getGridPose().getX()+1), 4 * (m_pilot.getGridPose().getY()+1), m_pilot.getGridPose().getHeading());
-		//int gx = goalPose.getX();
-		//int gy = goalPose.getY();
-		
-		int gx = 5;
-		int gy = 5;
-		while(m_running){
-			
+		while(!path.reachedEnd()){
 			
 			int x = m_pilot.getGridPose().getX();
 			int y = m_pilot.getGridPose().getY();
 			
+			Coordinate next = path.getNextCoord();
 			
-			while(x < gx){
+			int gx = next.getX();
+			int gy = next.getY();
+			
+			if(x < gx){
 				
 				m_pilot.setGridPose(new GridPose(x, y, Heading.PLUS_X));
 				m_pilot.moveForward();
-				x = m_pilot.getGridPose().getX();
-			}
-			while(y < gy){
+			}else if(x>gx){
+				m_pilot.setGridPose(new GridPose(x, y, Heading.MINUS_X));
+				m_pilot.moveForward();
+				
+			}else if(y<gy){
 				
 				m_pilot.setGridPose(new GridPose(x, y, Heading.PLUS_Y));
 				m_pilot.moveForward();
-				y = m_pilot.getGridPose().getY();
-			}			
-			
+			}else if(y>gy){
+				
+				m_pilot.setGridPose(new GridPose(x, y, Heading.MINUS_Y));
+				m_pilot.moveForward();
+			}
 		}
+	}
+	
+	public void setPath(Path _newPath){
 		
+		this.path = _newPath;
+	}
+	
+	@Override
+	public void run() {		
+		
+		ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+		
+		list.add(new Coordinate(1, 0));
+		list.add(new Coordinate(2,0));
+		list.add(new Coordinate(2, 1));
+		list.add(new Coordinate(2, 2));
+		
+		path = new Path(list);
+		
+		while(m_running){
+			
+			followPath(path);
+						
+		}
 	}
 
 	@Override
 	public void stop() {
 		m_running = false;
 		
+		
 	}
-
 }
