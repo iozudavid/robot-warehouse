@@ -13,10 +13,15 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import warehouse.Coordinate;
+
 public class Reading {
-	static BufferedReader inputFile = null;
+	static BufferedReader inputFile1 = null;
+	static BufferedReader inputFile2 = null;
+
 	static PrintWriter outputFile = null;
-	static String line = "";
+	static String line1 = "";
+	static String line2 = "";
 	static int n = 0;
 	static String[] nickAr = new String[100];
 	static String[] passAr = new String[100];
@@ -29,7 +34,7 @@ public class Reading {
 	private static ConcurrentMap<String, Item> queueTable = new ConcurrentHashMap<String, Item>();
 
 	// Returns null if the nickname is not in the table:
-	public static void readStuff() {
+	public static void readItem() {
 		try {
 			list.sort(new Comparator<Object>() {
 
@@ -39,19 +44,26 @@ public class Reading {
 				}
 				
 			});
-			inputFile = new BufferedReader(new FileReader("Whatev.txt"));
+			inputFile1 = new BufferedReader(new FileReader("tems.txt"));
+			inputFile2 = new BufferedReader(new FileReader("locations.txt"));
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
 		}
 		try {
-			while ((line = inputFile.readLine()) != null) {
-				String[] splitStr = line.split("\\s+");
-				Item item = new Item(Float.valueOf(splitStr[1]), Float.valueOf(splitStr[2]),
-						Integer.valueOf(splitStr[3]), Integer.valueOf(splitStr[4]));
-				queueTable.put(splitStr[0], item);
+			while ((line1 = inputFile1.readLine()) != null) {
+				line2 = inputFile2.readLine();
+				String[] splitItem = line1.split(",");
+				String[] splitLoc = line2.split(",");
+				Coordinate cord = new Coordinate(Integer.valueOf(splitLoc[0]), Integer.valueOf(splitLoc[1]));
+				
+				Item item = new Item(Float.valueOf(splitItem[1]), Float.valueOf(splitItem[2]),
+						cord);
+				queueTable.put(splitItem[0], item);
 			}
-			inputFile.close();
+			inputFile1.close();
+			inputFile2.close();
+
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -61,17 +73,17 @@ public class Reading {
 
 	public static void readJobs() {
 		try {
-			inputFile = new BufferedReader(new FileReader("Whatev.txt"));
+			inputFile1 = new BufferedReader(new FileReader("jobs.txt"));
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
 		}
 		try {
-			while ((line = inputFile.readLine()) != null) {
-				String[] splitStr = line.split("\\s+");
+			while ((line1 = inputFile1.readLine()) != null) {
+				String[] splitStr = line1.split(",");
 				int n = splitStr.length - 1;
 				Job job = new Job(splitStr[0]);
-				for (int i = 0; i < n; i++) {
+				for (int i = 1; i < n; i++) {
 					job.addItem(queueTable.get(splitStr[i]));
 					i++;
 				}
@@ -80,7 +92,7 @@ public class Reading {
 				// queueTable.put(splitStr[0], item);
 				list.add(job);
 			}
-			inputFile.close();
+			inputFile1.close();
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);

@@ -3,19 +3,20 @@ package warehouse.jobInput;
 import java.io.*;
 import java.net.*;
 
+import warehouse.Coordinate;
+
 // Gets messages from other clients via the server (by the
 // ServerSender thread).
 
 public class Item {
 
 	private Float w, v;
-	private int x, y;
+	private Coordinate xy;
 
-	Item(Float w, Float v, int x, int y) {
+	Item(Float w, Float v, Coordinate xy) {
 		this.w = w;
 		this.v = v;
-		this.x = x;
-		this.y = y;
+		this.xy = xy;
 	}
 
 	public float rWeight() {
@@ -26,12 +27,8 @@ public class Item {
 		return v;
 	}
 
-	public float rX() {
-		return x;
-	}
-
-	public float rY() {
-		return y;
+	public Coordinate rCoordinate(){
+		return xy;
 	}
 
 }
