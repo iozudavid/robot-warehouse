@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -36,14 +37,19 @@ import rp.robotics.simulation.SimulatedRobots;
 import rp.robotics.testing.TestMaps;
 import rp.robotics.visualisation.GridMapVisualisation;
 import rp.robotics.visualisation.MapVisualisationComponent;
+import warehouse.Controller;
+import warehouse.Coordinate;
+import warehouse.Path;
 
 public class Window {
 
 	private JFrame frame;
 	public static ArrayList<ArrayList<JLabel>> robotData = new ArrayList<ArrayList<JLabel>>();
-	ArrayList<DispRobotController> robotControllers = new ArrayList<DispRobotController>();
+	protected static ArrayList<DispRobotController> robotControllers = new ArrayList<DispRobotController>();
+	ArrayList<Coordinate> coordinatePath;
+	
 	protected static String[] robotName = {"A", "B", "C", "D"};
-	public static int numOfRobots = 3;
+	public static int numOfRobots = 1;
 
 	/**
 	 * Launch the application.
@@ -94,7 +100,7 @@ public class Window {
 		for (int i = 0 ; i < numOfRobots ; i++){
 			robotData.add(new ArrayList<JLabel>());
 			robotData.get(i).add(new JLabel("Robot: " + robotName[i]));
-			robotData.get(i).add(new JLabel("Position: " + numOfRobots));
+			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("job: "));      //this needs to take the information for the jobs and the reward
 			robotData.get(i).add(new JLabel("Reward: "));
 		}
@@ -162,22 +168,25 @@ public class Window {
 
 		for (int i = 0; i < numOfRobots; i++) {
 			// Starting point on the grid
+			Coordinate startCoordinate = new Coordinate(4, 4);
 			
-			GridPose gridStart = new GridPose(3 * i, 0, Heading.PLUS_Y);
+			//start pose of the robot this can be changed on the above line
+			GridPose gridStart = new GridPose(startCoordinate.getX(), startCoordinate.getY(), Heading.PLUS_Y);
 
+			//creates the mobileRobot
 			MobileRobotWrapper<MovableRobot> wrapper = sim.addRobot(
 					SimulatedRobots.makeConfiguration(false, true),
 					map.toPose(gridStart));
 
+			//adds a ranger not really needed in this situation
 			RangeFinder ranger = sim.getRanger(wrapper);
 
-			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, gridStart, ranger));
-
-			robotControllers.get(i).addCoordinate(4, 1);
-			robotControllers.get(i).addCoordinate(4, 1);
-			robotControllers.get(i).addCoordinate(4, 1);
+			//adds the robot to an array to be accessed later
+			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, gridStart, ranger, startCoordinate));
 			
+			//starts the robot and the label updater
 			new Thread(robotControllers.get(i)).start();
+			new Thread(new LableUpdater()).start();;
 		}
 
 		GridMapVisualisation viz = new GridMapVisualisation(map, sim.getMap(), 250f);
