@@ -5,14 +5,12 @@ import java.util.List;
 
 public class SortJobs {
 
-	public List<Job> sortByReward(List<Job> jobs) {
+	public static List<Job> sortByReward(List<Job> jobs) {
 		jobs.sort(new Comparator<Job>() {
 
 			@Override
 			public int compare(Job j1, Job j2) {
 				float val1 = 0;
-				int num1 = 0;
-				int num2 = 0;
 				float val2 = 0;
 
 				// calculate the total reward for a job

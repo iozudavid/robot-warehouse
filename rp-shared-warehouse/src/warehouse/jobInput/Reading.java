@@ -36,15 +36,7 @@ public class Reading {
 	// Returns null if the nickname is not in the table:
 	public static void readItem() {
 		try {
-			list.sort(new Comparator<Object>() {
-
-				@Override
-				public int compare(Object o1, Object o2) {
-					return 0;
-				}
-				
-			});
-			inputFile1 = new BufferedReader(new FileReader("tems.txt"));
+			inputFile1 = new BufferedReader(new FileReader("items.txt"));
 			inputFile2 = new BufferedReader(new FileReader("locations.txt"));
 		} catch (IOException e) {
 			System.out.println(e);
@@ -99,7 +91,7 @@ public class Reading {
 		}
 	}
 
-	public List<Job> returnJobs() {
+	public static List<Job> returnJobs() {
 		return list;
 	}
 }
