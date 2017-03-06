@@ -11,22 +11,29 @@ public class JobAssignment {
 	private int item;
 	// temporary
 	Coordinate dropOff = new Coordinate(3, 3);
+	private Coordinate coord;
 
 	public JobAssignment() {
+		
 		jobs = SortJobs.sortByReward(Reading.returnJobs());
 		job = 0;
 		item = 0;
 	}
 
-	public Coordinate getCoordinate() {
+	public Coordinate nextCoordinate() {
 		if (dropOff()) {
 			item = 0;
 			job++;
 			// after picking all of the items we go to the dropOff point,
 			// normally the closest one, but here is a temporary one
-			return dropOff;
+			coord = dropOff;
 		}
-		return jobs.get(job).returnItems().get(item++).rCoordinate();
+		coord = jobs.get(job).returnItems().get(item++).rCoordinate();
+		return coord;
+	}
+	
+	public Coordinate getCoordinate(){
+		return coord;
 	}
 
 	public boolean startPosition() {
@@ -42,7 +49,7 @@ public class JobAssignment {
 	// read from files
 	// Reading.readItem();
 	// Reading.readJobs();
-	// jobs = SortJobs.sortByReward(Reading.returnJobs());
+	//then create a JobAssignment object
 
 	// send coordinates
 	// wait
