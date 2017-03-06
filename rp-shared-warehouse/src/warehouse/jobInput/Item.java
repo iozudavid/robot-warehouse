@@ -12,12 +12,15 @@ public class Item {
 
 	private Float w, v;
 	private Coordinate xy;
+	private String name;
 
-	Item(Float w, Float v, Coordinate xy) {
+	Item(Float w, Float v, Coordinate xy, String name) {
 		this.w = w;
 		this.v = v;
 		this.xy = xy;
+		this.name = name;
 	}
+	
 
 	public float rWeight() {
 		return w;
@@ -29,6 +32,9 @@ public class Item {
 
 	public Coordinate rCoordinate(){
 		return xy;
+	}
+	public String rName(){
+		return name;
 	}
 
 }

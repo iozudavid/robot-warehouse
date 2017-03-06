@@ -4,11 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.MessageDigest;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -31,7 +27,7 @@ public class Reading {
 
 	// static Hashtable<String, Item> Items = new Hashtable<String, Item>();
 
-	private static ConcurrentMap<String, Item> queueTable = new ConcurrentHashMap<String, Item>();
+	 static ConcurrentMap<String, Item> queueTable = new ConcurrentHashMap<String, Item>();
 
 	// Returns null if the nickname is not in the table:
 	public static void readItem() {
@@ -50,7 +46,7 @@ public class Reading {
 				Coordinate cord = new Coordinate(Integer.valueOf(splitLoc[0]), Integer.valueOf(splitLoc[1]));
 				
 				Item item = new Item(Float.valueOf(splitItem[1]), Float.valueOf(splitItem[2]),
-						cord);
+						cord,splitItem[0]);
 				queueTable.put(splitItem[0], item);
 			}
 			inputFile1.close();
@@ -76,7 +72,7 @@ public class Reading {
 				int n = splitStr.length - 1;
 				Job job = new Job(splitStr[0]);
 				for (int i = 1; i < n; i++) {
-					job.addItem(queueTable.get(splitStr[i]));
+					job.addItem(queueTable.get(splitStr[i]),Integer.valueOf(splitStr[i+1]));
 					i++;
 				}
 				// Item item = new Item(Float.valueOf(splitStr[1]),

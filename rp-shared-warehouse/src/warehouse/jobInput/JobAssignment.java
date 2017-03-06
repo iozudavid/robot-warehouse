@@ -43,6 +43,10 @@ public class JobAssignment {
 	public boolean dropOff() {
 		return item == jobs.get(job).returnItems().size();
 	}
+	
+	public String getJobName(){
+		return jobs.get(job).returnN();
+	}
 
 	// public static void main(String[] args) {
 
