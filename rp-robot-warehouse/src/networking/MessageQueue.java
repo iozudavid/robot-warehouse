@@ -48,16 +48,12 @@ public class MessageQueue {
 
 	public Coordinate getReceivedCoordinate() {
 		Coordinate rtn;
-		while (true) {
-			try {
-				rtn = (Coordinate) receivedQueue.pop();
-			} catch (EmptyQueueException e) {
-				rtn = null;
-			}
-			if (rtn != null) {
-				return rtn;
-			}
+		try {
+			rtn = (Coordinate) coordinateQueue.pop();
+		} catch (EmptyQueueException e) {
+			rtn = null;
 		}
+		return rtn;
 	}
 
 	public void addCoordinate(Coordinate c) {

@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import warehouse.Coordinate;
+
 public class Path{
 	
 	private ArrayList<Coordinate> list;
