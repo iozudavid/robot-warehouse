@@ -11,14 +11,9 @@ public class LableUpdater implements StoppableRunnable {
 	public void run() {
 		while (m_running) {
 			for (int i = 0; i < Window.robotControllers.size(); i++) {
-				Coordinate x = Window.robotControllers.get(i).next;
-				if (!(Window.robotControllers.get(i).next == null)) {
-					Coordinate current = Window.robotControllers.get(0).next;
-					Window.robotData.get(i).get(1).setText("Position: " + current.getX() + "," + current.getY());
-				}
+				Window.robotData.get(i).get(1).setText("Position: " + Window.robotControllers.get(i).getCurrentLocation().getX() + "," + Window.robotControllers.get(i).getCurrentLocation().getY());
 			}
 		}
-
 	}
 
 	@Override

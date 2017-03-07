@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 public class ButtonPressed implements ActionListener{
 
+	//this will be run when the different cancel buttons are pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().substring(8).equals("A")){

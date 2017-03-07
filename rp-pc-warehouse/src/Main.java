@@ -6,6 +6,7 @@ import networking.RobotServer;
 import warehouse.Coordinate;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
+import warehouseInterface.Window;
 
 public class Main {
 
@@ -31,6 +32,7 @@ public class Main {
 		for (Coordinate c: list){
 			System.out.println("x: "+c.getX()+" y: "+c.getY());
 			rs.sendCoordinates(robotName, c);
+			Window.addCoordinateRobotA(c);
 		}
 	}
 }

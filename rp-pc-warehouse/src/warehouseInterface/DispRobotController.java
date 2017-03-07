@@ -11,6 +11,7 @@ import rp.robotics.navigation.GridPose;
 import rp.robotics.navigation.Heading;
 import rp.robotics.simulation.MovableRobot;
 import rp.systems.StoppableRunnable;
+import rp.util.Rate;
 import warehouse.Coordinate;
 import warehouse.Path;
 import warehouse.PathFinding;
@@ -26,170 +27,152 @@ public class DispRobotController implements StoppableRunnable {
 	private final MovableRobot m_robot;
 	public Coordinate next;
 	public Coordinate startCoordinate;
-		
-	private Path path;
-	private String currentJob;
-		
-		
-	public DispRobotController(MovableRobot _robot, GridMap _map, GridPose _start,
-			RangeFinder _ranger, Coordinate _startCoordinate) {
+	private Queue<Coordinate> route;
+
+
+	public DispRobotController(MovableRobot _robot, GridMap _map, GridPose _start, RangeFinder _ranger,
+			Coordinate _startCoordinate) {
 		m_map = _map;
 		m_pilot = new GridPilot(_robot.getPilot(), _map, _start);
 		m_ranger = _ranger;
-		m_robot = _robot;	
+		m_robot = _robot;
 		this.startCoordinate = _startCoordinate;
 		m_pilot.setTurnSpeed(150f);
 		m_pilot.setTravelSpeed(0.2f);
+		route = new LinkedList<Coordinate>();
 	}
-	
+
 	private boolean enoughSpace() {
-		return m_ranger.getRange() > m_map.getCellSize()
-				+ m_robot.getRobotLength() / 2f;
+		return m_ranger.getRange() > m_map.getCellSize() + m_robot.getRobotLength() / 2f;
 	}
-	
+
 	private boolean moveAheadClear() {
 		GridPose current = m_pilot.getGridPose();
 		GridPose moved = current.clone();
 		moved.moveUpdate();
-		return m_map.isValidTransition(current.getPosition(),
-				moved.getPosition())
-				&& enoughSpace();
+		return m_map.isValidTransition(current.getPosition(), moved.getPosition()) && enoughSpace();
 	}
 
-	private void moveLeft(){
-		
-		m_pilot.rotateNegative();
-		if(moveAheadClear()){
-			m_pilot.moveForward();			
-		}
-	}
-	
-	private void moveRight(){
-		
-		m_pilot.rotatePositive();
-		if(moveAheadClear()){
-			m_pilot.moveForward();			
-		}
-	}
-	
-	private void moveBack(){
-		
-		m_pilot.rotatePositive();
-		m_pilot.rotatePositive();
-		if(moveAheadClear()){
-			m_pilot.moveForward();			
-		}
-	}
-	
-	private void moveForward(){
-		
+	public void followPath() {
+		Rate r = new Rate(4);
+		while (true) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("thread error in displaying robot controller");
+			}
+			if (!route.isEmpty()) {
+				int x = m_pilot.getGridPose().getX();
+				int y = m_pilot.getGridPose().getY();
 
-		if(moveAheadClear()){
-			m_pilot.moveForward();			
-		}
-	}
+				next = route.remove();
 
-	public void followPath(Path path){
-		
-		while(!path.reachedEnd()){
+				int gx = next.getX();
+				int gy = next.getY();
 
-			int x = m_pilot.getGridPose().getX();
-			int y = m_pilot.getGridPose().getY();
-			
-			next = path.getNextCoord();
-			
-			int gx = next.getX();
-			int gy = next.getY();
-			
-			
-			if (m_pilot.getGridPose().getHeading() == Heading.PLUS_Y){
-				if(x < gx){
-					m_pilot.rotateNegative();
-					m_pilot.moveForward();			
-				}else if(x>gx){
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();
-				}else if(y<gy){
-					m_pilot.moveForward();
-				}else if(y>gy){
-					m_pilot.rotateNegative();
-					m_pilot.rotateNegative();
+				if (m_pilot.getGridPose().getHeading() == Heading.PLUS_Y) {
+					if (x < gx) {
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					} else if (x > gx) {
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					} else if (y < gy) {
+						m_pilot.moveForward();
+					} else if (y > gy) {
+						m_pilot.rotateNegative();
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					}
+				} else if (m_pilot.getGridPose().getHeading() == Heading.MINUS_X) {
+					if (x < gx) {
+						m_pilot.rotateNegative();
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					} else if (x > gx) {
+						m_pilot.moveForward();
+					} else if (y < gy) {
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					} else if (y > gy) {
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					}
+				} else if (m_pilot.getGridPose().getHeading() == Heading.PLUS_X) {
+					if (x < gx) {
+						m_pilot.moveForward();
+					} else if (x > gx) {
+						m_pilot.rotatePositive();
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					} else if (y < gy) {
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					} else if (y > gy) {
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					}
+				} else if (m_pilot.getGridPose().getHeading() == Heading.MINUS_Y) {
+					if (x < gx) {
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					} else if (x > gx) {
+						m_pilot.rotateNegative();
+						m_pilot.moveForward();
+					} else if (y < gy) {
+						m_pilot.rotatePositive();
+						m_pilot.rotatePositive();
+						m_pilot.moveForward();
+					} else if (y > gy) {
+						m_pilot.moveForward();
+					}
 				}
-			} else if (m_pilot.getGridPose().getHeading() == Heading.MINUS_X){
-				if(x < gx){
-					m_pilot.rotateNegative();
-					m_pilot.rotateNegative();
-					m_pilot.moveForward();			
-				}else if(x>gx){
-					m_pilot.moveForward();
-				}else if(y<gy){
-					m_pilot.rotateNegative();
-					m_pilot.moveForward();
-				}else if(y>gy){
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();
-				}
-			} else if (m_pilot.getGridPose().getHeading() == Heading.PLUS_X){
-				if(x < gx){
-					m_pilot.moveForward();			
-				}else if(x>gx){
-					m_pilot.rotatePositive();
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();
-				}else if(y<gy){
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();
-				}else if(y>gy){
-					m_pilot.rotateNegative();
-					m_pilot.moveForward();
-				}
-			} else if (m_pilot.getGridPose().getHeading() == Heading.MINUS_Y){
-				if(x < gx){
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();			
-				}else if(x>gx){
-					m_pilot.rotateNegative();
-					m_pilot.moveForward();
-				}else if(y<gy){
-					m_pilot.rotatePositive();
-					m_pilot.rotatePositive();
-					m_pilot.moveForward();
-				}else if(y>gy){
-					m_pilot.moveForward();
+			} else {
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					System.out.println("thread interupted while waiting for more coordinates");
 				}
 			}
-			
-		
+
 		}
 	}
-	
-	public void setPath(Path _newPath){
-		
-		this.path = _newPath;
-	}
-	
-	@Override
-	public void run() {		
-		
-		ArrayList<Coordinate> list = new ArrayList<Coordinate>();
 
-		
-		PathFinding find=new PathFinding(new SearchCell(startCoordinate), new SearchCell(new Coordinate(1, 3)));
-		list=find.aStar();
-		
+	@Override
+	public void run() {
+
+		//can use this for a demo of how to works
+		/*
+		ArrayList<Coordinate> list = new ArrayList<Coordinate>();
+		PathFinding find = new PathFinding(new SearchCell(startCoordinate), new SearchCell(new Coordinate(10, 3)));
+		list = find.aStar()
 		path = new Path(list);
-		
-		while(m_running){
-			
+		while (m_running) {
 			followPath(path);
-						
+		}
+		*/
+		//Rate r = new Rate(3);
+		System.out.println("thisis run");
+		while(true){
+			followPath();
 		}
 	}
 
 	@Override
 	public void stop() {
 		m_running = false;
+
+	}
+
+	public void addToQueue(Coordinate nextLocation) {
+		route.add(nextLocation);
+	}
+	
+	public Coordinate getCurrentLocation(){
+		int x = m_pilot.getGridPose().getX();
+		int y = m_pilot.getGridPose().getY();
 		
-		
+		Coordinate currentCoordinate = new Coordinate(x, y);
+		return currentCoordinate;
 	}
 }

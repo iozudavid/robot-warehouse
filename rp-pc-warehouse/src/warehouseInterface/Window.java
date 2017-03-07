@@ -107,7 +107,7 @@ public class Window {
 		
 		
 		//this puts all the labels onto the window the number of robots can be changed up to
-		//4 it is not possable to add more than 3 robot descriptions
+		//4 it is not possible to add more than 3 robot descriptions
 		int count = 0;
 		for (ArrayList<JLabel> robot : robotData){
 			JPanel dataHolder = new JPanel();
@@ -149,7 +149,6 @@ public class Window {
 		frame.setLayout(new FlowLayout());
 		frame.getContentPane().add(buttons);
 		frame.getContentPane().add(grid);
-		//frame.getContentPane().add(new mapVisPanel(gridMap, gridMap));
 		frame.setVisible(true);
 	}
 	
@@ -165,26 +164,41 @@ public class Window {
 
 		// Add a robot of a given configuration to the simulation. The return
 		// value is the object you can use to control the robot. //
+		Coordinate startCoordinateR1 = new Coordinate(0, 0);
+		Coordinate startCoordinateR2 = new Coordinate(1, 0);
+		Coordinate startCoordinateR3 = new Coordinate(2, 0);
+		
+		//start pose of the robot this can be changed on the above line
+		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
+		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
+		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
+		
+		ArrayList<GridPose> GridPoseStartPositions = new ArrayList<GridPose>();
+		GridPoseStartPositions.add(gridStartR1);
+		GridPoseStartPositions.add(gridStartR2);
+		GridPoseStartPositions.add(gridStartR3);
 
 		for (int i = 0; i < numOfRobots; i++) {
 			// Starting point on the grid
-			Coordinate startCoordinate = new Coordinate(4, 4);
 			
 			//start pose of the robot this can be changed on the above line
-			GridPose gridStart = new GridPose(startCoordinate.getX(), startCoordinate.getY(), Heading.PLUS_Y);
 
 			//creates the mobileRobot
 			MobileRobotWrapper<MovableRobot> wrapper = sim.addRobot(
 					SimulatedRobots.makeConfiguration(false, true),
-					map.toPose(gridStart));
+					map.toPose(GridPoseStartPositions.get(i)));
 
 			//adds a ranger not really needed in this situation
 			RangeFinder ranger = sim.getRanger(wrapper);
 
 			//adds the robot to an array to be accessed later
-			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, gridStart, ranger, startCoordinate));
+			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, GridPoseStartPositions.get(i), ranger, startCoordinateR1));
 			
 			//starts the robot and the label updater
+			addCoordinateRobotA(new Coordinate(1, 0));
+			addCoordinateRobotA(new Coordinate(2, 0));
+			addCoordinateRobotA(new Coordinate(3, 0));
+			
 			new Thread(robotControllers.get(i)).start();
 			new Thread(new LableUpdater()).start();;
 		}
@@ -195,5 +209,9 @@ public class Window {
 
 		// Add the visualisation to a JFrame to display it
 		return viz;
+	}
+	
+	public static void addCoordinateRobotA(Coordinate newCoordinate){
+		robotControllers.get(0).addToQueue(newCoordinate);
 	}
 }
