@@ -14,7 +14,7 @@ public class JobAssignment {
 	private Coordinate coord;
 
 	public JobAssignment() {
-		
+
 		jobs = SortJobs.sortByReward(Reading.returnJobs());
 		job = 0;
 		item = 0;
@@ -27,12 +27,12 @@ public class JobAssignment {
 			// after picking all of the items we go to the dropOff point,
 			// normally the closest one, but here is a temporary one
 			coord = dropOff;
-		}
-		coord = jobs.get(job).returnItems().get(item++).rCoordinate();
+		} else
+			coord = jobs.get(job).returnItems().get(item++).rCoordinate();
 		return coord;
 	}
-	
-	public Coordinate getCoordinate(){
+
+	public Coordinate getCoordinate() {
 		return coord;
 	}
 
@@ -43,8 +43,8 @@ public class JobAssignment {
 	public boolean dropOff() {
 		return item == jobs.get(job).returnItems().size();
 	}
-	
-	public String getJobName(){
+
+	public String getJobName() {
 		return jobs.get(job).returnN();
 	}
 
@@ -53,7 +53,7 @@ public class JobAssignment {
 	// read from files
 	// Reading.readItem();
 	// Reading.readJobs();
-	//then create a JobAssignment object
+	// then create a JobAssignment object
 
 	// send coordinates
 	// wait

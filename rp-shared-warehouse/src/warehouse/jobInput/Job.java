@@ -8,8 +8,8 @@ import java.util.concurrent.ConcurrentMap;
 // ServerSender thread).
 
 public class Job {
-	static List<Item> list = new ArrayList<Item>();
-	static ConcurrentMap<String, Integer> queueTable = new ConcurrentHashMap<String, Integer>();
+	 List<Item> list = new ArrayList<Item>();
+	 ConcurrentMap<String, Integer> queueTable = new ConcurrentHashMap<String, Integer>();
 	private String name;
 
 	Job(String name) {
