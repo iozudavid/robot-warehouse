@@ -12,6 +12,7 @@ public class MessageQueue {
 	}
 
 	public String take() {
+		//Will not return until a message is in the queue
 		while (true) {
 			try {
 				return (queue.take());

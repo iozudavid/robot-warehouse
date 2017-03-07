@@ -6,15 +6,20 @@ import java.util.Queue;
 import warehouse.Coordinate;
 
 public class MessageQueue {
+	//Outgoing queue
 	private Queue<String> msgOutQueue = new Queue<String>();
+	
+	//Incoming queue
 	private Queue<String> receivedQueue = new Queue<String>();
 	private Queue<Coordinate> coordinateQueue = new Queue<Coordinate>();
 
+	
+	//Msg out queue methods
 	public String getMessage() {
 		String rtn;
 		while (true) {
 			try {
-				rtn = (String) receivedQueue.pop();
+				rtn = (String) msgOutQueue.pop();
 			} catch (EmptyQueueException e) {
 				rtn = null;
 			}
@@ -28,6 +33,7 @@ public class MessageQueue {
 		msgOutQueue.addElement(msg);
 	}
 
+	//Received strings methods
 	public void addReceivedMessage(String msg) {
 		receivedQueue.addElement(msg);
 	}
@@ -46,14 +52,19 @@ public class MessageQueue {
 		}
 	}
 
+	//Received coordinates methods
 	public Coordinate getReceivedCoordinate() {
 		Coordinate rtn;
-		try {
-			rtn = (Coordinate) coordinateQueue.pop();
-		} catch (EmptyQueueException e) {
-			rtn = null;
+		while (true) {
+			try {
+				rtn = (Coordinate) coordinateQueue.pop();
+			} catch (EmptyQueueException e) {
+				rtn = null;
+			}
+			if (rtn != null) {
+				return rtn;
+			}
 		}
-		return rtn;
 	}
 
 	public void addCoordinate(Coordinate c) {

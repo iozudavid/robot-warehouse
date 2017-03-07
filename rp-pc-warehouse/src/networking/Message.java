@@ -3,6 +3,9 @@ package networking;
 import warehouse.Coordinate;
 
 public class Message {
+	//Class that just contains information about a received message, no
+	//complex calculations just getters and setters
+	
 	private String sender;
 	private String msg;
 	private Coordinate coord;

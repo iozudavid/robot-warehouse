@@ -23,6 +23,8 @@ public class RobotServer {
 	//For this to work a 32 bit version of java MUST be used
 	public void connectToNxts() {
 		NXTComm[] connections = new NXTComm[nxts.length];
+		//The running threads are stored in an array to allow for
+		//later access to the threads
 		threads = new Thread[nxts.length][2];
 
 		try {
@@ -30,10 +32,15 @@ public class RobotServer {
 				robotTable.addRobot(nxts[i].name);
 				connections[i] = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
 				if (connections[i].open(nxts[i])) {
+					//If a connection to a nxt has been opened in input and output streams are started
 					DataOutputStream toRobot = new DataOutputStream(connections[i].getOutputStream());
 					DataInputStream fromRobot = new DataInputStream(connections[i].getInputStream());
+					
+					//The threads frot that robot are created
 					threads[i][0] = new RobotServerReceiver(robotTable, fromRobot,nxts[i].name);
 					threads[i][1] = new RobotServerSender(robotTable.getMessages(nxts[i].name), toRobot);
+					
+					//The threads are started
 					threads[i][0].start();
 					threads[i][1].start();
 					System.out.println("Receiver and Sender for " + nxts[i].name + " started");

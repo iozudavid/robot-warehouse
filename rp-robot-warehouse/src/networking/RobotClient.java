@@ -18,19 +18,22 @@ public class RobotClient {
 	//Will not end until timeout(?) or a connection is received from the server
 	public void waitForConnection() {
 		System.out.println("Waiting for connection ...");
+		//The command below will wait until a connection is received, no timeout
 		BTConnection bt = Bluetooth.waitForConnection();
+		//Used to clear any messages that the bluetooth class pushed out
 		LCD.clear();
+		
+		//Connection received so data streams in and out are opened
 		DataInputStream fromServer = bt.openDataInputStream();
 		DataOutputStream toServer = bt.openDataOutputStream();
 
+		//Sender and receiver threads are created
 		RobotClientReceiver r = new RobotClientReceiver(fromServer, queue);
 		RobotClientSender s = new RobotClientSender(toServer, queue);
 
+		//Threads started
 		r.start();
 		s.start();
-		LCD.clear();
-		LCD.drawString("Threads started", 0, 0);
-
 	}
 	
 	//Send a string based message (i.e. a command)
