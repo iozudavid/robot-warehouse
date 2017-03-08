@@ -1,3 +1,4 @@
+import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import lejos.pc.comm.NXTCommFactory;
@@ -6,11 +7,20 @@ import networking.RobotServer;
 import warehouse.Coordinate;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
+import warehouse.jobInput.JobAssignment;
+import warehouse.jobInput.Reading;
+import warehouse.jobInput.SortJobs;
+import warehouseInterface.RunWarehouse;
 import warehouseInterface.Window;
 
 public class Main {
 
 	public static void main(String[] args) {
+		
+		JobAssignment jobs  = new JobAssignment();
+		
+		RunWarehouse.runWarehouseInterface();
+		
 		//A* search on test coordinates
 		SearchCell start=new SearchCell(new Coordinate(0,0));
 		SearchCell goal=new SearchCell(new Coordinate(6,6));

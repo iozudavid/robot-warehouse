@@ -2,12 +2,10 @@ package warehouseInterface;
 
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -19,14 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import lejos.nxt.Inbox;
 import lejos.robotics.RangeFinder;
-import lejos.robotics.navigation.Pose;
-import rp.config.WheeledRobotConfiguration;
-import rp.robotics.DifferentialDriveRobot;
 import rp.robotics.MobileRobotWrapper;
-import rp.robotics.control.RandomGridWalk;
-import rp.robotics.control.RandomWalkController;
 import rp.robotics.mapping.GridMap;
 import rp.robotics.mapping.MapUtils;
 import rp.robotics.navigation.GridPose;
@@ -34,16 +26,13 @@ import rp.robotics.navigation.Heading;
 import rp.robotics.simulation.MapBasedSimulation;
 import rp.robotics.simulation.MovableRobot;
 import rp.robotics.simulation.SimulatedRobots;
-import rp.robotics.testing.TestMaps;
 import rp.robotics.visualisation.GridMapVisualisation;
 import rp.robotics.visualisation.MapVisualisationComponent;
-import warehouse.Controller;
 import warehouse.Coordinate;
-import warehouse.Path;
 
 public class Window {
 
-	private JFrame frame;
+	public JFrame frame;
 	public static ArrayList<ArrayList<JLabel>> robotData = new ArrayList<ArrayList<JLabel>>();
 	protected static ArrayList<DispRobotController> robotControllers = new ArrayList<DispRobotController>();
 	ArrayList<Coordinate> coordinatePath;
@@ -54,6 +43,8 @@ public class Window {
 	/**
 	 * Launch the application.
 	 */
+	
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -66,6 +57,8 @@ public class Window {
 			}
 		});
 	}
+	
+	*/
 
 	/**
 	 * Create the application.
@@ -194,11 +187,7 @@ public class Window {
 			//adds the robot to an array to be accessed later
 			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, GridPoseStartPositions.get(i), ranger, startCoordinateR1));
 			
-			//starts the robot and the label updater
-			addCoordinateRobotA(new Coordinate(1, 0));
-			addCoordinateRobotA(new Coordinate(2, 0));
-			addCoordinateRobotA(new Coordinate(3, 0));
-			
+			//starts the robot and the label updater		
 			new Thread(robotControllers.get(i)).start();
 			new Thread(new LableUpdater()).start();;
 		}

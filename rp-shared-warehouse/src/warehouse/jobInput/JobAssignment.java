@@ -15,6 +15,10 @@ public class JobAssignment {
 
 	public JobAssignment() {
 
+		//getting data from files
+		Reading.readItem();
+		Reading.readJobs();
+		
 		jobs = SortJobs.sortByReward(Reading.returnJobs());
 		job = 0;
 		item = 0;

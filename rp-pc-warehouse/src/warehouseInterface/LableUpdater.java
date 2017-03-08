@@ -1,7 +1,6 @@
 package warehouseInterface;
 
 import rp.systems.StoppableRunnable;
-import warehouse.Coordinate;
 
 public class LableUpdater implements StoppableRunnable {
 

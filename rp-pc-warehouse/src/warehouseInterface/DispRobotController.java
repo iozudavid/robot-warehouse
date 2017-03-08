@@ -1,6 +1,5 @@
 package warehouseInterface;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,6 +12,8 @@ import rp.robotics.simulation.MovableRobot;
 import rp.systems.StoppableRunnable;
 import rp.util.Rate;
 import warehouse.Coordinate;
+
+//these may be needed in a demo of the system
 import warehouse.Path;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
@@ -22,7 +23,6 @@ public class DispRobotController implements StoppableRunnable {
 	private final GridMap m_map;
 	private final GridPilot m_pilot;
 
-	private boolean m_running = true;
 	private final RangeFinder m_ranger;
 	private final MovableRobot m_robot;
 	public Coordinate next;
@@ -55,12 +55,16 @@ public class DispRobotController implements StoppableRunnable {
 
 	public void followPath() {
 		Rate r = new Rate(4);
+		//the rate is needed so that this thread does not take all the cpu time
 		while (true) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				System.out.println("thread error in displaying robot controller");
 			}
+			
+			//goes through the queue emptying it as it goes and then moving the robot to that
+			
 			if (!route.isEmpty()) {
 				int x = m_pilot.getGridPose().getX();
 				int y = m_pilot.getGridPose().getY();
@@ -152,7 +156,6 @@ public class DispRobotController implements StoppableRunnable {
 		}
 		*/
 		//Rate r = new Rate(3);
-		System.out.println("thisis run");
 		while(true){
 			followPath();
 		}
@@ -160,7 +163,6 @@ public class DispRobotController implements StoppableRunnable {
 
 	@Override
 	public void stop() {
-		m_running = false;
 
 	}
 
