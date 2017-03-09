@@ -3,6 +3,7 @@ package networking;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import warehouse.Coordinate;
+import warehouse.Path;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
@@ -47,13 +48,16 @@ public class RobotClient {
 		queue.addMessage(strCoord);
 	}
 	
+	public Path getPath(){
+		return queue.getPath();
+	}
 	//Returns top of received message queue
-	public String getReceivedMessage(){
-		return queue.getReceivedMessage();
-	}
-	
-	//Returns top of received coordinates queue
-	public Coordinate getCoordinate(){
-		return queue.getReceivedCoordinate();
-	}
+//	public String getReceivedMessage(){
+//		return queue.getReceivedMessage();
+//	}
+//	
+//	//Returns top of received coordinates queue
+//	public Coordinate getCoordinate(){
+//		return queue.getReceivedCoordinate();
+//	}
 }

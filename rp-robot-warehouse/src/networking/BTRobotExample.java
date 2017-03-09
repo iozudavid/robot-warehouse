@@ -1,6 +1,7 @@
 package networking;
 
 import warehouse.Coordinate;
+import warehouse.Path;
 
 public class BTRobotExample {
 
@@ -13,17 +14,11 @@ public class BTRobotExample {
 		RobotClient r = new RobotClient();
 		r.waitForConnection();
 
-		// Simple loop to keep trying to get items from the coordinate queue,
-		// this is how you may have to
-		// implement getting coordinates, contact me if you would like me to
-		// change anything about this
-		// implementation
-		while (true) {
-			//getCoordinate will not return until a coordinate is in the coordinate queue
-			Coordinate msg = r.getCoordinate();
-			//Perform action on coordinate
-			
-			//System.out.println(msg.getX() + " " + msg.getY());
+		Path p = r.getPath();
+		while(!p.reachedEnd()){
+			Coordinate c = p.getNextCoord();
+			System.out.println("X: "+c.getX()+" Y: "+c.getY());
 		}
+		System.out.println("No. of items "+p.getNumberOFItems());
 	}
 }

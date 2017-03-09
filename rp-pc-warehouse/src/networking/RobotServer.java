@@ -2,6 +2,8 @@ package networking;
 
 import java.io.DataInputStream;
 import warehouse.Coordinate;
+import warehouse.Path;
+
 import java.io.DataOutputStream;
 
 import lejos.pc.comm.NXTComm;
@@ -53,14 +55,25 @@ public class RobotServer {
 	}
 
 	//Adds message to the queue for the nxt specified
-	public void sendMessage(String nxtName, String msg) {
+	private void sendMessage(String nxtName, String msg) {
 		robotTable.addMessage(nxtName, msg);
 	}
 	
 	//Adds a coordinate set to be sent to the nxt specified
-	public void sendCoordinates(String nxtName,Coordinate c){
+	private void sendCoordinates(String nxtName,Coordinate c){
 		String strCoord = c.getX()+","+c.getY();
 		robotTable.addMessage(nxtName, strCoord);
+	}
+	
+	public void sendPath (String nxtName,Path p){
+		this.sendMessage(nxtName,"PATHSTART");
+		while (!p.reachedEnd()){
+			this.sendCoordinates(nxtName, p.getNextCoord());
+		}
+		this.sendMessage(nxtName, "NUMOFITEMS");
+		//System.out.println(Integer.toString(p.getNumberOFItems()));
+		this.sendMessage(nxtName, Integer.toString(p.getNumberOFItems()));
+		this.sendMessage(nxtName, "PATHEND");
 	}
 	
 	//Gets top of the message queue (in a message object)
