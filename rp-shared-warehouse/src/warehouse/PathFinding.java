@@ -19,7 +19,7 @@ public class PathFinding {
 	protected Map<SearchCell, ArrayList<SearchCell>> graph;
 	protected Map<SearchCell, Integer> level;
 	protected Map<SearchCell, SearchCell> predecessor;
-	protected GridMap map = MapUtils.createMarkingWarehouseMap();
+	protected GridMap map = MapUtils.createRealWarehouse();
 
 	public PathFinding(SearchCell start, SearchCell goal) {
 		this.start = start;

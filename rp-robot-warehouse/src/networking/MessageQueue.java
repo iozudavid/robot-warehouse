@@ -77,18 +77,20 @@ public class MessageQueue {
 	public Path getPath() {
 		ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
 		int numOfItems = 0;
-		if (this.getReceivedMessage().equals("PATHSTART")) {
-			String receivedMessage = this.getReceivedMessage();
-			while(isCoordinate(receivedMessage)){
-				coordinates.add(toCoordinate(receivedMessage));
-				receivedMessage = this.getReceivedMessage();
-			}
-			if (receivedMessage.equals("NUMOFITEMS")){
-				receivedMessage = this.getReceivedMessage();
-				numOfItems = Integer.parseInt(receivedMessage);
-			}
+		String msgStart = this.getReceivedMessage();
+		while (!msgStart.equals("PATHSTART")) {
+			msgStart = this.getReceivedMessage();
 		}
-		return new Path(coordinates,numOfItems);
+		String receivedMessage = this.getReceivedMessage();
+		while (isCoordinate(receivedMessage)) {
+			coordinates.add(toCoordinate(receivedMessage));
+			receivedMessage = this.getReceivedMessage();
+		}
+		if (receivedMessage.equals("NUMOFITEMS")) {
+			receivedMessage = this.getReceivedMessage();
+			numOfItems = Integer.parseInt(receivedMessage);
+		}
+		return new Path(coordinates, numOfItems);
 	}
 
 	// Coordinate splitting

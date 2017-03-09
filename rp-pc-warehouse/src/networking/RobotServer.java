@@ -71,9 +71,8 @@ public class RobotServer {
 			this.sendCoordinates(nxtName, p.getNextCoord());
 		}
 		this.sendMessage(nxtName, "NUMOFITEMS");
-		//System.out.println(Integer.toString(p.getNumberOFItems()));
 		this.sendMessage(nxtName, Integer.toString(p.getNumberOFItems()));
-		this.sendMessage(nxtName, "PATHEND");
+		//this.sendMessage(nxtName, "PATHEND");
 	}
 	
 	//Gets top of the message queue (in a message object)
