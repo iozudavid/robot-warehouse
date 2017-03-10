@@ -80,8 +80,16 @@ public class RobotServer {
 		return robotTable.takeReceivedMessage();
 	}
 	
+	public boolean isReceivedEmpty(String nxtName){
+		return robotTable.isReceivedEmpty(nxtName);
+	}
+	
 	//Gets the top of the received coordinate queue
 	public Message getReceivedCoordinate(){
 		return robotTable.takeReceivedCoordinate();
+	}
+	
+	public boolean isCoordinateEmpty(String nxtName){
+		return robotTable.isCoordinateEmpty(nxtName);
 	}
 }

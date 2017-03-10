@@ -1,8 +1,10 @@
-package warehouse.jobInput;
+
 
 import java.util.List;
 
 import warehouse.Coordinate;
+import warehouse.jobInput.Item;
+import warehouse.jobInput.Job;
 
 public class JobAssignment {
 

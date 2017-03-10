@@ -50,6 +50,10 @@ public class RobotTable {
 		}
 	}
 	
+	public boolean isReceivedEmpty(String nxtName){
+		return receivedMessages.isEmpty();
+	}
+	
 	
 	//For incoming table for COORDINATES	
 	public void addReceivedCoordinate(String sender,Coordinate c) {
@@ -65,5 +69,9 @@ public class RobotTable {
 			}
 
 		}
+	}
+	
+	public boolean isCoordinateEmpty(String nxtName){
+		return receivedCoordinates.isEmpty();
 	}
 }

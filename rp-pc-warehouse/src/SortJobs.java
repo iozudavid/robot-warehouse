@@ -1,7 +1,10 @@
-package warehouse.jobInput;
+
 
 import java.util.Comparator;
 import java.util.List;
+
+import warehouse.jobInput.Item;
+import warehouse.jobInput.Job;
 
 public class SortJobs {
 

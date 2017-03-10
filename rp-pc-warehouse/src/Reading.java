@@ -1,4 +1,4 @@
-package warehouse.jobInput;
+
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import warehouse.Coordinate;
+import warehouse.jobInput.Item;
+import warehouse.jobInput.Job;
 
 public class Reading {
 	static BufferedReader inputFile1 = null;

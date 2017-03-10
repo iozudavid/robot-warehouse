@@ -3,14 +3,12 @@ import java.util.ArrayList;
 
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
+import networking.Message;
 import networking.RobotServer;
 import warehouse.Coordinate;
 import warehouse.Path;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
-import warehouse.jobInput.JobAssignment;
-import warehouse.jobInput.Reading;
-import warehouse.jobInput.SortJobs;
 import warehouseInterface.RunWarehouse;
 import warehouseInterface.Window;
 
@@ -18,18 +16,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		//JobAssignment jobs = new JobAssignment();
-
-		//RunWarehouse.runWarehouseInterface();
-
-		// A* search on test coordinates
-		SearchCell start = new SearchCell(new Coordinate(0, 0));
-		SearchCell goal = new SearchCell(new Coordinate(6, 6));
-		PathFinding graph = new PathFinding(start, goal);
-		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list,1);
-
-		// Information about single nxt robot
+		JobAssignment jobs = new JobAssignment();
 		String robotName = "NXT";
 		String robotAddress = "0016530C73B0";
 
@@ -39,8 +26,40 @@ public class Main {
 		// Set up server
 		RobotServer rs = new RobotServer(robots);
 		rs.connectToNxts();
+		RunWarehouse.runWarehouseInterface();
 
+		Coordinate startCoord = jobs.getCoordinate();
+		Coordinate finishCoord = jobs.nextCoordinate();
+
+		// A* search on test coordinates
+		SearchCell start = new SearchCell(startCoord);
+		SearchCell goal = new SearchCell(finishCoord);
+		PathFinding graph = new PathFinding(start, goal);
+		ArrayList<Coordinate> list = graph.aStar();
+		Path c = new Path(list, jobs.getNumOfItems());
 		rs.sendPath(robotName, c);
-		//Window.addCoordinateRobotA(c);
+		// Window.addCoordinateRobotA(c);
+		while (true) {
+			while (!rs.isCoordinateEmpty(robotName)) {
+				Message receivedMsg = rs.getReceivedCoordinate();
+				Window.addCoordinateRobotA(receivedMsg.getCoord());
+			}
+			while (!rs.isReceivedEmpty(robotName)) {
+				Message recivedMessage = rs.getReceivedMessage();
+				if (recivedMessage.equals("ITEMPICKUP")) {
+					startCoord = jobs.getCoordinate();
+					finishCoord = jobs.nextCoordinate();
+
+					// A* search on test coordinates
+					start = new SearchCell(startCoord);
+					goal = new SearchCell(finishCoord);
+					graph = new PathFinding(start, goal);
+					list = graph.aStar();
+					c = new Path(list, jobs.getNumOfItems());
+					rs.sendPath(robotName, c);
+				}
+			}
+			rs.getReceivedMessage();
+		}
 	}
 }

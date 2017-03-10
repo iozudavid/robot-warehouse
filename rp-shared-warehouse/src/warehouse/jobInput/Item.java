@@ -14,7 +14,7 @@ public class Item {
 	private Coordinate xy;
 	private String name;
 
-	Item(Float w, Float v, Coordinate xy, String name) {
+	public Item(Float w, Float v, Coordinate xy, String name) {
 		this.w = w;
 		this.v = v;
 		this.xy = xy;
