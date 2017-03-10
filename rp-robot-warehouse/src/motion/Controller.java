@@ -52,7 +52,7 @@ public class Controller extends RobotProgrammingDemo{
 	public void updatePosition(Coordinate cord){
 		
 		currentPosition = cord;
-		//r.sendCoordinate(cord);
+		r.sendCoordinate(cord);
 	}
 	
 	public void updateHeading(String heading){
@@ -102,8 +102,7 @@ public class Controller extends RobotProgrammingDemo{
 		pilot.forward();
 		pilot.setTravelSpeed(0.15f);
 		while(true){
-	//		System.out.println(lightright.readValue());
-		//	System.out.println(lightright.readValue());
+
 			if(Math.abs(leftValue-lightleft.readValue())>5){
 		
 				pilot.rotateLeft();
@@ -178,18 +177,27 @@ public class Controller extends RobotProgrammingDemo{
 			updatePosition(next);
 		}
 		
-		int i=0;		
-		System.out.println("Waiting for pickup.");
-		
-		while(i!=path.getNumberOFItems()){
-			int left = path.getNumberOFItems() - i;
-			System.out.println("Items picked up: " + i + " --- " + "Items left to pick up: " + left);
-			while(Button.waitForAnyPress() != Button.ID_RIGHT){
-				System.out.println("Press right button.");
+		if(path.getNumberOFItems() == 0){
+			
+			System.out.println("Waiting for drop off. Press left button.");
+			while(Button.waitForAnyPress() != Button.ID_LEFT){
+				System.out.println("Press left button.");
 			}
-			i++;
-		}
+		}else{
 		
+			int i=0;		
+			System.out.println("Waiting for pickup.");
+			
+			while(i!=path.getNumberOFItems()){
+				int left = path.getNumberOFItems() - i;
+				System.out.println("Items picked up: " + i + " --- " + "Items left to pick up: " + left);
+				while(Button.waitForAnyPress() != Button.ID_RIGHT){
+					System.out.println("Press right button.");
+				}
+				i++;
+			}
+		}
+		r.sendMessage("GOTITEM");
 		executing = false;
 	}
 
@@ -198,51 +206,18 @@ public class Controller extends RobotProgrammingDemo{
 		
 		r = new RobotClient();
 		r.waitForConnection();
-		//ArrayList<Coordinate> routeList = new ArrayList<Coordinate>();
-				
+		
 		Delay.msDelay(500);
-	leftValue=lightleft.readValue();
-	rightValue=lightright.readValue();
-	System.out.println(leftValue);
-	System.out.println(rightValue);
+		leftValue=lightleft.readValue();
+		rightValue=lightright.readValue();
+		
+		while(true){
+
 			Path route = r.getPath();
-//			while(!route.reachedEnd()){
-//				Coordinate c = route.getNextCoord();
-//				System.out.println("X: "+c.getX()+" Y: "+c.getY());
-//			}
-			//System.out.println("No. of items "+route.getNumberOFItems());
+	
 			followPath(route);		
 				
-			
-		}
-	
-//	@Override
-//	public void run() {
-//		
-////		Delay.msDelay(500);
-////		leftValue=lightleft.readValue();
-////		rightValue=lightright.readValue();
-////		System.out.println(leftValue);
-////		System.out.println(rightValue);
-//		ArrayList<Coordinate> routeList = new ArrayList<Coordinate>();
-//
-//				
-//				routeList.add(new Coordinate(0, 1));
-//				routeList.add(new Coordinate(0, 2));
-//				routeList.add(new Coordinate(0, 3));
-//				routeList.add(new Coordinate(0, 4));
-//				routeList.add(new Coordinate(0, 5));
-//				routeList.add(new Coordinate(1, 5));
-//				routeList.add(new Coordinate(2, 5));
-//			
-//			
-//			Path route = new Path(routeList,5); 
-//			followPath(route);		
-//				
-//			//pilot.travel(0.3);
-//		
-//		
-//	}
-
-	
+		}	
+	}
+		
 }
