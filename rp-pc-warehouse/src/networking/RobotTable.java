@@ -8,15 +8,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import warehouse.Coordinate;
 
 public class RobotTable {
-	//Outgoing table
+	// Outgoing table
 	private ConcurrentMap<String, MessageQueue> queueTable = new ConcurrentHashMap<String, MessageQueue>();
-	
-	//Incoming tables
+
+	// Incoming tables
 	private BlockingQueue<Message> receivedMessages = new LinkedBlockingQueue<Message>();
 	private BlockingQueue<Message> receivedCoordinates = new LinkedBlockingQueue<Message>();
 
-	
-	//For outing table queueTable
+	// For outing table queueTable
 	public void addRobot(String robotName) {
 		queueTable.putIfAbsent(robotName, new MessageQueue());
 	}
@@ -34,30 +33,28 @@ public class RobotTable {
 		return false;
 	}
 
-	//For incoming table for STRINGS
+	// For incoming table for STRINGS
 	public void addReceivedMessage(String sender, String msg) {
-		receivedMessages.offer(new Message(sender,msg));
+		receivedMessages.offer(new Message(sender, msg));
 	}
 
 	public Message takeReceivedMessage() {
-		while (true) {
-			try {
-				return (receivedMessages.take());
-			} catch (InterruptedException e) {
-				System.err.println(e);
-			}
 
+		try {
+			return (receivedMessages.take());
+		} catch (InterruptedException e) {
+			System.err.println(e);
 		}
+		return null;
 	}
-	
-	public boolean isReceivedEmpty(String nxtName){
+
+	public boolean isReceivedEmpty(String nxtName) {
 		return receivedMessages.isEmpty();
 	}
-	
-	
-	//For incoming table for COORDINATES	
-	public void addReceivedCoordinate(String sender,Coordinate c) {
-		receivedCoordinates.offer(new Message(sender,c));
+
+	// For incoming table for COORDINATES
+	public void addReceivedCoordinate(String sender, Coordinate c) {
+		receivedCoordinates.offer(new Message(sender, c));
 	}
 
 	public Message takeReceivedCoordinate() {
@@ -70,8 +67,8 @@ public class RobotTable {
 
 		}
 	}
-	
-	public boolean isCoordinateEmpty(String nxtName){
+
+	public boolean isCoordinateEmpty(String nxtName) {
 		return receivedCoordinates.isEmpty();
 	}
 }

@@ -188,7 +188,7 @@ public class Controller extends RobotProgrammingDemo{
 			int i=0;		
 			System.out.println("Waiting for pickup.");
 			
-			while(i!=path.getNumberOFItems()){
+			while(i<=path.getNumberOFItems()){
 				int left = path.getNumberOFItems() - i;
 				System.out.println("Items picked up: " + i + " --- " + "Items left to pick up: " + left);
 				while(Button.waitForAnyPress() != Button.ID_RIGHT){

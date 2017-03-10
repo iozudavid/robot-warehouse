@@ -36,7 +36,7 @@ public class Main {
 		SearchCell goal = new SearchCell(finishCoord);
 		PathFinding graph = new PathFinding(start, goal);
 		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list, jobs.getNumOfItems());
+		Path c = new Path(list, 2);
 		rs.sendPath(robotName, c);
 		// Window.addCoordinateRobotA(c);
 		while (true) {
@@ -55,11 +55,10 @@ public class Main {
 					goal = new SearchCell(finishCoord);
 					graph = new PathFinding(start, goal);
 					list = graph.aStar();
-					c = new Path(list, jobs.getNumOfItems());
+					c = new Path(list, 2);
 					rs.sendPath(robotName, c);
 				}
 			}
-			rs.getReceivedMessage();
 		}
 	}
 }

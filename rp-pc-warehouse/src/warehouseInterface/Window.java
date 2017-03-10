@@ -151,7 +151,7 @@ public class Window {
 
 	
 	public JComponent mapCreate(){
-		GridMap map = MapUtils.createMarkingWarehouseMap();
+		GridMap map = MapUtils.createRealWarehouse();
 
 		MapBasedSimulation sim = new MapBasedSimulation(map);
 
