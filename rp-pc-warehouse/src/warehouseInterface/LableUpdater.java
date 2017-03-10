@@ -1,5 +1,6 @@
 package warehouseInterface;
 
+import mainLoop.Main;
 import rp.systems.StoppableRunnable;
 
 public class LableUpdater implements StoppableRunnable {

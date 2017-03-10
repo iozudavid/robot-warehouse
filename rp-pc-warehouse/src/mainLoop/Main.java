@@ -1,6 +1,8 @@
+package mainLoop;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import jobPackage.JobAssignment;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 import networking.Message;
@@ -13,10 +15,12 @@ import warehouseInterface.RunWarehouse;
 import warehouseInterface.Window;
 
 public class Main {
+	
+	public static JobAssignment jobs;
 
 	public static void main(String[] args) {
 
-		JobAssignment jobs = new JobAssignment();
+		jobs = new JobAssignment();
 		String robotName = "NXT";
 		String robotAddress = "0016530C73B0";
 
