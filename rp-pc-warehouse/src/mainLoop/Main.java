@@ -2,6 +2,8 @@ package mainLoop;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
+import javax.print.attribute.standard.Finishings;
+
 import jobPackage.JobAssignment;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
@@ -35,12 +37,15 @@ public class Main {
 		Coordinate startCoord = jobs.getCoordinate();
 		Coordinate finishCoord = jobs.nextCoordinate();
 
+		System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
+		System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
+
 		// A* search on test coordinates
 		SearchCell start = new SearchCell(startCoord);
 		SearchCell goal = new SearchCell(finishCoord);
 		PathFinding graph = new PathFinding(start, goal);
 		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list, 2);
+		Path c = new Path(list, jobs.getNumOfItems());
 		rs.sendPath(robotName, c);
 		// Window.addCoordinateRobotA(c);
 		while (true) {
@@ -50,16 +55,18 @@ public class Main {
 			}
 			while (!rs.isReceivedEmpty(robotName)) {
 				Message recivedMessage = rs.getReceivedMessage();
-				if (recivedMessage.equals("ITEMPICKUP")) {
+				if (recivedMessage.getMsg().equals("ITEMPICKUP")) {
 					startCoord = jobs.getCoordinate();
 					finishCoord = jobs.nextCoordinate();
+					System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
+					System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
 
 					// A* search on test coordinates
 					start = new SearchCell(startCoord);
 					goal = new SearchCell(finishCoord);
 					graph = new PathFinding(start, goal);
 					list = graph.aStar();
-					c = new Path(list, 2);
+					c = new Path(list, jobs.getNumOfItems());
 					rs.sendPath(robotName, c);
 				}
 			}

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
+import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
@@ -176,7 +177,7 @@ public class Controller extends RobotProgrammingDemo{
 			}
 			updatePosition(next);
 		}
-		
+		LCD.clear();
 		if(path.getNumberOFItems() == 0){
 			
 			System.out.println("Waiting for drop off. Press left button.");
@@ -197,7 +198,8 @@ public class Controller extends RobotProgrammingDemo{
 				i++;
 			}
 		}
-		r.sendMessage("GOTITEM");
+		LCD.clear();
+		r.sendMessage("ITEMPICKUP");
 		executing = false;
 	}
 
@@ -214,6 +216,7 @@ public class Controller extends RobotProgrammingDemo{
 		while(true){
 
 			Path route = r.getPath();
+			System.out.println("Path received");
 	
 			followPath(route);		
 				
