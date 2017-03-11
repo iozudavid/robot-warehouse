@@ -11,9 +11,11 @@ public class LableUpdater implements StoppableRunnable {
 	public void run() {
 		while (m_running) {
 			for (int i = 0; i < Window.robotControllers.size(); i++) {
-				Window.robotData.get(i).get(1).setText("Position: " + Window.robotControllers.get(i).getCurrentLocation().getX() + "," + Window.robotControllers.get(i).getCurrentLocation().getY());
+				Window.robotData.get(i).get(1)
+						.setText("Position: " + Window.robotControllers.get(i).getCurrentLocation().getX() + ","
+								+ Window.robotControllers.get(i).getCurrentLocation().getY());
 				Window.robotData.get(i).get(2).setText("Job: " + Main.jobs.getJobName());
-				Window.robotData.get(i).get(2).setText("Reward: " + Main.jobs.getReward());
+				Window.robotData.get(i).get(3).setText("Reward: " + Main.jobs.getReward());
 			}
 			try {
 				Thread.sleep(20);

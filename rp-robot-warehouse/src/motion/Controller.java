@@ -151,6 +151,7 @@ public class Controller extends RobotProgrammingDemo{
 			int y = this.getY();
 			
 			Coordinate next = path.getNextCoord();
+			updatePosition(next);
 			
 			int gx = next.getX();
 			int gy = next.getY();
@@ -175,7 +176,7 @@ public class Controller extends RobotProgrammingDemo{
 				updateHeading("minusY");
 				moveForward();
 			}
-			updatePosition(next);
+			//updatePosition(next);
 		}
 		LCD.clear();
 		if(path.getNumberOFItems() == 0){
