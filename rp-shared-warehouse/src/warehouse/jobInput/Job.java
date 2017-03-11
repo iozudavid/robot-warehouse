@@ -12,7 +12,7 @@ public class Job {
 	 ConcurrentMap<String, Integer> queueTable = new ConcurrentHashMap<String, Integer>();
 	private String name;
 
-	public Job(String name) {
+	Job(String name) {
 		this.name = name;
 	}
 
@@ -32,5 +32,11 @@ public class Job {
 	public Integer returnNmbr(String s) {
 		return queueTable.get(s);
 	}
+	
+	public void setNumOfItems(String item, int number){
+		queueTable.replace(item, number);
+	}
+	
+	
 
 }

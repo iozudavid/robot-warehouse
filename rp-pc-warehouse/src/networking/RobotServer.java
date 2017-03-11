@@ -75,6 +75,10 @@ public class RobotServer {
 		//this.sendMessage(nxtName, "PATHEND");
 	}
 	
+	public void sendStopCommand(String nxtName){
+		this.sendMessage(nxtName, "STOP");
+	}
+	
 	//Gets top of the message queue (in a message object)
 	public Message getReceivedMessage(){
 		return robotTable.takeReceivedMessage();

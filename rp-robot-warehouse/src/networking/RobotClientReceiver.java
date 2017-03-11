@@ -20,7 +20,11 @@ public class RobotClientReceiver extends Thread {
 			while (true) {
 				String message = fromServer.readUTF();
 				if (message != null) {
-					queue.addReceivedMessage(message);
+					if (message.equals("STOP")) {
+						//TODO: add stop code
+					} else {
+						queue.addReceivedMessage(message);
+					}
 				}
 			}
 		} catch (IOException e) {

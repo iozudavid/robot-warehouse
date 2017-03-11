@@ -1,6 +1,5 @@
 package jobPackage;
 
-
 import java.util.List;
 
 import warehouse.Coordinate;
@@ -10,10 +9,10 @@ import warehouse.jobInput.Job;
 public class JobAssignment {
 
 	static List<Job> jobs;
-	private int job;
-	private int item;
-	// temporary
-	//arvydas you should also read this stuff from the file
+	private int jobIndex;
+	private int itemIndex;
+	private Job job;
+	private Item item;
 	Coordinate dropOff = new Coordinate(3, 3);
 	private Coordinate coord = new Coordinate(0, 0);
 	private float weightSum = 0;
@@ -21,33 +20,51 @@ public class JobAssignment {
 
 	public JobAssignment() {
 
-		// getting data from files
 		Reading.readItem();
 		Reading.readJobs();
 		jobs = SortJobs.sortByReward(Reading.returnJobs());
-		job = 0;
-		item = 0;
+		jobIndex = 0;
+		itemIndex = 0;
+		job = jobs.get(jobIndex);
+		item = job.returnItems().get(itemIndex);
 	}
 
-	public Coordinate nextCoordinate() {
-		Item i = jobs.get(job).returnItems().get(item++);
-		weightSum += i.rWeight();
+	public synchronized Coordinate nextCoordinate() {
+		job = jobs.get(jobIndex);
+		item = job.returnItems().get(itemIndex++);
 		
+		Float itemsWeight = item.rWeight() * getNumOfItems();
+		weightSum += itemsWeight;
+
 		if (isDropOff()) {
-			item = 0;
-			job++;
+			itemIndex = 0;
+			jobIndex++;
 			// after picking all of the items we go to the dropOff point,
 			// normally the closest one, but here is a temporary one
 			coord = dropOff;
 			weightSum = 0;
-		}
-		else if (weightSum > maxWeight){
-			coord = dropOff;
+			
+		} else if (weightSum > maxWeight) {
+			
+			itemIndex--;
+			
+			if (itemsWeight < maxWeight) {
+				coord = dropOff;
+			} else {
+				/*
+				float w = weightSum - itemsWeight;
+				int num = (int) (w/item.rWeight());
+				int initialNum = job.returnNmbr(item.rName());
+				int newNum = initialNum - num;
+				job.addItem(item, newNum);
+				job.setNumOfItems(item.rName(), num);
+				coord = item.rCoordinate();
+				*/
+			}
 			weightSum = 0;
-			item--;
-		}
-			else
-			coord = i.rCoordinate();
+			
+		} else
+			coord = item.rCoordinate();
 		return coord;
 	}
 
@@ -55,26 +72,23 @@ public class JobAssignment {
 		return coord;
 	}
 
-	public boolean startPosition() {
-		return item == 0;
-	}
-
 	public boolean isDropOff() {
-		return item == jobs.get(job).returnItems().size();
+		return itemIndex == job.returnItems().size();
 	}
 
 	public String getJobName() {
-		return jobs.get(job).returnN();
+		return job.returnN();
 	}
 
 	public int getNumOfItems() {
-		String itemName = jobs.get(job).returnItems().get(item - 1).rName();
-		return jobs.get(job).returnNmbr(itemName);
+		//String itemName = job.returnItems().get(itemIndex - 1).rName();
+		//String itemName = item.rName();
+		return job.returnNmbr(item.rName());
 	}
 
 	public float getReward() {
-		Item i = jobs.get(job).returnItems().get(item - 1);
-		return i.rValue();
+		//Item i = job.returnItems().get(itemIndex - 1);
+		return item.rValue();
 	}
 
 }
