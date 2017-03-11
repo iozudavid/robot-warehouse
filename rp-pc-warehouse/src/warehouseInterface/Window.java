@@ -97,6 +97,8 @@ public class Window {
 			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
+			robotData.get(i).add(new JLabel("Total reward: "));
+
 		}
 		
 		

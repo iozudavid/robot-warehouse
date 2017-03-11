@@ -19,6 +19,7 @@ public class JobAssignment {
 	private float weightSum = 0;
 	private final float maxWeight = 50;
 	private int numOfItems;
+	public boolean cancelCurrentJob = false;
 
 	public JobAssignment() {
 
@@ -99,6 +100,15 @@ public class JobAssignment {
 	public float getReward() {
 		// Item i = job.returnItems().get(itemIndex - 1);
 		return item.rValue();
+	}
+	
+	//TODO not implemented yet
+	//needs to have a message sent the robot when the cancelCurrentJob variable is true
+	//then the next path should be sent
+	public void cancelJob(){
+		jobIndex++;
+		itemIndex = 0;
+		cancelCurrentJob = true;
 	}
 
 }
