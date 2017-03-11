@@ -44,7 +44,7 @@ public class Window {
 	 * Launch the application.
 	 */
 	
-	/*
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -58,7 +58,7 @@ public class Window {
 		});
 	}
 	
-	*/
+	
 
 	/**
 	 * Create the application.
@@ -94,7 +94,7 @@ public class Window {
 			robotData.add(new ArrayList<JLabel>());
 			robotData.get(i).add(new JLabel("Robot: " + robotName[i]));
 			robotData.get(i).add(new JLabel("Position: "));
-			robotData.get(i).add(new JLabel("job: "));      //this needs to take the information for the jobs and the reward
+			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
 		}
 		
