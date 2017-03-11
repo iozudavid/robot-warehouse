@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
+import Variables.StartCoordinate;
 import lejos.robotics.RangeFinder;
 import rp.robotics.MobileRobotWrapper;
 import rp.robotics.mapping.GridMap;
@@ -157,12 +158,12 @@ public class Window {
 
 		// Add a robot of a given configuration to the simulation. The return
 		// value is the object you can use to control the robot. //
-		Coordinate startCoordinateR1 = new Coordinate(0, 0);
+		Coordinate startCoordinateR1 = StartCoordinate.STARTCOORDINATE;
 		Coordinate startCoordinateR2 = new Coordinate(1, 0);
 		Coordinate startCoordinateR3 = new Coordinate(2, 0);
 		
 		//start pose of the robot this can be changed on the above line
-		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
+		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
 		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
 		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
 		

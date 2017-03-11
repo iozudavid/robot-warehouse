@@ -2,6 +2,7 @@ package jobPackage;
 
 import java.util.List;
 
+import Variables.StartCoordinate;
 import warehouse.Coordinate;
 import warehouse.jobInput.Item;
 import warehouse.jobInput.Job;
@@ -14,7 +15,7 @@ public class JobAssignment {
 	private Job job;
 	private Item item;
 	Coordinate dropOff = new Coordinate(3, 5);
-	private Coordinate coord = new Coordinate(0, 0);
+	private Coordinate coord = StartCoordinate.STARTCOORDINATE;
 	private float weightSum = 0;
 	private final float maxWeight = 50;
 	private int numOfItems;
