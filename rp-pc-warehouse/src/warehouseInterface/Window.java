@@ -6,9 +6,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -43,6 +47,7 @@ public class Window {
 	protected static String[] robotName = {"A", "B", "C", "D"};
 	public static int numOfRobots = 1;
 	final static Logger logger = Logger.getLogger(Window.class);
+	static final String path = "src/log4j.properties";
 
 	/**
 	 * Launch the application.
@@ -68,6 +73,7 @@ public class Window {
 	 * Create the application.
 	 */
 	public Window() {
+		PropertyConfigurator.configure(path);
 		initialize();
 	}
 
