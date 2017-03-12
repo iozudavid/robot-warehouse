@@ -8,6 +8,8 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -40,6 +42,7 @@ public class Window {
 	
 	protected static String[] robotName = {"A", "B", "C", "D"};
 	public static int numOfRobots = 1;
+	final static Logger logger = Logger.getLogger(Window.class);
 
 	/**
 	 * Launch the application.
@@ -74,7 +77,7 @@ public class Window {
 	private void initialize() {
 		
 		//widow set up here
-		frame = new JFrame();
+		frame = new JFrame("Warehouse Simulator");
 		frame.setBounds(100, 100, 1350, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -98,7 +101,7 @@ public class Window {
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
 			robotData.get(i).add(new JLabel("Total reward: "));
-
+			logger.debug("Robot " + i + " JLabels has been created");
 		}
 		
 		
@@ -121,6 +124,7 @@ public class Window {
 			box.add(new JLabel(" "));
 			box.add(dataHolder);
 			dataHolder.add(boxHolder);
+			logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
 		}
 
 			
@@ -190,6 +194,7 @@ public class Window {
 			//adds the robot to an array to be accessed later
 			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, GridPoseStartPositions.get(i), ranger, startCoordinateR1));
 			
+			logger.debug("robot " + i + " placed on the screen and threads started");
 			//starts the robot and the label updater		
 			new Thread(robotControllers.get(i)).start();
 			new Thread(new LableUpdater()).start();;
@@ -205,5 +210,6 @@ public class Window {
 	
 	public static void addCoordinateRobotA(Coordinate newCoordinate){
 		robotControllers.get(0).addToQueue(newCoordinate);
+		logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 	}
 }
