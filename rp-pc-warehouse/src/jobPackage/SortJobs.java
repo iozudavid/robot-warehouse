@@ -1,6 +1,9 @@
 package jobPackage;
 
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,12 +33,23 @@ public class SortJobs {
 				val2 /= j2.returnItems().size();
 
 				if (val1 < val2)
-					return -1;
-				if (val1 > val2)
 					return 1;
+				if (val1 > val2)
+					return -1;
 				return 0;
 			}
 		});
+		try {
+			PrintWriter out = new PrintWriter(new FileWriter("sortedJobs.txt"),true);
+			for(Job j :jobs){
+				out.println(j.returnN()+","+j.returnItems().size() + " "+ j.getReward());
+			}
+
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return jobs;
 	}
 }
