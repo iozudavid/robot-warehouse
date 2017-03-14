@@ -39,7 +39,7 @@ public class WarehouseInterfaceTest {
 		assert(window.frame.getComponentCount() == 1);
 		assert(window.frame.getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChildrenCount() == 2);
 		assert(window.frame.getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChild(1).getAccessibleContext().getAccessibleChildrenCount() == 1);
-		assert(window.frame.getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChild(1).getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChildrenCount() == 2);
+		assert(window.frame.getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChild(1).getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChildrenCount() == 3);
 		assert(window.frame.getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChild(0).getAccessibleContext().getAccessibleChildrenCount() == 0);
 	}
 	

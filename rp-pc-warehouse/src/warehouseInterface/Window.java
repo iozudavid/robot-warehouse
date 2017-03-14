@@ -3,13 +3,19 @@ package warehouseInterface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Properties;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -22,6 +28,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.border.Border;
+import javax.swing.text.DefaultCaret;
 
 import Variables.StartCoordinate;
 import lejos.robotics.RangeFinder;
@@ -42,7 +52,10 @@ public class Window {
 	public JFrame frame;
 	public static ArrayList<ArrayList<JLabel>> robotData = new ArrayList<ArrayList<JLabel>>();
 	protected static ArrayList<DispRobotController> robotControllers = new ArrayList<DispRobotController>();
+	protected static Queue<String> logging_messages = new LinkedList<String>();
 	ArrayList<Coordinate> coordinatePath;
+	protected static Box loggingContainer;
+	protected static JScrollPane scrollPan;
 	
 	protected static String[] robotName = {"A", "B", "C", "D"};
 	public static int numOfRobots = 1;
@@ -84,7 +97,7 @@ public class Window {
 		
 		//widow set up here
 		frame = new JFrame("Warehouse Simulator");
-		frame.setBounds(100, 100, 1350, 800);
+		frame.setBounds(100, 100, 1600, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//buttons panel contains all the information and the cancel buttons
@@ -155,6 +168,7 @@ public class Window {
 		frame.setLayout(new FlowLayout());
 		frame.getContentPane().add(buttons);
 		frame.getContentPane().add(grid);
+		frame.getContentPane().add(LoggingPanel());
 		frame.setVisible(true);
 	}
 	
@@ -214,8 +228,47 @@ public class Window {
 		return viz;
 	}
 	
+	public JPanel LoggingPanel(){
+		JPanel pan = new JPanel();
+		loggingContainer = Box.createVerticalBox();
+		scrollPan = new JScrollPane(loggingContainer);
+		pan.setPreferredSize(new Dimension(300, 690));
+		pan.setSize(new Dimension(300, 800));
+		pan.setBackground(Color.GRAY);
+		pan.setBorder(BorderFactory.createLineBorder(Color.black));
+		pan.setLayout(new FlowLayout(FlowLayout.LEADING));
+		
+		JPanel titlePan = new JPanel();
+		titlePan.setBackground(Color.GRAY);
+		JLabel title = new JLabel("                                       Logger");
+		titlePan.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+		title.setPreferredSize(new Dimension(275, 30));
+		title.setForeground(Color.WHITE);
+		titlePan.add(title);
+		titlePan.setBorder(BorderFactory.createLineBorder(Color.black));
+		titlePan.setSize(new Dimension(300, 50));
+		pan.add(titlePan);
+		
+		scrollPan.setPreferredSize(new Dimension(300, 700));
+		scrollPan.setSize(new Dimension(300, 700));
+		scrollPan.getViewport().setBackground(Color.GRAY);
+		JScrollBar vertical = scrollPan.getVerticalScrollBar();
+		loggingContainer.setBackground(Color.gray);
+		pan.add(scrollPan);
+		
+		new Thread(new LoggingInterfaceUpdater()).start();
+		
+		return pan;
+	}
+	
 	public static void addCoordinateRobotA(Coordinate newCoordinate){
 		robotControllers.get(0).addToQueue(newCoordinate);
 		logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+	}
+	
+	
+	public static void logMessage(String input){
+		logging_messages.add(input);
 	}
 }
