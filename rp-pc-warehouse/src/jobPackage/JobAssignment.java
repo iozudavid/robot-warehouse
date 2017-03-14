@@ -30,14 +30,11 @@ public class JobAssignment {
 		itemIndex = 0;
 		job = jobs.get(jobIndex);
 		item = job.returnItems().get(itemIndex);
+
 	}
 
 	public synchronized Coordinate nextCoordinate() {
 		job = jobs.get(jobIndex);
-//		System.out.println("Job index "+jobIndex);
-//		System.out.println("Item index"+itemIndex);
-		Float itemsWeight = item.rWeight() * getNumOfItems();
-		weightSum += itemsWeight;
 
 		if (isDropOff()) {
 
@@ -50,28 +47,34 @@ public class JobAssignment {
 			coord = dropOff;
 			weightSum = 0;
 
-		} else if (weightSum > maxWeight) {
-
-			itemIndex--;
-
-			if (itemsWeight < maxWeight) {
-				coord = dropOff;
-			} else {
-				/*
-				 * float w = weightSum - itemsWeight; int num = (int)
-				 * (w/item.rWeight()); int initialNum =
-				 * job.returnNmbr(item.rName()); int newNum = initialNum - num;
-				 * job.addItem(item, newNum); job.setNumOfItems(item.rName(),
-				 * num); coord = item.rCoordinate();
-				 */
-			}
-			weightSum = 0;
-
 		} else {
+
+			item = job.returnItems().get(itemIndex);
+			Float itemsWeight = item.rWeight() * getNumOfItems();
+			weightSum += itemsWeight;
 			
-			item = job.returnItems().get(itemIndex++);
+			if (weightSum > maxWeight) {
+
+				if (itemsWeight < maxWeight) {
+					coord = dropOff;
+				} else {
+
+					float w = weightSum - itemsWeight;
+					int num = (int) (w / item.rWeight());
+					int initialNum = job.returnNmbr(item.rName());
+					int newNum = initialNum - num;
+					numOfItems = num;
+					job.setNumOfItems(item.rName(), newNum);
+
+				}
+				weightSum = 0;
+
+			} else {
+
+				itemIndex++;
+				numOfItems = job.returnNmbr(item.rName());
+			}
 			coord = item.rCoordinate();
-			numOfItems = job.returnNmbr(item.rName()); 
 		}
 		return coord;
 
@@ -90,22 +93,18 @@ public class JobAssignment {
 	}
 
 	public int getNumOfItems() {
-		// String itemName = job.returnItems().get(itemIndex - 1).rName();
-		// String itemName = item.rName();
-		//if (!isDropOff()) 
-		//	return job.returnNmbr(item.rName());
 		return numOfItems;
 	}
 
 	public float getReward() {
-		// Item i = job.returnItems().get(itemIndex - 1);
 		return item.rValue();
 	}
-	
-	//TODO not implemented yet
-	//needs to have a message sent the robot when the cancelCurrentJob variable is true
-	//then the next path should be sent
-	public void cancelJob(){
+
+	// TODO not implemented yet
+	// needs to have a message sent the robot when the cancelCurrentJob variable
+	// is true
+	// then the next path should be sent
+	public void cancelJob() {
 		jobIndex++;
 		itemIndex = 0;
 		cancelCurrentJob = true;

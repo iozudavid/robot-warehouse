@@ -8,9 +8,10 @@ import java.util.concurrent.ConcurrentMap;
 // ServerSender thread).
 
 public class Job {
-	 List<Item> list = new ArrayList<Item>();
-	 ConcurrentMap<String, Integer> queueTable = new ConcurrentHashMap<String, Integer>();
+	List<Item> list = new ArrayList<Item>();
+	ConcurrentMap<String, Integer> queueTable = new ConcurrentHashMap<String, Integer>();
 	private String name;
+	private float reward = 0;
 
 	public Job(String name) {
 		this.name = name;
@@ -32,11 +33,16 @@ public class Job {
 	public Integer returnNmbr(String s) {
 		return queueTable.get(s);
 	}
-	
-	public void setNumOfItems(String item, int number){
+
+	public void setNumOfItems(String item, int number) {
 		queueTable.replace(item, number);
 	}
-	
-	
+
+	public float getReward() {
+		for(Item i : list){
+			reward += i.rValue();
+		}
+		return reward;
+	}
 
 }
