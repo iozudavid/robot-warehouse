@@ -44,5 +44,14 @@ public class Job {
 		}
 		return reward;
 	}
+	
+	public void setItems(List<Item> items){
+		this.list = items;
+	}
+	
+	@Override
+	public String toString(){
+		return name;
+	}
 
 }

@@ -36,5 +36,11 @@ public class Item {
 	public String rName(){
 		return name;
 	}
+	
+	@Override
+	public String toString(){
+		return name;
+		
+	}
 
 }
