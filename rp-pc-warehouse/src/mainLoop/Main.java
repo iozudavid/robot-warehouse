@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.print.attribute.standard.Finishings;
 
+import Variables.Messages;
 import jobPackage.JobAssignment;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
@@ -55,7 +56,7 @@ public class Main {
 			}
 			while (!rs.isReceivedEmpty(robotName)) {
 				Message recivedMessage = rs.getReceivedMessage();
-				if (recivedMessage.getMsg().equals("ITEMPICKUP")) {
+				if (recivedMessage.getMsg().equals(Messages.GOTITEM)) {
 					startCoord = jobs.getCoordinate();
 					finishCoord = jobs.nextCoordinate();
 					System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");

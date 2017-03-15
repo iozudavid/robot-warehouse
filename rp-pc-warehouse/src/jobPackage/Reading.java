@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import Variables.InputFiles;
 import warehouse.Coordinate;
 import warehouse.jobInput.Item;
 import warehouse.jobInput.Job;
@@ -35,8 +36,8 @@ public class Reading {
 	// Returns null if the nickname is not in the table:
 	public static void readItem() {
 		try {
-			inputFile1 = new BufferedReader(new FileReader("items.txt"));
-			inputFile2 = new BufferedReader(new FileReader("locations.txt"));
+			inputFile1 = new BufferedReader(new FileReader(InputFiles.ITEMSFILE));
+			inputFile2 = new BufferedReader(new FileReader(InputFiles.LOCATIONSFILE));
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -64,7 +65,7 @@ public class Reading {
 
 	public static void readJobs() {
 		try {
-			inputFile1 = new BufferedReader(new FileReader("jobs.txt"));
+			inputFile1 = new BufferedReader(new FileReader(InputFiles.JOBSFILE));
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
