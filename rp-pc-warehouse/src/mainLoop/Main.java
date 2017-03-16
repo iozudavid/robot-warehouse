@@ -28,7 +28,9 @@ public class Main {
 		String robotAddress = "0016530C73B0";
 
 		// Infomation put into NXTInfo list which can be itterated through
-		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, robotName, robotAddress) };
+		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546")
+		};
 
 		// Set up server
 		RobotServer rs = new RobotServer(robots);

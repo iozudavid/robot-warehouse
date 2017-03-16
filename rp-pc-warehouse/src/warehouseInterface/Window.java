@@ -265,14 +265,14 @@ public class Window {
 	public static void addCoordinateRobotA(Coordinate newCoordinate){
 		robotControllers.get(0).addToQueue(newCoordinate);
 		logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+		//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 	}
 	
 	public static void addCoordinateRobotB(Coordinate newCoordinate){
 		try{
 			robotControllers.get(1).addToQueue(newCoordinate);
 			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 		} catch (Exception e){System.out.println("There is no robot b");}
 	}
 	
@@ -280,7 +280,7 @@ public class Window {
 		try{
 			robotControllers.get(2).addToQueue(newCoordinate);
 			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 		} catch (Exception e){System.out.println("There is no robot c");}
 	}
 	

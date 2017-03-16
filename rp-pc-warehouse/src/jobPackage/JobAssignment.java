@@ -61,7 +61,7 @@ public class JobAssignment {
 		job = jobs.get(jobIndex);
 
 		if (isDropOff()) {
-
+			Window.logMessage("job " + job.returnN() + " has been completed going to drop off");
 			numOfItems = 0;
 			System.out.println("dropOff");
 			itemIndex = 0;
@@ -77,8 +77,11 @@ public class JobAssignment {
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
 			
+			Window.logMessage("On route to " + item.rName());
+			Window.logMessage("current weight is " + weightSum);
+			
 			if (weightSum > maxWeight) {
-
+				Window.logMessage("Robot is at weight limit");
 				if (itemsWeight < maxWeight) {
 					coord = dropOff;
 				} else {
@@ -89,7 +92,6 @@ public class JobAssignment {
 					int newNum = initialNum - num;
 					numOfItems = num;
 					job.setNumOfItems(item.rName(), newNum);
-
 				}
 				weightSum = 0;
 

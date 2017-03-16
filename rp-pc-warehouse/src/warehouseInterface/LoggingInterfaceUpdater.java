@@ -17,9 +17,7 @@ public class LoggingInterfaceUpdater implements StoppableRunnable{
 	public void run() {
 		int count = 0;
 		while(m_running){
-			while(count < 150){
-				Window.logMessage("Logging message " + Integer.toString(count++));
-			}
+		
 			
 			String stringToAdd = Window.logging_messages.poll();
 			if (!(stringToAdd == null)){
