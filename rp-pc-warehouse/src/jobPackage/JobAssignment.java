@@ -39,8 +39,8 @@ public class JobAssignment {
 
 	}
 	
-	/*
-	 * this is just what i was using for testing 
+
+	 //this is just what i was using for testing 
 	public static void main(String[] args){
 		JobAssignment TSTestClass = new JobAssignment();
 		Job testJob = new Job("1000");
@@ -55,7 +55,7 @@ public class JobAssignment {
 		testJob = TSTestClass.TSsort(testJob);
 		System.out.println("second: " + testJob.returnItems().toString());
 	}
-	*/
+	
 
 	public synchronized Coordinate nextCoordinate() {
 		job = jobs.get(jobIndex);

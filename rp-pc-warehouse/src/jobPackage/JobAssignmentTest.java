@@ -14,6 +14,12 @@ import warehouse.jobInput.Job;
 
 public class JobAssignmentTest {
 
+	//need this otherwise i get weird errors from the gridmap class saying there
+	//is an obstacle 
+	static {
+        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(false);
+    }
+	
 	static JobAssignment job;
 
 	@BeforeClass
@@ -59,9 +65,8 @@ public class JobAssignmentTest {
 		assertTrue(c.getX() == 5 && c.getY() == 5 && 3 == job.getNumOfItems());
 	}
 	
-	/*
 	@Test
-	public void TStest(){
+	public void TStest1(){
 		JobAssignment TSTestClass = new JobAssignment();
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
@@ -70,13 +75,185 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 6), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job4"));
 		testJob.setItems(itemList);
-		
-		System.out.println("first: " + itemList.toString());
-		System.out.println("run");
 		Job returnJob = TSTestClass.TSsort(testJob);
-		System.out.println("run1");
-		System.out.println("second: " + returnJob.returnItems().toString());
+		assertTrue(returnJob.returnItems().toString().equals("[job4, job1, job2, job3]"));
 	}
-	*/
 	
+	@Test
+	public void TStest2(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 7), "job7"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 6), "job6"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 5), "job5"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		assertTrue(returnJob.returnItems().toString().equals("[job1, job2, job3, job4, job5, job6, job7]"));
+	}
+	
+	@Test
+	public void TStest3(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 7), "job7"));
+		itemList.add(new Item(1f, 1f, new Coordinate(6, 6), "job6"));
+		itemList.add(new Item(1f, 1f, new Coordinate(3, 5), "job5"));
+		itemList.add(new Item(1f, 1f, new Coordinate(3, 4), "job4"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(5, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(3, 1), "job1"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		assertTrue(returnJob.returnItems().toString().equals("[job3, job7, job5, job4, job1, job2, job6]"));
+	}
+	
+	@Test
+	public void TStest4(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 0), "job7"));
+		itemList.add(new Item(1f, 1f, new Coordinate(1, 0), "job6"));
+		itemList.add(new Item(1f, 1f, new Coordinate(2, 0), "job5"));
+		itemList.add(new Item(1f, 1f, new Coordinate(3, 0), "job4"));
+		itemList.add(new Item(1f, 1f, new Coordinate(4, 0), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(5, 0), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(6, 0), "job1"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		assertTrue(returnJob.returnItems().toString().equals("[job7, job6, job5, job4, job3, job2, job1]"));
+	}
+	
+	@Test
+	public void TStest5(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 0), "job7"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		assertTrue(returnJob.returnItems().toString().equals("[job7]"));
+	}
+	
+	@Test
+	public void TStest6(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(1, 0), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(2, 5), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(5, 2), "job5"));
+		itemList.add(new Item(1f, 1f, new Coordinate(2, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(5, 5), "job4"));
+		itemList.add(new Item(1f, 1f, new Coordinate(6, 0), "job6"));
+		itemList.add(new Item(1f, 1f, new Coordinate(8, 0), "job7"));
+		itemList.add(new Item(1f, 1f, new Coordinate(9, 5), "job8"));
+		itemList.add(new Item(1f, 1f, new Coordinate(9, 7), "job9"));
+		itemList.add(new Item(1f, 1f, new Coordinate(11, 7), "job10"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		assertTrue(returnJob.returnItems().toString().equals("[job1, job2, job3, job4, job5, job6, job7, job8, job9, job10]"));
+	}
+	
+	//check that no coordinates have been changed
+	@Test
+	public void TStest7(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		List<Item> returnItems = returnJob.returnItems();
+		
+		for (int i = 0; i < itemList.size() ; i++){
+			assertTrue(itemList.get(i).rCoordinate().getX() == returnItems.get(i).rCoordinate().getX());
+			assertTrue(itemList.get(i).rCoordinate().getY() == returnItems.get(i).rCoordinate().getY());
+		}
+	}
+	
+	@Test
+	public void TStest8(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		List<Item> returnItems = returnJob.returnItems();
+		
+		for (int i = 0; i < itemList.size() ; i++){
+			assertTrue(itemList.get(i).rName().equals(returnItems.get(i).rName()));
+			assertTrue(itemList.get(i).rName().equals(returnItems.get(i).rName()));
+		}
+	}
+	
+	@Test
+	public void TStest9(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		List<Item> returnItems = returnJob.returnItems();
+		
+		for (int i = 0; i < itemList.size() ; i++){
+			assertTrue(itemList.get(i).rValue() == returnItems.get(i).rValue());
+			assertTrue(itemList.get(i).rValue() == returnItems.get(i).rValue());
+		}
+	}
+	
+	@Test
+	public void TStest10(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		List<Item> returnItems = returnJob.returnItems();
+		
+		for (int i = 0; i < itemList.size() ; i++){
+			assertTrue(itemList.get(i).rWeight() == returnItems.get(i).rWeight());
+			assertTrue(itemList.get(i).rWeight() == returnItems.get(i).rWeight());
+		}
+	}
+	
+	@Test
+	public void TStest11(){
+		JobAssignment TSTestClass = new JobAssignment();
+		Job testJob = new Job("1000");
+		List<Item> itemList = new ArrayList<Item>();
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
+		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
+		testJob.setItems(itemList);
+		Job returnJob = TSTestClass.TSsort(testJob);
+		List<Item> returnItems = returnJob.returnItems();
+		
+		for (int i = 0; i < itemList.size() ; i++){
+			assertFalse(itemList.get(i).rWeight() == returnItems.get(i).rValue());
+			assertTrue(itemList.get(i).rWeight() == returnItems.get(i).rValue());
+		}
+	}
 }
