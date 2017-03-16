@@ -29,7 +29,8 @@ public class Main {
 
 		// Infomation put into NXTInfo list which can be itterated through
 		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
-				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546")
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil","0016530A631F")
 		};
 
 		// Set up server
@@ -40,16 +41,14 @@ public class Main {
 		Coordinate startCoord = jobs.getCoordinate();
 		Coordinate finishCoord = jobs.nextCoordinate();
 
-		System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
-		System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
-
 		// A* search on test coordinates
 		SearchCell start = new SearchCell(startCoord);
 		SearchCell goal = new SearchCell(finishCoord);
 		PathFinding graph = new PathFinding(start, goal);
 		ArrayList<Coordinate> list = graph.aStar();
 		Path c = new Path(list, jobs.getNumOfItems());
-		rs.sendPath(robotName, c);
+	
+		rs.sendPath(robots[0].name, c);
 		// Window.addCoordinateRobotA(c);
 		while (true) {
 			while (!rs.isCoordinateEmpty(robotName)) {

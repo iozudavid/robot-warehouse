@@ -222,11 +222,11 @@ public class Controller extends RobotProgrammingDemo{
 	@Override
 	public void run() {
 		
-		//r = new RobotClient();
-		//r.waitForConnection();
+		r = new RobotClient();
+		r.waitForConnection();
 		
-		pilot.rotate(-90);
-		Delay.msDelay(5000);
+		//pilot.rotate(-90);
+		//Delay.msDelay(5000);
 		Delay.msDelay(500);
 		leftValue=lightleft.readValue();
 		rightValue=lightright.readValue();
