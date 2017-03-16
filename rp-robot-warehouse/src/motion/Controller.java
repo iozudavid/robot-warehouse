@@ -58,36 +58,44 @@ public class Controller extends RobotProgrammingDemo{
 	
 	public void updateHeading(String heading){
 		
-		while(!heading.equals(currentHeading)){	
+		if((currentHeading.equals("plusX")&&heading.equals("minusY"))||
+			(currentHeading.equals("minusY")&&heading.equals("minusX"))||
+			(currentHeading.equals("minusX")&&heading.equals("plusY")) ||
+			(currentHeading.equals("plusY")&&heading.equals("plusX"))){
 			
+			pilot.rotate(-90);
+			currentHeading = heading;
+		}else{
 			
-			switch (currentHeading) {
-			case "plusX":
-				pilot.rotate(90);
-				currentHeading = "plusY";
-				break;
-			case "plusY":
-				//pilot.rotateLeft();
+			while(!heading.equals(currentHeading)){				
 				
-				pilot.rotate(90);
-				currentHeading = "minusX";
-				break;
-			case "minusX":
-				//pilot.rotateLeft();
-				pilot.rotate(90);
-				currentHeading = "minusY";
-				break;
-			case "minusY":
-				//pilot.rotateLeft();
-				pilot.rotate(90);
-				currentHeading = "plusX";
-				break;
+				switch (currentHeading) {
+				case "plusX":
+					pilot.rotate(90);
+					currentHeading = "plusY";
+					break;
+				case "plusY":
+					//pilot.rotateLeft();
+					
+					pilot.rotate(90);
+					currentHeading = "minusX";
+					break;
+				case "minusX":
+					//pilot.rotateLeft();
+					pilot.rotate(90);
+					currentHeading = "minusY";
+					break;
+				case "minusY":
+					//pilot.rotateLeft();
+					pilot.rotate(90);
+					currentHeading = "plusX";
+					break;
 
-			default:
-				break;
-			}
+				default:
+					break;
+				}
+			}			
 		}		
-		
 	}
 	
 	public void setNewPath(Path newPath){
@@ -214,9 +222,11 @@ public class Controller extends RobotProgrammingDemo{
 	@Override
 	public void run() {
 		
-		r = new RobotClient();
-		r.waitForConnection();
+		//r = new RobotClient();
+		//r.waitForConnection();
 		
+		pilot.rotate(-90);
+		Delay.msDelay(5000);
 		Delay.msDelay(500);
 		leftValue=lightleft.readValue();
 		rightValue=lightright.readValue();
