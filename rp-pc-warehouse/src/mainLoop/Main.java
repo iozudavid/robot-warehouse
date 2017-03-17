@@ -14,6 +14,7 @@ import warehouse.Coordinate;
 import warehouse.Path;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
+import warehouse.jobInput.Job;
 import warehouseInterface.RunWarehouse;
 import warehouseInterface.Window;
 
@@ -38,18 +39,18 @@ public class Main {
 		rs.connectToNxts();
 		RunWarehouse.runWarehouseInterface();
 
-		Coordinate startCoord = jobs.getCoordinate();
-		Coordinate finishCoord = jobs.nextCoordinate();
+		Coordinate startCoord = jobs.RobotA.getCoordinate();
+		Coordinate finishCoord = jobs.RobotA.nextCoordinate();
 
 		// A* search on test coordinates
 		SearchCell start = new SearchCell(startCoord);
 		SearchCell goal = new SearchCell(finishCoord);
 		PathFinding graph = new PathFinding(start, goal);
 		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list, jobs.getNumOfItems());
-	
+		Path c = new Path(list, jobs.RobotA.getNumOfItems());
 		rs.sendPath(robots[0].name, c);
 		// Window.addCoordinateRobotA(c);
+		
 		while (true) {
 			while (!rs.isCoordinateEmpty(robotName)) {
 				Message receivedMsg = rs.getReceivedCoordinate();
@@ -58,8 +59,8 @@ public class Main {
 			while (!rs.isReceivedEmpty(robotName)) {
 				Message recivedMessage = rs.getReceivedMessage();
 				if (recivedMessage.getMsg().equals(Messages.GOTITEM)) {
-					startCoord = jobs.getCoordinate();
-					finishCoord = jobs.nextCoordinate();
+					startCoord = jobs.RobotA.getCoordinate();
+					finishCoord = jobs.RobotA.nextCoordinate();
 					System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
 					System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
 
@@ -68,7 +69,7 @@ public class Main {
 					goal = new SearchCell(finishCoord);
 					graph = new PathFinding(start, goal);
 					list = graph.aStar();
-					c = new Path(list, jobs.getNumOfItems());
+					c = new Path(list, jobs.RobotA.getNumOfItems());
 					rs.sendPath(robotName, c);
 				}
 			}

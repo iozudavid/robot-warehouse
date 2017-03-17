@@ -30,6 +30,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultCaret;
 
@@ -56,9 +57,10 @@ public class Window {
 	ArrayList<Coordinate> coordinatePath;
 	protected static Box loggingContainer;
 	protected static JScrollPane scrollPan;
+	protected static JTextArea compleatedJobs;
 	
 	protected static String[] robotName = {"A", "B", "C", "D"};
-	public static int numOfRobots = 1;
+	public static int numOfRobots = 3;
 	final static Logger logger = Logger.getLogger(Window.class);
 	static final String path = "src/log4j.properties";
 
@@ -97,7 +99,7 @@ public class Window {
 		
 		//widow set up here
 		frame = new JFrame("Warehouse Simulator");
-		frame.setBounds(100, 100, 1600, 800);
+		frame.setBounds(100, 100, 1750, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//buttons panel contains all the information and the cancel buttons
@@ -105,7 +107,7 @@ public class Window {
 		
 		//styling for the information panel
 		buttons.setBorder(BorderFactory.createLineBorder(Color.black));
-		buttons.setSize(200,800);
+		buttons.setSize(400,800);
 		buttons.setBackground(Color.LIGHT_GRAY);
 	
 		//box to contain the different robots individual information
@@ -120,6 +122,7 @@ public class Window {
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
 			robotData.get(i).add(new JLabel("Total reward: "));
+			robotData.get(i).add(new JLabel("Items: "));
 			logger.debug("Robot " + i + " JLabels has been created");
 		}
 		
@@ -145,6 +148,22 @@ public class Window {
 			dataHolder.add(boxHolder);
 			logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
 		}
+		
+		//added panel for the jobs that have been compleated
+		JPanel dataHolder = new JPanel();
+		dataHolder.setBorder(BorderFactory.createLineBorder(Color.black));
+		Box boxHolder = Box.createVerticalBox();
+		JLabel jobsCompletedtext = new JLabel("Jobs Completed: ");
+		compleatedJobs = new JTextArea("[]");
+		compleatedJobs.setLineWrap(true);
+		Color backgroundC = new Color(238,238,238);
+		compleatedJobs.setBackground(backgroundC);
+		boxHolder.add(jobsCompletedtext);
+		boxHolder.add(compleatedJobs);
+		dataHolder.add(boxHolder);
+		box.add(new JLabel(" "));
+		box.add(new JLabel(" "));
+		box.add(dataHolder);
 
 			
 		//this places the map on in the panel and on the frame/window
@@ -162,7 +181,7 @@ public class Window {
 		
 		// Add visualisation to frame
 
-		buttons.setPreferredSize(new Dimension(150, 700));
+		buttons.setPreferredSize(new Dimension(290, 700));
 		
 		
 		frame.setLayout(new FlowLayout());
@@ -184,14 +203,14 @@ public class Window {
 
 		// Add a robot of a given configuration to the simulation. The return
 		// value is the object you can use to control the robot. //
-		Coordinate startCoordinateR1 = StartCoordinate.STARTCOORDINATE;
-		Coordinate startCoordinateR2 = new Coordinate(1, 0);
-		Coordinate startCoordinateR3 = new Coordinate(2, 0);
+		Coordinate startCoordinateR1 = StartCoordinate.STARTCOORDINATEA;
+		Coordinate startCoordinateR2 = StartCoordinate.STARTCOORDINATEB;
+		Coordinate startCoordinateR3 = StartCoordinate.STARTCOORDINATEC;
 		
 		//start pose of the robot this can be changed on the above line
 		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
-		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
-		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_Y);
+		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
+		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
 		
 		ArrayList<GridPose> GridPoseStartPositions = new ArrayList<GridPose>();
 		GridPoseStartPositions.add(gridStartR1);
