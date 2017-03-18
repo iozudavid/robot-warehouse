@@ -167,6 +167,9 @@ public class Controller extends RobotProgrammingDemo{
 			int gx = next.getX();
 			int gy = next.getY();
 			
+			if(next.equals(currentPosition))
+				Delay.msDelay(3000);
+			
 			if(x < gx){
 				LCD.clear();
 				System.out.println("PlusX");

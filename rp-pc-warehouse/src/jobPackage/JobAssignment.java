@@ -2,8 +2,10 @@ package jobPackage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 
 import Variables.StartCoordinate;
+import lejos.pc.comm.NXTInfo;
 import lejos.robotics.pathfinding.AstarSearchAlgorithm;
 import warehouse.Coordinate;
 import warehouse.PathFinding;
@@ -21,19 +23,27 @@ public class JobAssignment {
 	public SingleRobotJobAssignment RobotA;
 	public SingleRobotJobAssignment RobotB;
 	public SingleRobotJobAssignment RobotC;
+	ConcurrentMap<String,SingleRobotJobAssignment> robotAssignments = new ConcurrentHashMap<String,SingleRobotJobAssignment>();
 
-	public JobAssignment() {
+	public JobAssignment(NXTInfo[] robots) {
 
 		Reading.readItem();
 		Reading.readJobs();
 		jobs = Reading.returnJobs();
 		jobs = SortJobs.sortByReward(jobs);
 		
+		/*
 		RobotA = new SingleRobotJobAssignment("a");
 		RobotB = new SingleRobotJobAssignment("b");
 		RobotC = new SingleRobotJobAssignment("c");
-		
-		
+		*/
+		for (NXTInfo nxt: robots){
+			robotAssignments.put(nxt.name, new SingleRobotJobAssignment(nxt.name));
+		}
+	}
+	
+	public SingleRobotJobAssignment getRobotJobAssignment(String nxtName){
+		return robotAssignments.get(nxtName);
 	}
 		
 	public static synchronized Job nextJob(){

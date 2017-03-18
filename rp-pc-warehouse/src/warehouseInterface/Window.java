@@ -303,6 +303,14 @@ public class Window {
 		} catch (Exception e){System.out.println("There is no robot c");}
 	}
 	
+	public static void addCoordinateRobot(Coordinate newCoordinate,int id){
+		try{
+			robotControllers.get(id).addToQueue(newCoordinate);
+			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+		} catch (Exception e){System.out.println("There is no robot b");}
+	}
+	
 	
 	public static void logMessage(String input){
 		logging_messages.add(input);

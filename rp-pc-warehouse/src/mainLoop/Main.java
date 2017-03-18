@@ -1,4 +1,5 @@
 package mainLoop;
+
 import java.awt.EventQueue;
 import java.util.ArrayList;
 
@@ -19,60 +20,79 @@ import warehouseInterface.RunWarehouse;
 import warehouseInterface.Window;
 
 public class Main {
-	
+
 	public static JobAssignment jobs;
 
 	public static void main(String[] args) {
-
-		jobs = new JobAssignment();
-		String robotName = "NXT";
-		String robotAddress = "0016530C73B0";
-
 		// Infomation put into NXTInfo list which can be itterated through
 		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
 				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
-				new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil","0016530A631F")
-		};
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil", "0016530A631F") };
 
+		jobs = new JobAssignment(robots);
+		
 		// Set up server
 		RobotServer rs = new RobotServer(robots);
 		rs.connectToNxts();
 		RunWarehouse.runWarehouseInterface();
 
-		Coordinate startCoord = jobs.RobotA.getCoordinate();
-		Coordinate finishCoord = jobs.RobotA.nextCoordinate();
+		ArrayList<RobotLoop> robotLoops = new ArrayList<RobotLoop>();
 
-		// A* search on test coordinates
-		SearchCell start = new SearchCell(startCoord);
-		SearchCell goal = new SearchCell(finishCoord);
-		PathFinding graph = new PathFinding(start, goal);
-		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list, jobs.RobotA.getNumOfItems());
-		rs.sendPath(robots[0].name, c);
-		// Window.addCoordinateRobotA(c);
 		
-		while (true) {
-			while (!rs.isCoordinateEmpty(robotName)) {
-				Message receivedMsg = rs.getReceivedCoordinate();
-				Window.addCoordinateRobotA(receivedMsg.getCoord());
-			}
-			while (!rs.isReceivedEmpty(robotName)) {
-				Message recivedMessage = rs.getReceivedMessage();
-				if (recivedMessage.getMsg().equals(Messages.GOTITEM)) {
-					startCoord = jobs.RobotA.getCoordinate();
-					finishCoord = jobs.RobotA.nextCoordinate();
-					System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
-					System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
+		robotLoops.add(new RobotLoop(rs, robots[0].name, 0, jobs.RobotA));
+		robotLoops.get(robotLoops.size() - 1).start();
 
-					// A* search on test coordinates
-					start = new SearchCell(startCoord);
-					goal = new SearchCell(finishCoord);
-					graph = new PathFinding(start, goal);
-					list = graph.aStar();
-					c = new Path(list, jobs.RobotA.getNumOfItems());
-					rs.sendPath(robotName, c);
-				}
-			}
+		robotLoops.add(new RobotLoop(rs, robots[1].name, 1,jobs.RobotB));
+		robotLoops.get(robotLoops.size() - 1).start();
+
+		robotLoops.add(new RobotLoop(rs, robots[2].name, 2,jobs.RobotC));
+		robotLoops.get(robotLoops.size() - 1).start();
+
+		try {
+			robotLoops.get(0).join();
+			robotLoops.get(1).join();
+			robotLoops.get(2).join();
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		/*Set path testing
+		ArrayList<Coordinate> path1 = new ArrayList<Coordinate>();
+		path1.add(new Coordinate(0,0));
+		path1.add(new Coordinate(1,0));
+		path1.add(new Coordinate(2,0));
+		path1.add(new Coordinate(2,0));
+		path1.add(new Coordinate(3,0));
+		path1.add(new Coordinate(4,0));
+		path1.add(new Coordinate(5,0));
+		path1.add(new Coordinate(5,0));
+		path1.add(new Coordinate(6,0));
+		
+		ArrayList<Coordinate> path2 = new ArrayList<Coordinate>();
+		path2.add(new Coordinate(3,3));
+		path2.add(new Coordinate(3,2));
+		path2.add(new Coordinate(3,1));
+		path2.add(new Coordinate(3,0));
+		path2.add(new Coordinate(4,0));
+		path2.add(new Coordinate(5,0));
+		path2.add(new Coordinate(5,1));
+		path2.add(new Coordinate(5,2));
+		path2.add(new Coordinate(5,3));
+		
+		ArrayList<Coordinate> path3 = new ArrayList<Coordinate>();
+		path3.add(new Coordinate(11,0));
+		path3.add(new Coordinate(10,0));
+		path3.add(new Coordinate(9,0));
+		path3.add(new Coordinate(8,0));
+		path3.add(new Coordinate(7,0));
+		path3.add(new Coordinate(6,0));
+		path3.add(new Coordinate(6,1));
+		path3.add(new Coordinate(6,2));
+		path3.add(new Coordinate(6,3));
+		
+		Path path01 = new Path(path1,2);
+		Path path02 = new Path(path2,2);
+		Path path03 = new Path(path3,2);
+		*/
 	}
 }

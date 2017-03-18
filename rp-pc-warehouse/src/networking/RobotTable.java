@@ -12,12 +12,16 @@ public class RobotTable {
 	private ConcurrentMap<String, MessageQueue> queueTable = new ConcurrentHashMap<String, MessageQueue>();
 
 	// Incoming tables
-	private BlockingQueue<Message> receivedMessages = new LinkedBlockingQueue<Message>();
-	private BlockingQueue<Message> receivedCoordinates = new LinkedBlockingQueue<Message>();
+	private ConcurrentMap<String, ReceivedQueue> receivedMessages = new ConcurrentHashMap<String, ReceivedQueue>();
+	private ConcurrentMap<String, ReceivedQueue> receivedCoordinates = new ConcurrentHashMap<String, ReceivedQueue>();
+	//private BlockingQueue<Message> receivedMessages = new LinkedBlockingQueue<Message>();
+	//private BlockingQueue<Message> receivedCoordinates = new LinkedBlockingQueue<Message>();
 
 	// For outing table queueTable
 	public void addRobot(String robotName) {
 		queueTable.putIfAbsent(robotName, new MessageQueue());
+		receivedMessages.putIfAbsent(robotName, new ReceivedQueue());
+		receivedCoordinates.putIfAbsent(robotName, new ReceivedQueue());
 	}
 
 	public MessageQueue getMessages(String robotName) {
@@ -35,40 +39,35 @@ public class RobotTable {
 
 	// For incoming table for STRINGS
 	public void addReceivedMessage(String sender, String msg) {
-		receivedMessages.offer(new Message(sender, msg));
+		ReceivedQueue robotQueue = receivedMessages.get(sender);
+		robotQueue.offerString(msg);
 	}
 
-	public Message takeReceivedMessage() {
-
-		try {
-			return (receivedMessages.take());
-		} catch (InterruptedException e) {
-			System.err.println(e);
-		}
-		return null;
+	public String takeReceivedMessage(String nxtName) {
+		ReceivedQueue robotQueue = receivedMessages.get(nxtName);
+		return (robotQueue.takeString());
 	}
 
 	public boolean isReceivedEmpty(String nxtName) {
-		return receivedMessages.isEmpty();
+		ReceivedQueue robotQueue = receivedMessages.get(nxtName);
+		return robotQueue.isStringEmpty();
 	}
 
 	// For incoming table for COORDINATES
-	public void addReceivedCoordinate(String sender, Coordinate c) {
-		receivedCoordinates.offer(new Message(sender, c));
+	public void addReceivedCoordinate(String nxtName, Coordinate c) {
+		ReceivedQueue robotQueue = receivedMessages.get(nxtName);
+		robotQueue.offerCoordinate(c);
 	}
 
-	public Message takeReceivedCoordinate() {
+	public Coordinate takeReceivedCoordinate(String nxtName) {
 		while (true) {
-			try {
-				return (receivedCoordinates.take());
-			} catch (InterruptedException e) {
-				System.err.println(e);
-			}
-
+			ReceivedQueue robotQueue = receivedMessages.get(nxtName);
+			return (robotQueue.takeCoordinate());
 		}
 	}
 
 	public boolean isCoordinateEmpty(String nxtName) {
-		return receivedCoordinates.isEmpty();
+		ReceivedQueue robotQueue = receivedMessages.get(nxtName);
+		return robotQueue.isCoordinateEmpty();
 	}
 }
