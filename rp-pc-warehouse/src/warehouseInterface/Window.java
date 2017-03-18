@@ -36,6 +36,7 @@ import javax.swing.text.DefaultCaret;
 
 import Variables.StartCoordinate;
 import lejos.robotics.RangeFinder;
+import mainLoop.Main;
 import rp.robotics.MobileRobotWrapper;
 import rp.robotics.mapping.GridMap;
 import rp.robotics.mapping.MapUtils;
@@ -60,7 +61,7 @@ public class Window {
 	protected static JTextArea compleatedJobs;
 	
 	protected static String[] robotName = {"A", "B", "C", "D"};
-	public static int numOfRobots = 3;
+	public static int numOfRobots = Main.robots.length;
 	final static Logger logger = Logger.getLogger(Window.class);
 	static final String path = "src/log4j.properties";
 
@@ -99,7 +100,7 @@ public class Window {
 		
 		//widow set up here
 		frame = new JFrame("Warehouse Simulator");
-		frame.setBounds(100, 100, 1750, 800);
+		frame.setBounds(100, 100, 1650, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//buttons panel contains all the information and the cancel buttons
@@ -172,7 +173,7 @@ public class Window {
 		JPanel mapPanel = new JPanel();
 		mapPanel.setLayout(new BorderLayout());
 		mapPanel.add(mapCreate());
-		mapPanel.setPreferredSize(new Dimension(1100, 700));
+		mapPanel.setPreferredSize(new Dimension(1010, 700));
 		
 		grid.add(mapPanel, new Integer(2),1);	
 		//grid.add(new mapVisPanel(gridMap, gridMap), new Integer(1),0);

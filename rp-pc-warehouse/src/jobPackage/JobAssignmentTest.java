@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import lejos.pc.comm.NXTInfo;
 import warehouse.Coordinate;
 import warehouse.jobInput.Item;
 import warehouse.jobInput.Job;
@@ -24,53 +25,80 @@ public class JobAssignmentTest {
 
 	@BeforeClass
 	public static void before() {
-		job = new JobAssignment();
+		Job job1 = new Job("job1");
+		Job job2 = new Job("job2");
+		Job job3 = new Job("job3");
+		
+		job1.addItem(new Item(2f, 2f, new Coordinate(2, 2), "item1"), 2);
+		job1.addItem(new Item(2f, 3f, new Coordinate(2, 3), "item2"), 2);
+		job1.addItem(new Item(2f, 4f, new Coordinate(2, 4), "item3"), 2);
+		
+		job2.addItem(new Item(2f, 3f, new Coordinate(2, 3), "item1"), 2);
+		job2.addItem(new Item(2f, 4f, new Coordinate(2, 4), "item2"), 2);
+		job2.addItem(new Item(2f, 5f, new Coordinate(2, 5), "item3"), 2);
+
+		job3.addItem(new Item(2f, 4f, new Coordinate(2, 4), "item1"), 2);
+		job3.addItem(new Item(2f, 5f, new Coordinate(2, 5), "item2"), 2);
+		job3.addItem(new Item(2f, 6f, new Coordinate(2, 6), "item3"), 2);
+		
+		ArrayList<Job> jobs = new ArrayList<Job>();
+		jobs.add(job1);
+		jobs.add(job2);
+		jobs.add(job3);
+		
+		job = new JobAssignment(jobs);
 	}
 
 	//this tests will fail if new files are used like when we have to the demo so a more robust
 	//solution will be needs TODO
 	
 	@Test
-	public void test1() {
+	public void muliRobotJobAssignment() {
 		//this represents the start location so will fail if the start location is changed
-		Coordinate c = new Coordinate(0, 0);
-		Coordinate c1 = job.RobotA.getCoordinate();
-		assertTrue(c1.getX() == c.getX() && c.getY() == c1.getY());
+		Coordinate c = job.RobotA.getCoordinate();
+		assertTrue(c.getX() == 0 && c.getY() == 0);
+		
+		c = job.RobotB.getCoordinate();
+		assertTrue(c.getX() == 1 && c.getY() == 0);
+		
+		c = job.RobotC.getCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 0);
+		
+		c = job.RobotA.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 4);
+		
+		c = job.RobotB.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 3);
+		
+		c = job.RobotC.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 2);
+		
+		c = job.RobotA.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 5);
+		
+		c = job.RobotB.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 4);
+		
+		c = job.RobotC.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 3);
+		
+		c = job.RobotA.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 6);
+		
+		c = job.RobotB.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 5);
+		
+		c = job.RobotC.nextCoordinate();
+		assertTrue(c.getX() == 2 && c.getY() == 4);
 	}
-
-	@Test
-	public void test2() {
-		Coordinate c = job.RobotA.nextCoordinate();
-		assertTrue(c.getX() == 8 && c.getY() == 4 && 1 == job.RobotA.getNumOfItems());
-	}
-
-	@Test
-	public void test3() {
-		Coordinate c = job.RobotA.nextCoordinate();
-		assertTrue(c.getX() == 9 && c.getY() == 5 && 1 == job.RobotA.getNumOfItems());
-	}
-
-	@Test
-	public void test4() {
-		Coordinate c = job.RobotA.nextCoordinate();
-		assertTrue(c.getX() == 3 && c.getY() == 5 && 0 == job.RobotA.getNumOfItems());
-	}
-
-	@Test
-	public void test5() {
-		Coordinate c = job.RobotA.nextCoordinate();
-		assertTrue(c.getX() == 8 && c.getY() == 4 && 3 == job.RobotA.getNumOfItems());
-	}
-	
-	@Test
-	public void test6() {
-		Coordinate c = job.RobotA.nextCoordinate();
-		assertTrue(c.getX() == 8 && c.getY() == 3 && 0 == job.RobotA.getNumOfItems());
-	}
-	
+		
 	@Test
 	public void TStest1(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+
+		//JobAssignment TSTestClass = new JobAssignment(eachJob);
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(2, 4), "job1"));
@@ -78,13 +106,16 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 6), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job4, job1, job2, job3]"));
 	}
 	
 	@Test
 	public void TStest2(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 7), "job7"));
@@ -95,13 +126,16 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 2), "job2"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job1, job2, job3, job4, job5, job6, job7]"));
 	}
 	
 	@Test
 	public void TStest3(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 7), "job7"));
@@ -112,13 +146,16 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 2), "job2"));
 		itemList.add(new Item(1f, 1f, new Coordinate(3, 1), "job1"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job3, job7, job5, job4, job1, job2, job6]"));
 	}
 	
 	@Test
 	public void TStest4(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 0), "job7"));
@@ -129,24 +166,30 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 0), "job2"));
 		itemList.add(new Item(1f, 1f, new Coordinate(6, 0), "job1"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job7, job6, job5, job4, job3, job2, job1]"));
 	}
 	
 	@Test
 	public void TStest5(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 0), "job7"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job7]"));
 	}
 	
 	@Test
 	public void TStest6(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(1, 0), "job1"));
@@ -160,14 +203,17 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(9, 7), "job9"));
 		itemList.add(new Item(1f, 1f, new Coordinate(11, 7), "job10"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job1, job2, job3, job4, job5, job6, job7, job8, job9, job10]"));
 	}
 	
 	//check that no coordinates have been changed
 	@Test
 	public void TStest7(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
@@ -175,7 +221,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		List<Item> returnItems = returnJob.returnItems();
 		
 		for (int i = 0; i < itemList.size() ; i++){
@@ -186,7 +232,10 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void TStest8(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
@@ -194,7 +243,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		List<Item> returnItems = returnJob.returnItems();
 		
 		for (int i = 0; i < itemList.size() ; i++){
@@ -205,7 +254,10 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void TStest9(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
@@ -213,7 +265,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		List<Item> returnItems = returnJob.returnItems();
 		
 		for (int i = 0; i < itemList.size() ; i++){
@@ -224,7 +276,10 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void TStest10(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
@@ -232,7 +287,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		List<Item> returnItems = returnJob.returnItems();
 		
 		for (int i = 0; i < itemList.size() ; i++){
@@ -243,7 +298,10 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void TStest11(){
-		JobAssignment TSTestClass = new JobAssignment();
+		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
 		Job testJob = new Job("1000");
 		List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 1), "job1"));
@@ -251,7 +309,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 3), "job3"));
 		itemList.add(new Item(1f, 1f, new Coordinate(0, 4), "job4"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.RobotA.TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
 		List<Item> returnItems = returnJob.returnItems();
 		
 		for (int i = 0; i < itemList.size() ; i++){
@@ -262,40 +320,23 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void muliRobotTest(){
-		JobAssignment JATestClass = new JobAssignment();
-		System.out.println(JATestClass.RobotA.getJobName());
-		System.out.println(JATestClass.RobotB.getJobName());
-		System.out.println(JATestClass.RobotC.getJobName());
+		NXTInfo intoObject1 = new NXTInfo(2, "a", "1231231");
+		NXTInfo intoObject2 = new NXTInfo(2, "b", "1231231");
+		NXTInfo intoObject3 = new NXTInfo(2, "c", "1231231");
+		NXTInfo[] arrayTest = {intoObject1, intoObject2, intoObject3};
+		JobAssignment JATestClass = new JobAssignment(arrayTest);
 		
-		assertTrue(JATestClass.RobotA.getCoordinate().getX() == 0);
-		assertTrue(JATestClass.RobotA.getCoordinate().getY() == 0);
+		System.out.println(JATestClass.getRobotJobAssignment("a").getJobName());
+		System.out.println(JATestClass.getRobotJobAssignment("b").getJobName());
+		System.out.println(JATestClass.getRobotJobAssignment("c").getJobName());
 		
-		assertTrue(JATestClass.RobotB.getCoordinate().getX() == 1);
-		assertTrue(JATestClass.RobotB.getCoordinate().getY() == 0);
+		assertTrue(JATestClass.getRobotJobAssignment("a").getCoordinate().getX() == 0);
+		assertTrue(JATestClass.getRobotJobAssignment("a").getCoordinate().getY() == 0);
+		
+		assertTrue(JATestClass.getRobotJobAssignment("b").getCoordinate().getX() == 1);
+		assertTrue(JATestClass.getRobotJobAssignment("b").getCoordinate().getY() == 0);
 
-		assertTrue(JATestClass.RobotC.getCoordinate().getX() == 2);
-		assertTrue(JATestClass.RobotC.getCoordinate().getY() == 0);
-		
-		System.out.println(JATestClass.RobotA.getCoordinate().getX() + "," + JATestClass.RobotA.getCoordinate().getY());
-		System.out.println(JATestClass.RobotB.getCoordinate().getX() + "," + JATestClass.RobotB.getCoordinate().getY());
-		System.out.println(JATestClass.RobotC.getCoordinate().getX() + "," + JATestClass.RobotC.getCoordinate().getY());
-		
-		
-		System.out.println(JATestClass.RobotA.nextCoordinate().getX() + "," + JATestClass.RobotA.nextCoordinate().getY());
-		System.out.println(JATestClass.RobotA.getJobName());
-		System.out.println(JATestClass.RobotA.getNumOfItems());
-		
-		System.out.println(JATestClass.RobotB.nextCoordinate().getX() + "," + JATestClass.RobotB.nextCoordinate().getY());
-		System.out.println(JATestClass.RobotB.getJobName());
-		System.out.println(JATestClass.RobotB.getNumOfItems());
-		
-		System.out.println(JATestClass.RobotC.nextCoordinate().getX() + "," + JATestClass.RobotC.nextCoordinate().getY());
-		System.out.println(JATestClass.RobotC.getJobName());
-		System.out.println(JATestClass.RobotC.getNumOfItems());
-		
-		
-		System.out.println(JATestClass.RobotA.getNumOfItems());
-		System.out.println(JATestClass.RobotB.getNumOfItems());
-		System.out.println(JATestClass.RobotC.getNumOfItems());
+		assertTrue(JATestClass.getRobotJobAssignment("c").getCoordinate().getX() == 2);
+		assertTrue(JATestClass.getRobotJobAssignment("c").getCoordinate().getY() == 0);
 	}
 }

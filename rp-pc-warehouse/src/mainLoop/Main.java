@@ -23,11 +23,12 @@ public class Main {
 
 	public static JobAssignment jobs;
 
+	public static NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
+			new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
+			new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil", "0016530A631F") };
+	
 	public static void main(String[] args) {
 		// Infomation put into NXTInfo list which can be itterated through
-		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
-				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
-				new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil", "0016530A631F") };
 
 		jobs = new JobAssignment(robots);
 		
@@ -37,15 +38,14 @@ public class Main {
 		RunWarehouse.runWarehouseInterface();
 
 		ArrayList<RobotLoop> robotLoops = new ArrayList<RobotLoop>();
-
 		
-		robotLoops.add(new RobotLoop(rs, robots[0].name, 0, jobs.RobotA));
+		robotLoops.add(new RobotLoop(rs, robots[0].name, 0, jobs.getRobotJobAssignment( robots[0].name)));
 		robotLoops.get(robotLoops.size() - 1).start();
 
-		robotLoops.add(new RobotLoop(rs, robots[1].name, 1,jobs.RobotB));
+		robotLoops.add(new RobotLoop(rs, robots[1].name, 1, jobs.getRobotJobAssignment( robots[1].name)));
 		robotLoops.get(robotLoops.size() - 1).start();
 
-		robotLoops.add(new RobotLoop(rs, robots[2].name, 2,jobs.RobotC));
+		robotLoops.add(new RobotLoop(rs, robots[2].name, 2, jobs.getRobotJobAssignment( robots[2].name)));
 		robotLoops.get(robotLoops.size() - 1).start();
 
 		try {

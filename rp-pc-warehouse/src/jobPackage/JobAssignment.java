@@ -32,14 +32,19 @@ public class JobAssignment {
 		jobs = Reading.returnJobs();
 		jobs = SortJobs.sortByReward(jobs);
 		
-		/*
-		RobotA = new SingleRobotJobAssignment("a");
-		RobotB = new SingleRobotJobAssignment("b");
-		RobotC = new SingleRobotJobAssignment("c");
-		*/
 		for (NXTInfo nxt: robots){
 			robotAssignments.put(nxt.name, new SingleRobotJobAssignment(nxt.name));
 		}
+	}
+	
+	//for the test class
+	public JobAssignment(ArrayList<Job> testJobs){
+		this.jobs = testJobs;
+		jobs = SortJobs.sortByReward(jobs);
+		
+		RobotA = new SingleRobotJobAssignment("a");
+		RobotB = new SingleRobotJobAssignment("b");
+		RobotC = new SingleRobotJobAssignment("c");
 	}
 	
 	public SingleRobotJobAssignment getRobotJobAssignment(String nxtName){
@@ -47,6 +52,7 @@ public class JobAssignment {
 	}
 		
 	public static synchronized Job nextJob(){
+		System.out.println(currentJobIndex+1);
 		return jobs.get(currentJobIndex++);
 	}
 	

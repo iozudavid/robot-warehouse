@@ -46,7 +46,6 @@ public class SingleRobotJobAssignment {
 			weightSum = 0;
 
 		} else {
-
 			item = job.returnItems().get(itemIndex);
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
