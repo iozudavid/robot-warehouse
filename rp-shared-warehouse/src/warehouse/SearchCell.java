@@ -34,6 +34,11 @@ public class SearchCell {
 		return (x+y);
 	}
 	
+	public int heuristicsSingleAStar(Coordinate _goal,ArrayList<SearchCell> obstacles){
+		PathFindingDinamic a=new PathFindingDinamic(this, new SearchCell(_goal), obstacles);
+		return a.aStar().size();
+	}
+	
 	
 	
 }
