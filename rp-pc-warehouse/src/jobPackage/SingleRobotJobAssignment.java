@@ -33,7 +33,8 @@ public class SingleRobotJobAssignment {
 	
 	public synchronized Coordinate nextCoordinate() {
 		if (isDropOff()) {
-			Window.logMessage("job " + job.returnN() + " has been completed going to drop off");
+			Window.logMessage("job " + job.returnN() + " has been completed");
+			Window.logMessage(name + " going to drop off");
 			numOfItems = 0;
 			itemIndex = 0;
 			JobAssignment.addCompleatedJob(job);
@@ -48,7 +49,7 @@ public class SingleRobotJobAssignment {
 			weightSum += itemsWeight;
 			
 			Window.logMessage(name + " on route to " + item.rName());
-			Window.logMessage("current weight is " + weightSum);
+			Window.logMessage("current weight of " + name + " is " + weightSum);
 			
 			if (weightSum > maxWeight) {
 				Window.logMessage("Robot is at weight limit");

@@ -2,6 +2,7 @@ package mainLoop;
 
 import java.awt.EventQueue;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import javax.print.attribute.standard.Finishings;
@@ -56,7 +57,9 @@ public class Main {
 			paths.get(i).setNumberOfItems(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
 			rs.sendPath(robots[i].name, paths.get(i));
 		}
+		
 		boolean[] finished = {false,false,false};
+		
 		while (true) {
 			while (!rs.isCoordinateEmpty()) {
 				Message receivedMsg = rs.getReceivedCoordinate();
@@ -83,6 +86,8 @@ public class Main {
 						paths.get(i).setNumberOfItems(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
 						rs.sendPath(robots[i].name, paths.get(i));
 					}
+					
+					Arrays.fill(finished, false); 
 				}
 			}
 		}

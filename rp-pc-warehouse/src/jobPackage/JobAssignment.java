@@ -21,9 +21,9 @@ public class JobAssignment {
 	protected static List<Job> jobs;
 	protected static int currentJobIndex = 0;
 	protected static ArrayList<String> compleatedJobs = new ArrayList<String>();
-	public SingleRobotJobAssignment RobotA;
-	public SingleRobotJobAssignment RobotB;
-	public SingleRobotJobAssignment RobotC;
+	protected SingleRobotJobAssignment RobotA;
+	protected SingleRobotJobAssignment RobotB;
+	protected SingleRobotJobAssignment RobotC;
 	ConcurrentMap<String,SingleRobotJobAssignment> robotAssignments = new ConcurrentHashMap<String,SingleRobotJobAssignment>();
 	public static ArrayList<Coordinate> dropOffs;
 
@@ -57,7 +57,7 @@ public class JobAssignment {
 	}
 		
 	public static synchronized Job nextJob(){
-		Window.logMessage("At job index " + (currentJobIndex+1));
+		Window.logMessage("Currently at job index " + (currentJobIndex+1));
 		return jobs.get(currentJobIndex++);
 	}
 	
@@ -82,7 +82,6 @@ public class JobAssignment {
 	public static Coordinate findDropOff(Coordinate current){
 		Coordinate close = dropOffs.get(0);
 		for (Coordinate drops : dropOffs){
-			System.out.println(drops + " " + lineDistanceTrig(drops, current));
 			if(lineDistanceTrig(drops, current) < lineDistanceTrig(close, current)){
 				close = drops;
 			}

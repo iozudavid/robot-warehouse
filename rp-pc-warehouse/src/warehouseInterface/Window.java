@@ -3,18 +3,11 @@ package warehouseInterface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Properties;
 import java.util.Queue;
 
 import org.apache.log4j.Logger;
@@ -31,10 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultCaret;
-
 import Variables.StartCoordinate;
+import lejos.pc.comm.NXTInfo;
 import lejos.robotics.RangeFinder;
 import mainLoop.Main;
 import rp.robotics.MobileRobotWrapper;
@@ -60,7 +51,7 @@ public class Window {
 	protected static JScrollPane scrollPan;
 	protected static JTextArea compleatedJobs;
 	
-	protected static String[] robotName = {"A", "B", "C", "D"};
+	protected static NXTInfo[] robotName = Main.robots;
 	public static int numOfRobots = Main.robots.length;
 	final static Logger logger = Logger.getLogger(Window.class);
 	static final String path = "src/log4j.properties";
@@ -118,7 +109,7 @@ public class Window {
 		//adds the labels for the different robots depending on how many robot there currently are
 		for (int i = 0 ; i < numOfRobots ; i++){
 			robotData.add(new ArrayList<JLabel>());
-			robotData.get(i).add(new JLabel("Robot: " + robotName[i]));
+			robotData.get(i).add(new JLabel("Robot: " + robotName[i].name));
 			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
@@ -139,7 +130,7 @@ public class Window {
 			for (JLabel label : robot){
 				boxHolder.add(label);
 			}
-			JButton cancelButton = new JButton("Cancel: " + robotName[count]);
+			JButton cancelButton = new JButton("Cancel: " + robotName[count].name);
 			cancelButton.addActionListener(new ButtonPressed());
 			boxHolder.add(cancelButton);
 			count++;
@@ -283,7 +274,7 @@ public class Window {
 		return pan;
 	}
 	
-	public static void addCoordinateRobot(Coordinate newCoordinate,String id){
+	public static void addCoordinateRobot(Coordinate newCoordinate, String id){
 		try{
 			getIndex(id).addToQueue(newCoordinate);
 			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
@@ -292,8 +283,8 @@ public class Window {
 	}
 	
 	public static DispRobotController getIndex(String id){
-		for (int i = 0; i<robotControllers.size();i++){
-			if (id.equals(Main.robots[i])){
+		for (int i = 0; i < robotControllers.size();i++){
+			if (id.equals(Main.robots[i].name)){
 				return robotControllers.get(i);
 			}
 		}
