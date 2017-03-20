@@ -7,6 +7,7 @@ import java.util.concurrent.*;
 import Variables.StartCoordinate;
 import lejos.pc.comm.NXTInfo;
 import lejos.robotics.pathfinding.AstarSearchAlgorithm;
+import mainLoop.Main;
 import warehouse.Coordinate;
 import warehouse.PathFinding;
 import warehouse.SearchCell;
@@ -24,13 +25,17 @@ public class JobAssignment {
 	public SingleRobotJobAssignment RobotB;
 	public SingleRobotJobAssignment RobotC;
 	ConcurrentMap<String,SingleRobotJobAssignment> robotAssignments = new ConcurrentHashMap<String,SingleRobotJobAssignment>();
+	public static ArrayList<Coordinate> dropOffs;
 
 	public JobAssignment(NXTInfo[] robots) {
 
 		Reading.readItem();
 		Reading.readJobs();
+		Reading.readDropOff();
+		
+		dropOffs = Reading.returnDropOffs();
 		jobs = Reading.returnJobs();
-		jobs = SortJobs.sortByReward(jobs);
+		//jobs = SortJobs.sortByReward(jobs);
 		
 		for (NXTInfo nxt: robots){
 			robotAssignments.put(nxt.name, new SingleRobotJobAssignment(nxt.name));
@@ -39,7 +44,7 @@ public class JobAssignment {
 	
 	//for the test class
 	public JobAssignment(ArrayList<Job> testJobs){
-		this.jobs = testJobs;
+		jobs = testJobs;
 		jobs = SortJobs.sortByReward(jobs);
 		
 		RobotA = new SingleRobotJobAssignment("a");
@@ -52,14 +57,14 @@ public class JobAssignment {
 	}
 		
 	public static synchronized Job nextJob(){
-		System.out.println(currentJobIndex+1);
+		Window.logMessage("At job index " + (currentJobIndex+1));
 		return jobs.get(currentJobIndex++);
 	}
 	
 	public static Coordinate startPositionSelector(String name){
-		if (name.equals("a")){
+		if (name.equals(Main.robots[0].name)){
 			return StartCoordinate.STARTCOORDINATEA;
-		} else if (name.equals("b")){
+		} else if (name.equals(Main.robots[1].name)){
 			return StartCoordinate.STARTCOORDINATEB;
 		} else {
 			return StartCoordinate.STARTCOORDINATEC;
@@ -72,6 +77,17 @@ public class JobAssignment {
 		
 	public static void addCompleatedJob(Job job){
 		compleatedJobs.add(job.returnN());
+	}
+	
+	public static Coordinate findDropOff(Coordinate current){
+		Coordinate close = dropOffs.get(0);
+		for (Coordinate drops : dropOffs){
+			System.out.println(drops + " " + lineDistanceTrig(drops, current));
+			if(lineDistanceTrig(drops, current) < lineDistanceTrig(close, current)){
+				close = drops;
+			}
+		}
+		return close;
 	}
 	
 	//this returns the next closet item in the list
@@ -90,8 +106,8 @@ public class JobAssignment {
 	//returns the "as the crow flys" distance between the two items more 
 	//efficient but could yield inaccurate results as it will not
 	//take into account walls
-	private static double lineDistanceTrig(Coordinate item1, Item item2){
-		return Math.sqrt(Math.pow((item2.rCoordinate().getX() - item1.getY()), 2) + Math.pow((item2.rCoordinate().getY() - item1.getY()), 2));
+	private static double lineDistanceTrig(Coordinate item1, Coordinate item2){
+		return Math.sqrt(Math.pow((item2.getX() - item1.getX()), 2) + Math.pow((item2.getY() - item1.getY()), 2));
 	}
 	
 	//uses the astar algorithm to get the distance between the two items

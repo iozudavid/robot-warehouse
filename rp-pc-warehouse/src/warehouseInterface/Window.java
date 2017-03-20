@@ -150,7 +150,7 @@ public class Window {
 			logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
 		}
 		
-		//added panel for the jobs that have been compleated
+		//added panel for the jobs that have been completed
 		JPanel dataHolder = new JPanel();
 		dataHolder.setBorder(BorderFactory.createLineBorder(Color.black));
 		Box boxHolder = Box.createVerticalBox();
@@ -160,11 +160,13 @@ public class Window {
 		Color backgroundC = new Color(238,238,238);
 		compleatedJobs.setBackground(backgroundC);
 		boxHolder.add(jobsCompletedtext);
-		boxHolder.add(compleatedJobs);
+		JScrollPane scrollPane = new JScrollPane(compleatedJobs);
+		scrollPane.setPreferredSize(new Dimension(180, 100));
+		boxHolder.add(scrollPane);
 		dataHolder.add(boxHolder);
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
-		box.add(dataHolder);
+		buttons.add(dataHolder);
 
 			
 		//this places the map on in the panel and on the frame/window
@@ -261,7 +263,6 @@ public class Window {
 		JPanel titlePan = new JPanel();
 		titlePan.setBackground(Color.GRAY);
 		JLabel title = new JLabel("                                       Logger");
-		titlePan.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		title.setPreferredSize(new Dimension(275, 30));
 		title.setForeground(Color.WHITE);
@@ -280,28 +281,6 @@ public class Window {
 		new Thread(new LoggingInterfaceUpdater()).start();
 		
 		return pan;
-	}
-	
-	public static void addCoordinateRobotA(Coordinate newCoordinate){
-		robotControllers.get(0).addToQueue(newCoordinate);
-		logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-	}
-	
-	public static void addCoordinateRobotB(Coordinate newCoordinate){
-		try{
-			robotControllers.get(1).addToQueue(newCoordinate);
-			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		} catch (Exception e){System.out.println("There is no robot b");}
-	}
-	
-	public static void addCoordinateRobotC(Coordinate newCoordinate){
-		try{
-			robotControllers.get(2).addToQueue(newCoordinate);
-			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		} catch (Exception e){System.out.println("There is no robot c");}
 	}
 	
 	public static void addCoordinateRobot(Coordinate newCoordinate,String id){

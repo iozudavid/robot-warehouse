@@ -35,14 +35,11 @@ public class SingleRobotJobAssignment {
 		if (isDropOff()) {
 			Window.logMessage("job " + job.returnN() + " has been completed going to drop off");
 			numOfItems = 0;
-			System.out.println("dropOff");
 			itemIndex = 0;
 			JobAssignment.addCompleatedJob(job);
 			job = JobAssignment.nextJob();
 			job = TSsort(job);
-			// after picking all of the items we go to the dropOff point,
-			// normally the closest one, but here is a temporary one
-			coord = dropOff;
+			coord = JobAssignment.findDropOff(getCoordinate());
 			weightSum = 0;
 
 		} else {
@@ -50,7 +47,7 @@ public class SingleRobotJobAssignment {
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
 			
-			Window.logMessage("On route to " + item.rName());
+			Window.logMessage(name + " on route to " + item.rName());
 			Window.logMessage("current weight is " + weightSum);
 			
 			if (weightSum > maxWeight) {

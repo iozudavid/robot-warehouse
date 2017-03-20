@@ -55,16 +55,7 @@ public class JobAssignmentTest {
 	@Test
 	public void muliRobotJobAssignment() {
 		//this represents the start location so will fail if the start location is changed
-		Coordinate c = job.RobotA.getCoordinate();
-		assertTrue(c.getX() == 0 && c.getY() == 0);
-		
-		c = job.RobotB.getCoordinate();
-		assertTrue(c.getX() == 1 && c.getY() == 0);
-		
-		c = job.RobotC.getCoordinate();
-		assertTrue(c.getX() == 2 && c.getY() == 0);
-		
-		c = job.RobotA.nextCoordinate();
+		Coordinate c = job.RobotA.nextCoordinate();
 		assertTrue(c.getX() == 2 && c.getY() == 4);
 		
 		c = job.RobotB.nextCoordinate();
@@ -132,7 +123,7 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void TStest3(){
-		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo intoObject = new NXTInfo(2, "NXT", "1231231");
 		NXTInfo[] arrayTest = {intoObject};
 		JobAssignment TSTestClass = new JobAssignment(arrayTest);
 		
@@ -146,13 +137,13 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 2), "job2"));
 		itemList.add(new Item(1f, 1f, new Coordinate(3, 1), "job1"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("NXT").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job3, job7, job5, job4, job1, job2, job6]"));
 	}
 	
 	@Test
 	public void TStest4(){
-		NXTInfo intoObject = new NXTInfo(2, "a", "1231231");
+		NXTInfo intoObject = new NXTInfo(2, "NXT", "1231231");
 		NXTInfo[] arrayTest = {intoObject};
 		JobAssignment TSTestClass = new JobAssignment(arrayTest);
 		
@@ -166,7 +157,7 @@ public class JobAssignmentTest {
 		itemList.add(new Item(1f, 1f, new Coordinate(5, 0), "job2"));
 		itemList.add(new Item(1f, 1f, new Coordinate(6, 0), "job1"));
 		testJob.setItems(itemList);
-		Job returnJob = TSTestClass.getRobotJobAssignment("a").TSsort(testJob);
+		Job returnJob = TSTestClass.getRobotJobAssignment("NXT").TSsort(testJob);
 		assertTrue(returnJob.returnItems().toString().equals("[job7, job6, job5, job4, job3, job2, job1]"));
 	}
 	
@@ -320,23 +311,52 @@ public class JobAssignmentTest {
 	
 	@Test
 	public void muliRobotTest(){
-		NXTInfo intoObject1 = new NXTInfo(2, "a", "1231231");
-		NXTInfo intoObject2 = new NXTInfo(2, "b", "1231231");
-		NXTInfo intoObject3 = new NXTInfo(2, "c", "1231231");
+		NXTInfo intoObject1 = new NXTInfo(2, "NXT", "1231231");
+		NXTInfo intoObject2 = new NXTInfo(2, "William", "1231231");
+		NXTInfo intoObject3 = new NXTInfo(2, "Phil", "1231231");
 		NXTInfo[] arrayTest = {intoObject1, intoObject2, intoObject3};
 		JobAssignment JATestClass = new JobAssignment(arrayTest);
+				
+		assertTrue(JATestClass.getRobotJobAssignment("NXT").getCoordinate().getX() == 0);
+		assertTrue(JATestClass.getRobotJobAssignment("NXT").getCoordinate().getY() == 0);
 		
-		System.out.println(JATestClass.getRobotJobAssignment("a").getJobName());
-		System.out.println(JATestClass.getRobotJobAssignment("b").getJobName());
-		System.out.println(JATestClass.getRobotJobAssignment("c").getJobName());
-		
-		assertTrue(JATestClass.getRobotJobAssignment("a").getCoordinate().getX() == 0);
-		assertTrue(JATestClass.getRobotJobAssignment("a").getCoordinate().getY() == 0);
-		
-		assertTrue(JATestClass.getRobotJobAssignment("b").getCoordinate().getX() == 1);
-		assertTrue(JATestClass.getRobotJobAssignment("b").getCoordinate().getY() == 0);
+		assertTrue(JATestClass.getRobotJobAssignment("William").getCoordinate().getX() == 1);
+		assertTrue(JATestClass.getRobotJobAssignment("William").getCoordinate().getY() == 0);
 
-		assertTrue(JATestClass.getRobotJobAssignment("c").getCoordinate().getX() == 2);
-		assertTrue(JATestClass.getRobotJobAssignment("c").getCoordinate().getY() == 0);
+		assertTrue(JATestClass.getRobotJobAssignment("Phil").getCoordinate().getX() == 2);
+		assertTrue(JATestClass.getRobotJobAssignment("Phil").getCoordinate().getY() == 0);
+	}
+	
+	@Test
+	public void dropLocationTest1(){	
+		NXTInfo intoObject = new NXTInfo(2, "NXT", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
+		Coordinate test = JobAssignment.findDropOff(new Coordinate(0, 0));
+		assertTrue(test.getX() == 4);
+		assertTrue(test.getY() == 7);
+	}
+	
+	@Test
+	public void dropLocationTest2(){	
+		NXTInfo intoObject = new NXTInfo(2, "NXT", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
+		Coordinate test = JobAssignment.findDropOff(new Coordinate(10, 6));
+		assertTrue(test.getX() == 7);
+		assertTrue(test.getY() == 7);
+	}
+	
+	@Test
+	public void dropLocationTest3(){	
+		NXTInfo intoObject = new NXTInfo(2, "NXT", "1231231");
+		NXTInfo[] arrayTest = {intoObject};
+		JobAssignment TSTestClass = new JobAssignment(arrayTest);
+		
+		Coordinate test = JobAssignment.findDropOff(new Coordinate(3, 6));
+		assertTrue(test.getX() == 4);
+		assertTrue(test.getY() == 7);
 	}
 }

@@ -28,6 +28,7 @@ public class Reading {
 	String K;
 	String V;
 	static List<Job> list = new ArrayList<Job>();
+	static ArrayList<Coordinate> dropOffs = new ArrayList<Coordinate>();
 
 	// static Hashtable<String, Item> Items = new Hashtable<String, Item>();
 
@@ -89,6 +90,33 @@ public class Reading {
 			System.out.println(e);
 			System.exit(1);
 		}
+	}
+	
+	public static void readDropOff() {
+		dropOffs = new ArrayList<Coordinate>();
+		try {
+			inputFile1 = new BufferedReader(new FileReader("drops.csv"));
+		} catch (IOException e) {
+			System.out.println("cant read drop off file");
+			System.exit(1);
+		}
+		try {
+			while ((line1 = inputFile1.readLine()) != null) {
+				line1 = line1.replaceAll("\\s+", "");
+				if (!line1.equals("")){
+					String[] splitStr = line1.split(",");
+					dropOffs.add(new Coordinate(Integer.parseInt(splitStr[0]), Integer.parseInt(splitStr[1])));
+				}
+			}
+			inputFile1.close();
+		} catch (IOException e) {
+			System.out.println(e);
+			System.exit(1);
+		}
+	}
+	
+	public static ArrayList<Coordinate> returnDropOffs() {
+		return dropOffs;
 	}
 
 	public static List<Job> returnJobs() {
