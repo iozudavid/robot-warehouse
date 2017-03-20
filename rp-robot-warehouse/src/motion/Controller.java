@@ -65,6 +65,9 @@ public class Controller extends RobotProgrammingDemo{
 			
 			pilot.rotate(-90);
 			currentHeading = heading;
+		}else if(currentHeading.equals(heading)){
+			Delay.msDelay(1800);
+			
 		}else{
 			
 			while(!heading.equals(currentHeading)){				
@@ -84,6 +87,7 @@ public class Controller extends RobotProgrammingDemo{
 					//pilot.rotateLeft();
 					pilot.rotate(90);
 					currentHeading = "minusY";
+					
 					break;
 				case "minusY":
 					//pilot.rotateLeft();
@@ -167,9 +171,6 @@ public class Controller extends RobotProgrammingDemo{
 			int gx = next.getX();
 			int gy = next.getY();
 			
-			if(next.equals(currentPosition))
-				Delay.msDelay(3000);
-			
 			if(x < gx){
 				LCD.clear();
 				System.out.println("PlusX");
@@ -196,6 +197,7 @@ public class Controller extends RobotProgrammingDemo{
 			}
 			//updatePosition(next);
 		}
+		
 		LCD.clear();
 		if(path.getNumberOFItems() == 0){
 			

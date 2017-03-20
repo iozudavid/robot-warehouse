@@ -46,16 +46,28 @@ public class HCAStar {
 
 		ArrayList<Path> a=new ArrayList<Path>();
 		i = 1;
-
+		
 		for (ArrayList<Coordinate> p : paths) {
 			a.add(new Path(p,1));
 			for (Coordinate c : p) {
-				System.out.println(i + ": " + c.getX() + " " + c.getY());
+		//		System.out.println(i + ": " + c.getX() + " " + c.getY());
 			}
 			i++;
 		}
+		//System.out.println(a.size());
 		
 		return a;
+	}
+	
+	public static void main(String[] args){
+		LinkedHashMap a=new LinkedHashMap();
+		a.put(new Coordinate(0,0), new Coordinate(2,0));
+		a.put(new Coordinate(3,0), new Coordinate(3,1));
+		HCAStar b=new HCAStar(a);
+		for(Path c:b.startFindingPaths()){
+	//		System.out.println(c.getNextCoord());
+			
+		}
 	}
 
 }

@@ -15,6 +15,7 @@ public class RobotServerReceiver extends Thread {
 		this.robotTable = r;
 		this.fromRobot = i;
 		this.robotName = name;
+		System.out.println("Receiver for "+robotName+" started");
 	}
 
 	public void run() {

@@ -157,8 +157,8 @@ public class PathFindingMultiRobot {
 		
 		while (openList.isEmpty()==false) {
 	
-			System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
-			Delay.msDelay(1000);
+	//System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
+			//Delay.msDelay(1000);
 			if(isGoal(currentCell)){
 				boolean ok=false;
 				for(Entry<Integer,ArrayList<Coordinate>> a:reserved.entrySet()){

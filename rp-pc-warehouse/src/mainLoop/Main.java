@@ -43,9 +43,15 @@ public class Main {
 		startToDestinations.put(jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
 		startToDestinations.put(jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
 		startToDestinations.put(jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
+
+//		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
+//		System.out.println(jobs.getRobotJobAssignment(robots[1].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
+//		System.out.println(jobs.getRobotJobAssignment(robots[2].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
+
 		
 		HCAStar astar = new HCAStar(startToDestinations);
 		ArrayList<Path> paths = astar.startFindingPaths();
+		System.out.println(paths.size());
 		for(int i = 0;i<robots.length;i++){
 			paths.get(i).setNumberOfItems(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
 			rs.sendPath(robots[i].name, paths.get(i));
@@ -55,6 +61,7 @@ public class Main {
 			while (!rs.isCoordinateEmpty()) {
 				Message receivedMsg = rs.getReceivedCoordinate();
 				Window.addCoordinateRobot(receivedMsg.getCoord(),receivedMsg.getSender());
+				System.out.println("Robot: "+receivedMsg.getSender()+" coordinate: "+receivedMsg.getCoord().toString());
 			}
 			while (!rs.isReceivedEmpty()) {
 				Message receivedMessage = rs.getReceivedMessage();
