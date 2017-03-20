@@ -31,10 +31,10 @@ public class RobotServerReceiver extends Thread {
 						//It is a coordinate
 						Coordinate c = new Coordinate(Integer.parseInt(responseSplit[0]),
 								Integer.parseInt(responseSplit[1]));
-						robotTable.addReceivedCoordinate(robotName, c);
+						robotTable.addReceivedCoordinate(new Message(robotName,c));
 					} else {
 						//Not a coordinate just a string
-						robotTable.addReceivedMessage(robotName, response);
+						robotTable.addReceivedMessage(new Message(robotName, response));
 					}
 				}
 			}

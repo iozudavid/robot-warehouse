@@ -27,38 +27,6 @@ public class RobotLoop extends Thread {
 	}
 
 	public void run(){
-		Coordinate startCoord = jobs.getCoordinate();
-		Coordinate finishCoord = jobs.nextCoordinate();
-		// A* search on test coordinates
-		SearchCell start = new SearchCell(startCoord);
-		SearchCell goal = new SearchCell(finishCoord);
-		PathFinding graph = new PathFinding(start, goal);
-		ArrayList<Coordinate> list = graph.aStar();
-		Path c = new Path(list, jobs.getNumOfItems());
-		server.sendPath(robotName, c);
-		// Window.addCoordinateRobotA(c);
 		
-		while (true) {
-			while (!server.isCoordinateEmpty(robotName)) {
-				Coordinate receivedMsg = server.getReceivedCoordinate(robotName);
-				Window.addCoordinateRobotA(receivedMsg);
-			}
-			while (!server.isReceivedEmpty(robotName)) {
-				String recivedMessage = server.getReceivedMessage(robotName);
-				if (recivedMessage.equals(Messages.GOTITEM)) {
-					startCoord = jobs.getCoordinate();
-					finishCoord = jobs.nextCoordinate();
-					System.out.println(startCoord.getX()+" "+startCoord.getY() + "start");
-					System.out.println(finishCoord.getX()+" "+finishCoord.getY() + "finish");
-					// A* search on test coordinates
-					start = new SearchCell(startCoord);
-					goal = new SearchCell(finishCoord);
-					graph = new PathFinding(start, goal);
-					list = graph.aStar();
-					c = new Path(list, jobs.getNumOfItems());
-					server.sendPath(robotName, c);
-				}
-			}
-		}
 	}
 }

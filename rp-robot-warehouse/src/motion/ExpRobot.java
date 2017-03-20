@@ -3,6 +3,7 @@ package motion;
 import Variables.StartCoordinate;
 import lejos.nxt.Button;
 import lejos.nxt.SensorPort;
+import lejos.nxt.remote.NXTCommand;
 import rp.config.RobotConfigs;
 import rp.systems.RobotProgrammingDemo;
 import warehouse.Coordinate;
@@ -14,7 +15,6 @@ public class ExpRobot {
 		Button.waitForAnyPress();
 		RobotProgrammingDemo robot = new Controller(RobotConfigs.EXPRESS_BOT, SensorPort.S3, new Coordinate(11,0), SensorPort.S1, SensorPort.S4);
 		robot.run();
-		
 	}
 
 }

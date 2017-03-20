@@ -304,12 +304,21 @@ public class Window {
 		} catch (Exception e){System.out.println("There is no robot c");}
 	}
 	
-	public static void addCoordinateRobot(Coordinate newCoordinate,int id){
+	public static void addCoordinateRobot(Coordinate newCoordinate,String id){
 		try{
-			robotControllers.get(id).addToQueue(newCoordinate);
+			getIndex(id).addToQueue(newCoordinate);
 			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 		} catch (Exception e){System.out.println("There is no robot b");}
+	}
+	
+	public static DispRobotController getIndex(String id){
+		for (int i = 0; i<robotControllers.size();i++){
+			if (id.equals(Main.robots[i])){
+				return robotControllers.get(i);
+			}
+		}
+		return robotControllers.get(0);
 	}
 	
 	
