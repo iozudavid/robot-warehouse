@@ -2,8 +2,10 @@ package networking;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import warehouse.Coordinate;
+import warehouse.Path;
 
 public class RobotClientReceiver extends Thread {
 
@@ -18,6 +20,40 @@ public class RobotClientReceiver extends Thread {
 	public void run() {
 		try {
 			while (true) {
+				int mode = fromServer.readInt();
+				switch (mode) {
+				case 0:
+					//Coordinate
+					String coordinateStr = fromServer.readUTF();
+					queue.addCoordinate(toCoordinate(coordinateStr));
+					break;
+				case 1:
+					//Path
+					ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
+					int numOfItems = 0;
+					String msgStart = fromServer.readUTF();
+					while (!msgStart.equals("PATHSTART")) {
+						msgStart = fromServer.readUTF();
+					}
+					String receivedMessage = fromServer.readUTF();
+					while (isCoordinate(receivedMessage)) {
+						coordinates.add(toCoordinate(receivedMessage));
+						receivedMessage = fromServer.readUTF();
+					}
+					if (receivedMessage.equals("NUMOFITEMS")) {
+						receivedMessage = fromServer.readUTF();
+						numOfItems = Integer.parseInt(receivedMessage);
+					}
+					
+					break;
+				case 2:
+					//String
+					String receivedMessage1 = fromServer.readUTF();
+					queue.addReceivedMessage(receivedMessage1);
+					break;
+				default:
+					break;
+				}
 				String message = fromServer.readUTF();
 				if (message != null) {
 					if (message.equals("STOP")) {

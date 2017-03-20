@@ -28,7 +28,7 @@ public class RobotTable {
 		return queueTable.get(robotName);
 	}
 
-	public boolean addMessage(String robotName, String msg) {
+	public boolean addMessage(String robotName, Message msg) {
 		MessageQueue robotQueue = queueTable.get(robotName);
 		if (robotQueue != null) {
 			robotQueue.offer(msg);

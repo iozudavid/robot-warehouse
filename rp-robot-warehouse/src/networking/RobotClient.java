@@ -39,13 +39,13 @@ public class RobotClient {
 	
 	//Send a string based message (i.e. a command)
 	public void sendMessage(String msg){
-		queue.addMessage(msg);
+		queue.addOutgoingMessage(msg);
 	}
 	
 	//Send a coordinate to the server
 	public void sendCoordinate(Coordinate c){
 		String strCoord = c.getX()+","+c.getY();
-		queue.addMessage(strCoord);
+		queue.addOutgoingMessage(strCoord);
 	}
 	
 	public Path getPath(){

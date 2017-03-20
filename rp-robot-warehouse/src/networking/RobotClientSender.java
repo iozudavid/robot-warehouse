@@ -15,7 +15,7 @@ public class RobotClientSender extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				String msg = messageQueue.getMessage();
+				String msg = messageQueue.getOutgoingMessage();
 				if (msg != null) {
 					toServer.writeUTF(msg);
 					toServer.flush();

@@ -49,20 +49,19 @@ public class RobotServer {
 				}
 			}
 		} catch (NXTCommException nxt) {
-			System.err.println(nxt);
+			System.out.println(nxt);
 		}
 
 	}
 
 	//Adds message to the queue for the nxt specified
 	private void sendMessage(String nxtName, String msg) {
-		robotTable.addMessage(nxtName, msg);
+		robotTable.addMessage(nxtName,new Message(msg));
 	}
 	
 	//Adds a coordinate set to be sent to the nxt specified
 	private void sendCoordinates(String nxtName,Coordinate c){
-		String strCoord = c.getX()+","+c.getY();
-		robotTable.addMessage(nxtName, strCoord);
+		robotTable.addMessage(nxtName, new Message(c));
 	}
 	
 	public void sendPath (String nxtName,Path p){
