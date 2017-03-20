@@ -21,14 +21,12 @@ public class RobotClientReceiver extends Thread {
 		try {
 			while (true) {
 				int mode = fromServer.readInt();
-				switch (mode) {
-				case 0:
-					//Coordinate
+				if (mode == 0) {
+					// Coordinate
 					String coordinateStr = fromServer.readUTF();
-					queue.addCoordinate(toCoordinate(coordinateStr));
-					break;
-				case 1:
-					//Path
+					queue.addReceivedCoordinate(toCoordinate(coordinateStr));
+				} else if (mode == 1) {
+					// Path
 					ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
 					int numOfItems = 0;
 					String msgStart = fromServer.readUTF();
@@ -44,23 +42,13 @@ public class RobotClientReceiver extends Thread {
 						receivedMessage = fromServer.readUTF();
 						numOfItems = Integer.parseInt(receivedMessage);
 					}
-					
-					break;
-				case 2:
-					//String
+					queue.addReceivedPath(new Path(coordinates, numOfItems));
+				} else if (mode == 2) {
+					// String
 					String receivedMessage1 = fromServer.readUTF();
-					queue.addReceivedMessage(receivedMessage1);
+					queue.addReceivedString(receivedMessage1);
 					break;
-				default:
-					break;
-				}
-				String message = fromServer.readUTF();
-				if (message != null) {
-					if (message.equals("STOP")) {
-						//TODO: add stop code
-					} else {
-						queue.addReceivedMessage(message);
-					}
+
 				}
 			}
 		} catch (IOException e) {

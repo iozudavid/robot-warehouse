@@ -18,24 +18,19 @@ public class RobotServerReceiver extends Thread {
 	}
 
 	public void run() {
-		//A point worth noting about this implementation is that you should NOT
-		//send "," for a plain text string otherwise it WILL break it
 		try {
+			int mode;
 			while (true) {
-				//Reads from the input stream
+				// Reads from the input stream
+				mode = fromRobot.readInt();
 				String response = fromRobot.readUTF();
-				if (response != null) {
-					//Splits the string to see if it is a coordinate
+				if (mode == 0 && response != null) {
 					String[] responseSplit = response.split(",");
-					if (responseSplit.length == 2) {
-						//It is a coordinate
-						Coordinate c = new Coordinate(Integer.parseInt(responseSplit[0]),
-								Integer.parseInt(responseSplit[1]));
-						robotTable.addReceivedCoordinate(robotName, c);
-					} else {
-						//Not a coordinate just a string
-						robotTable.addReceivedMessage(robotName, response);
-					}
+					Coordinate c = new Coordinate(Integer.parseInt(responseSplit[0]),
+							Integer.parseInt(responseSplit[1]));
+					robotTable.addReceivedCoordinate(new Message(robotName, c));
+				} else if (mode == 2 && response != null) {
+					robotTable.addReceivedMessage(new Message(robotName, response));
 				}
 			}
 		} catch (IOException e) {

@@ -55,44 +55,34 @@ public class RobotServer {
 	}
 
 	//Adds message to the queue for the nxt specified
-	private void sendMessage(String nxtName, String msg) {
-		robotTable.addMessage(nxtName,new Message(msg));
+	public void sendMessage(String nxtName, String msg) {
+		robotTable.addMessage(nxtName,new Message("server",msg));
 	}
 	
 	//Adds a coordinate set to be sent to the nxt specified
-	private void sendCoordinates(String nxtName,Coordinate c){
-		robotTable.addMessage(nxtName, new Message(c));
+	public void sendCoordinate(String nxtName,Coordinate c){
+		robotTable.addMessage(nxtName, new Message("server",c));
 	}
 	
-	public void sendPath (String nxtName,Path p){
-		this.sendMessage(nxtName,"PATHSTART");
-		while (!p.reachedEnd()){
-			this.sendCoordinates(nxtName, p.getNextCoord());
-		}
-		this.sendMessage(nxtName, "NUMOFITEMS");
-		this.sendMessage(nxtName, Integer.toString(p.getNumberOFItems()));
-		//this.sendMessage(nxtName, "PATHEND");
-	}
-	
-	public void sendStopCommand(String nxtName){
-		this.sendMessage(nxtName, "STOP");
+	public void sendPath(String nxtName,Path p){
+		robotTable.addMessage(nxtName, new Message("server",p));
 	}
 	
 	//Gets top of the message queue (in a message object)
-	public String getReceivedMessage(String nxtName){
-		return robotTable.takeReceivedMessage(nxtName);
+	public Message getReceivedMessage(){
+		return robotTable.takeReceivedMessage();
 	}
 	
-	public boolean isReceivedEmpty(String nxtName){
-		return robotTable.isReceivedEmpty(nxtName);
+	public boolean isReceivedEmpty(){
+		return robotTable.isReceivedEmpty();
 	}
 	
 	//Gets the top of the received coordinate queue
-	public Coordinate getReceivedCoordinate(String nxtName){
-		return robotTable.takeReceivedCoordinate(nxtName);
+	public Message getReceivedCoordinate(){
+		return robotTable.takeReceivedCoordinate();
 	}
 	
-	public boolean isCoordinateEmpty(String nxtName){
-		return robotTable.isCoordinateEmpty(nxtName);
+	public boolean isCoordinateEmpty(){
+		return robotTable.isCoordinateEmpty();
 	}
 }

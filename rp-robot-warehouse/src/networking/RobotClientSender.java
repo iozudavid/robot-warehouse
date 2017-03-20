@@ -15,9 +15,15 @@ public class RobotClientSender extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				String msg = messageQueue.getOutgoingMessage();
+				Message msg = messageQueue.getOutgoingMessage();
 				if (msg != null) {
-					toServer.writeUTF(msg);
+					if (msg.isMessage()) {
+						toServer.writeInt(2);
+						toServer.writeUTF(msg.getMsg());
+					} else {
+						toServer.writeInt(0);
+						toServer.writeUTF(msg.getCoordinate().getX() + "," + msg.getCoordinate().getY());
+					}
 					toServer.flush();
 				}
 				Thread.sleep(100);
