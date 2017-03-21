@@ -39,7 +39,8 @@ public class Main {
 		RobotServer rs = new RobotServer(robots);
 		rs.connectToNxts();
 		RunWarehouse.runWarehouseInterface();
-
+			
+	
 		LinkedHashMap<Coordinate,Coordinate> startToDestinations = new LinkedHashMap<Coordinate,Coordinate>();
 		Coordinate[][] nxtCoordinates = {{jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate()},
 				{jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate()},
@@ -65,7 +66,7 @@ public class Main {
 //		System.out.println(jobs.getRobotJobAssignment(robots[1].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
 //		System.out.println(jobs.getRobotJobAssignment(robots[2].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
 
-		
+			
 		HCAStar astar = new HCAStar(startToDestinations);
 		ArrayList<Path> paths = astar.startFindingPaths();
 		System.out.println(paths.size());

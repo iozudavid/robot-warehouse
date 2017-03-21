@@ -1,9 +1,10 @@
 package jobPackage;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import Variables.StartCoordinate;
 import warehouse.Coordinate;
 import warehouse.jobInput.Item;
 import warehouse.jobInput.Job;
@@ -15,22 +16,19 @@ public class SingleRobotJobAssignment {
 	private int itemIndex = 0;
 	private Job job;
 	private Item item;
-	Coordinate dropOff = new Coordinate(3, 5);
 	private Coordinate coord;
 	private float weightSum = 0;
 	private final float maxWeight = 50;
 	private int numOfItems;
 	public boolean cancelCurrentJob = false;
-	
-	public SingleRobotJobAssignment(String name){
+
+	public SingleRobotJobAssignment(String name) {
 		coord = JobAssignment.startPositionSelector(name);
 		this.name = name;
-		job = JobAssignment.nextJob();
+		job = JobAssignment.nextJob(getCoordinate());
 		item = job.returnItems().get(itemIndex);
-		job = TSsort(job);			
 	}
-	
-	
+
 	public synchronized Coordinate nextCoordinate() {
 		if (isDropOff()) {
 			Window.logMessage("job " + job.returnN() + " has been completed");
@@ -38,8 +36,8 @@ public class SingleRobotJobAssignment {
 			numOfItems = 0;
 			itemIndex = 0;
 			JobAssignment.addCompleatedJob(job);
-			job = JobAssignment.nextJob();
-			job = TSsort(job);
+			JobAssignment.removeCompleatedJob(job);
+			job = JobAssignment.nextJob(getCoordinate());
 			coord = JobAssignment.findDropOff(getCoordinate());
 			weightSum = 0;
 
@@ -47,14 +45,13 @@ public class SingleRobotJobAssignment {
 			item = job.returnItems().get(itemIndex);
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
-			
+
 			Window.logMessage(name + " on route to " + item.rName());
-			Window.logMessage("current weight of " + name + " is " + weightSum);
-			
+
 			if (weightSum > maxWeight) {
 				Window.logMessage("Robot is at weight limit");
 				if (itemsWeight < maxWeight) {
-					coord = dropOff;
+					coord = JobAssignment.findDropOff(getCoordinate());
 				} else {
 
 					float w = weightSum - itemsWeight;
@@ -67,9 +64,9 @@ public class SingleRobotJobAssignment {
 				weightSum = 0;
 
 			} else {
-
-				itemIndex++;
+				Window.logMessage("current weight of " + name + " is " + weightSum);
 				numOfItems = job.returnNmbr(item.rName());
+				job.removeItem(item);
 			}
 			coord = item.rCoordinate();
 		}
@@ -82,7 +79,7 @@ public class SingleRobotJobAssignment {
 	}
 
 	public boolean isDropOff() {
-		return itemIndex == job.returnItems().size();
+		return job.returnItems().isEmpty();
 	}
 
 	public String getJobName() {
@@ -96,16 +93,16 @@ public class SingleRobotJobAssignment {
 	public float getReward() {
 		return item.rValue();
 	}
-	
-	public String name(){
+
+	public String name() {
 		return this.name;
 	}
-	
-	public void setName(String name){
+
+	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Item> items(){
+
+	public List<Item> items() {
 		return job.returnItems();
 	}
 
@@ -114,28 +111,15 @@ public class SingleRobotJobAssignment {
 	// is true
 	// then the next path should be sent
 	public void cancelJob() {
-		job = JobAssignment.nextJob();
+		job = JobAssignment.nextJob(getCoordinate());
 		itemIndex = 0;
 		cancelCurrentJob = true;
 	}
 	
-	//runs through all the jobs getting the next closest job each time
-		//This should only be run when the job is requested by the robot and NOT
-		//for all the jobs otherwise it will take about 20 mins to sort all the items
-		public Job TSsort(Job job){
-			List<Item> items = job.returnItems();
-			List<Item> newItems = new ArrayList<Item>();
-			Coordinate current = getCoordinate();
-			
-			while(!items.isEmpty()){
-				Item temp = JobAssignment.getNextClosest(items, current);
-				items.remove(temp);
-				newItems.add(temp);
-				current = temp.rCoordinate();
-			}
-			
-			job.setItems(newItems);
-			return job;
-		}
-	
+	public static <T> boolean listEqualsNoOrder(List<T> l1, List<T> l2) {
+	    final Set<T> s1 = new HashSet<>(l1);
+	    final Set<T> s2 = new HashSet<>(l2);
+
+	    return s1.equals(s2);
+	}
 }

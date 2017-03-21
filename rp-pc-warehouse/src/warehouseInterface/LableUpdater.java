@@ -16,9 +16,9 @@ public class LableUpdater implements StoppableRunnable {
 	@Override
 	public void run() {
 		try {
+			NXTInfo[] robots = Main.robots;
 			String compleatedJobsSoFar = Main.jobs.getCompleatedJobs().toString();
 			while (m_running) {
-				NXTInfo[] robots = Main.robots;
 
 				for (int i = 0; i < Window.robotControllers.size(); i++) {
 					currentReward = Main.jobs.getRobotJobAssignment(robots[i].name).getReward();
@@ -36,10 +36,11 @@ public class LableUpdater implements StoppableRunnable {
 					Window.robotData.get(i).get(3).setText("Reward: " + currentReward);
 					Window.robotData.get(i).get(4).setText("Total Reward: " + totalReward);
 					Window.robotData.get(i).get(5)
-							.setText("Items: " + Main.jobs.getRobotJobAssignment(robots[i].name).items().toString());
+							.setText("Next items: " + Main.jobs.getRobotJobAssignment(robots[i].name).items().toString());
 
 					Thread.sleep(40);
 				}
+							
 
 				if (!(compleatedJobsSoFar == Main.jobs.getCompleatedJobs().toString())){
 					compleatedJobsSoFar = Main.jobs.getCompleatedJobs().toString();

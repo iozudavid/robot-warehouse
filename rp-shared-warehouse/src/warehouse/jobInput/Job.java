@@ -65,6 +65,11 @@ public class Job {
 		return w;
 	}
 	
+	public void removeItem(Item item){
+		queueTable.remove(item.rName());
+		list.remove(item);
+	}
+	
 	@Override
 	public String toString(){
 		return name;
