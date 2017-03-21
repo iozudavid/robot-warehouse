@@ -47,8 +47,6 @@ public class RobotClientReceiver extends Thread {
 					// String
 					String receivedMessage1 = fromServer.readUTF();
 					queue.addReceivedString(receivedMessage1);
-					break;
-
 				}
 			}
 		} catch (IOException e) {

@@ -32,6 +32,9 @@ public class Message {
 		this.isPath = true;
 	}
 
+	public String getSender(){
+		return sender;
+	}
 
 	public String getMsg() {
 		return msg;
