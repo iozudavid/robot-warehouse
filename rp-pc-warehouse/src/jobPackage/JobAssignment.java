@@ -35,7 +35,7 @@ public class JobAssignment {
 		
 		dropOffs = Reading.returnDropOffs();
 		jobs = Reading.returnJobs();
-		//jobs = SortJobs.sortByReward(jobs);
+		jobs = SortJobs.sortByReward(jobs);
 		
 		for (NXTInfo nxt: robots){
 			robotAssignments.put(nxt.name, new SingleRobotJobAssignment(nxt.name));

@@ -51,7 +51,6 @@ public class Window {
 	protected static JScrollPane scrollPan;
 	protected static JTextArea compleatedJobs;
 	
-	protected static NXTInfo[] robotName = Main.robots;
 	public static int numOfRobots = Main.robots.length;
 	final static Logger logger = Logger.getLogger(Window.class);
 	static final String path = "src/log4j.properties";
@@ -109,7 +108,7 @@ public class Window {
 		//adds the labels for the different robots depending on how many robot there currently are
 		for (int i = 0 ; i < numOfRobots ; i++){
 			robotData.add(new ArrayList<JLabel>());
-			robotData.get(i).add(new JLabel("Robot: " + robotName[i].name));
+			robotData.get(i).add(new JLabel("Robot: " + Main.robots[i].name));
 			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
@@ -130,7 +129,7 @@ public class Window {
 			for (JLabel label : robot){
 				boxHolder.add(label);
 			}
-			JButton cancelButton = new JButton("Cancel: " + robotName[count].name);
+			JButton cancelButton = new JButton("Cancel: " + Main.robots[count].name);
 			cancelButton.addActionListener(new ButtonPressed());
 			boxHolder.add(cancelButton);
 			count++;
