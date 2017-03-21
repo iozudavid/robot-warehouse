@@ -41,9 +41,25 @@ public class Main {
 		RunWarehouse.runWarehouseInterface();
 
 		LinkedHashMap<Coordinate,Coordinate> startToDestinations = new LinkedHashMap<Coordinate,Coordinate>();
-		startToDestinations.put(jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
-		startToDestinations.put(jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
-		startToDestinations.put(jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
+		Coordinate[][] nxtCoordinates = {{jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate()},
+				{jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate()},
+				{jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate()}
+				
+		};
+		for(int i = 0;i<nxtCoordinates.length;i++){
+			System.out.println("Robot "+i);
+			System.out.println(nxtCoordinates[i][0].toString());
+			System.out.println(nxtCoordinates[i][1].toString());
+			System.out.println();
+		}
+		System.out.println(" ");
+		
+		startToDestinations.put(nxtCoordinates[0][0],nxtCoordinates[0][1]);
+		startToDestinations.put(nxtCoordinates[1][0],nxtCoordinates[1][1]);
+		startToDestinations.put(nxtCoordinates[2][0],nxtCoordinates[2][1]);
+//		startToDestinations.put(jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
+//		startToDestinations.put(jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
+//		startToDestinations.put(jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
 
 //		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
 //		System.out.println(jobs.getRobotJobAssignment(robots[1].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
@@ -53,8 +69,16 @@ public class Main {
 		HCAStar astar = new HCAStar(startToDestinations);
 		ArrayList<Path> paths = astar.startFindingPaths();
 		System.out.println(paths.size());
+		for(Path p:paths){
+			System.out.println("NEW PATH");
+			System.out.println("--------");
+			for(Coordinate c: p.getList()){
+				System.out.println(c.toString());
+			}
+		}
 		for(int i = 0;i<robots.length;i++){
 			paths.get(i).setNumberOfItems(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
+			System.out.println("The number of items is: "+paths.get(i).getNumberOFItems());
 			rs.sendPath(robots[i].name, paths.get(i));
 		}
 		
@@ -76,12 +100,33 @@ public class Main {
 				
 				if (finished[0] && finished[1] && finished[2]) {
 					startToDestinations = new LinkedHashMap<Coordinate,Coordinate>();
-					startToDestinations.put(jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
-					startToDestinations.put(jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
-					startToDestinations.put(jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
+					Coordinate[][] nxtCoordinates2 = {{jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate()},
+							{jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate()},
+							{jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate()}
+							
+					};
+					for(int i = 0;i<nxtCoordinates.length;i++){
+						System.out.println("Robot "+i);
+						System.out.println(nxtCoordinates2[i][0].toString());
+						System.out.println(nxtCoordinates2[i][1].toString());
+						System.out.println();
+					}
+					System.out.println(" ");
+					
+					startToDestinations.put(nxtCoordinates2[0][0],nxtCoordinates2[0][1]);
+					startToDestinations.put(nxtCoordinates2[1][0],nxtCoordinates2[1][1]);
+					startToDestinations.put(nxtCoordinates2[2][0],nxtCoordinates2[2][1]);
 					
 					astar = new HCAStar(startToDestinations);
 					paths = astar.startFindingPaths();
+					System.out.println(paths.size());
+					for(Path p:paths){
+						System.out.println("NEW PATH");
+						System.out.println("--------");
+						for(Coordinate c: p.getList()){
+							System.out.println(c.toString());
+						}
+					}
 					for(int i = 0;i<robots.length;i++){
 						paths.get(i).setNumberOfItems(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
 						rs.sendPath(robots[i].name, paths.get(i));

@@ -202,8 +202,8 @@ public class Window {
 		
 		//start pose of the robot this can be changed on the above line
 		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
-		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
-		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
+		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR2.getY(), Heading.PLUS_X);
+		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR3.getY(), Heading.PLUS_X);
 		
 		ArrayList<GridPose> GridPoseStartPositions = new ArrayList<GridPose>();
 		GridPoseStartPositions.add(gridStartR1);
@@ -229,7 +229,7 @@ public class Window {
 			logger.debug("robot " + i + " placed on the screen and threads started");
 			//starts the robot and the label updater		
 			new Thread(robotControllers.get(i)).start();
-			new Thread(new LableUpdater()).start();;
+			new Thread(new LableUpdater()).start();
 		}
 
 		GridMapVisualisation viz = new GridMapVisualisation(map, sim.getMap(), 250f);

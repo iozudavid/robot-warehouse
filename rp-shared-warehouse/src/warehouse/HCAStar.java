@@ -61,11 +61,15 @@ public class HCAStar {
 	
 	public static void main(String[] args){
 		LinkedHashMap a=new LinkedHashMap();
-		a.put(new Coordinate(0,0), new Coordinate(2,0));
-		a.put(new Coordinate(3,0), new Coordinate(3,1));
+	//	a.put(new Coordinate(0,0), new Coordinate(3,2));
+		a.put(new Coordinate(11,7), new Coordinate(3,2));
+		a.put(new Coordinate(6,0), new Coordinate(6,2));
 		HCAStar b=new HCAStar(a);
+		
 		for(Path c:b.startFindingPaths()){
-	//		System.out.println(c.getNextCoord());
+			for(Coordinate n:c.get()){
+				System.out.println(n.getX()+" "+n.getY());
+			}
 			
 		}
 	}

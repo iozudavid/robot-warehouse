@@ -164,7 +164,6 @@ public class Controller extends RobotProgrammingDemo{
 			
 			
 			Coordinate next = path.getNextCoord();
-			LCD.clear();
 			System.out.println(next.getX()+" "+next.getY());
 			updatePosition(next);
 			
@@ -172,33 +171,24 @@ public class Controller extends RobotProgrammingDemo{
 			int gy = next.getY();
 			
 			if(x < gx){
-				LCD.clear();
-				System.out.println("PlusX");
 				updateHeading("plusX");
 				moveForward();
 				
 				
 			}else if(x>gx){
-				LCD.clear();
-				System.out.println("MinusX");
 				updateHeading("minusX");
 				moveForward();
 				
 			}else if(y<gy){
-				LCD.clear();
-				System.out.println("PlusY");
 				updateHeading("plusY");
 				moveForward();
 			}else if(y>gy){
-				LCD.clear();
-				System.out.println("MinusY");
 				updateHeading("minusY");
 				moveForward();
 			}
 			//updatePosition(next);
 		}
 		
-		LCD.clear();
 		if(path.getNumberOFItems() == 0){
 			
 			System.out.println("Waiting for drop off. Press left button.");
