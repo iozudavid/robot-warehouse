@@ -32,6 +32,7 @@ public class HCAStar {
 				if (reserved.containsKey(i) == true) {
 					reserved.get(i).add(c);
 				} else {
+				
 					ArrayList<Coordinate> array = new ArrayList<Coordinate>();
 					array.add(c);
 					reserved.put(i, array);

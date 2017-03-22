@@ -27,6 +27,7 @@ public class PF {
 	public PF(SearchCell start, SearchCell goal, LinkedHashMap<Integer, ArrayList<Coordinate>> reserved) {
 		this.start = start;
 		this.goal = goal;
+		
 		obstacles = new ArrayList<>();
 		for (int i = 0; i <= map.getXSize(); i++) {
 			for (int j = 0; j <= map.getYSize(); j++) {
@@ -169,6 +170,12 @@ public class PF {
 	}
 
 	public ArrayList<Coordinate> aStar() {
+	
+		if(start.xcoord==goal.xcoord && start.xcoord==goal.ycoord){
+			ArrayList<Coordinate> a=new ArrayList<>();
+			a.add(new Coordinate(goal.xcoord,goal.ycoord));
+			return a;
+		}
 		ArrayList<Coordinate> finalPath = new ArrayList<>();
 		start.setG(0);
 		if(reserved.size()>0){
@@ -246,7 +253,13 @@ public class PF {
 		count=0;
 			//Delay.msDelay(5000);
 			//if(level.get(currentCell)>=val){
-
+		
+		
+			if(reserved.size()==1 && obstaclesNumber==obstacles.size()){
+				for(Coordinate a:reserved.get(0)){
+					obstacles.add(new SearchCell(new Coordinate(a.getX(),a.getY())));
+				}
+			}
 			if (level.get(currentCell)+1+count < reserved.size()) {
 
 				if (level.get(currentCell)+count != 0) {
@@ -259,6 +272,7 @@ public class PF {
 				for (Entry<Integer, ArrayList<Coordinate>> e : reserved.entrySet()) {
 					if (e.getKey() == level.get(currentCell)+1+count) {
 						for (Coordinate c : e.getValue()) {
+					
 							obstacles.add(new SearchCell(c));
 						//	System.out.println("-----------------added: "+c.getX()+" "+c.getY());
 						}
