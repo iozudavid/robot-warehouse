@@ -27,6 +27,10 @@ public class Path{
 		return false;
 	}
 	
+	public ArrayList<Coordinate> get(){
+		return list;
+	}
+	
 	public void setNumberOfItems(int num){
 		if (num >= 0){
 			this.numberOfItems = num;
@@ -35,5 +39,10 @@ public class Path{
 
 	public int getNumberOFItems(){
 		return numberOfItems;
+	}
+	
+	//Should be removed
+	public ArrayList<Coordinate> getList(){
+		return list;
 	}
 }

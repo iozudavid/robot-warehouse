@@ -65,6 +65,9 @@ public class Controller extends RobotProgrammingDemo{
 			
 			pilot.rotate(-90);
 			currentHeading = heading;
+		}else if(currentHeading.equals(heading)){
+			Delay.msDelay(1800);
+			
 		}else{
 			
 			while(!heading.equals(currentHeading)){				
@@ -84,6 +87,7 @@ public class Controller extends RobotProgrammingDemo{
 					//pilot.rotateLeft();
 					pilot.rotate(90);
 					currentHeading = "minusY";
+					
 					break;
 				case "minusY":
 					//pilot.rotateLeft();
@@ -160,43 +164,31 @@ public class Controller extends RobotProgrammingDemo{
 			
 			
 			Coordinate next = path.getNextCoord();
-			LCD.clear();
 			System.out.println(next.getX()+" "+next.getY());
 			updatePosition(next);
 			
 			int gx = next.getX();
 			int gy = next.getY();
 			
-			if(next.equals(currentPosition))
-				Delay.msDelay(3000);
-			
 			if(x < gx){
-				LCD.clear();
-				System.out.println("PlusX");
 				updateHeading("plusX");
 				moveForward();
 				
 				
 			}else if(x>gx){
-				LCD.clear();
-				System.out.println("MinusX");
 				updateHeading("minusX");
 				moveForward();
 				
 			}else if(y<gy){
-				LCD.clear();
-				System.out.println("PlusY");
 				updateHeading("plusY");
 				moveForward();
 			}else if(y>gy){
-				LCD.clear();
-				System.out.println("MinusY");
 				updateHeading("minusY");
 				moveForward();
 			}
 			//updatePosition(next);
 		}
-		LCD.clear();
+		
 		if(path.getNumberOFItems() == 0){
 			
 			System.out.println("Waiting for drop off. Press left button.");

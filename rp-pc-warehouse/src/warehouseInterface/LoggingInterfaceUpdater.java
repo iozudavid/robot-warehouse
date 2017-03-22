@@ -26,12 +26,7 @@ public class LoggingInterfaceUpdater implements StoppableRunnable{
 				Window.loggingContainer.add(labelToAdd);
 				JScrollBar vertical = Window.scrollPan.getVerticalScrollBar();
 				vertical.setValue( vertical.getMaximum() );
-			} 
-
-			
-			
-		
-			
+			}
 			Window.loggingContainer.revalidate();
 			Window.loggingContainer.repaint();
 			try {

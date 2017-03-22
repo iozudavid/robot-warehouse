@@ -49,6 +49,27 @@ public class Job {
 		this.list = items;
 	}
 	
+	public int getTotalNumOfItems(){
+		int num = 0;
+		for(Item i: list){
+			num += returnNmbr(i.rName());
+		}
+		return num;
+	}
+	
+	public int getTotalWeight(){
+		int w = 0;
+		for(Item i: list){
+			w += returnNmbr(i.rName())* i.rWeight();
+		}
+		return w;
+	}
+	
+	public void removeItem(Item item){
+		queueTable.remove(item.rName());
+		list.remove(item);
+	}
+	
 	@Override
 	public String toString(){
 		return name;

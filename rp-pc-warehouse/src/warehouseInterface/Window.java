@@ -3,18 +3,11 @@ package warehouseInterface;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Properties;
 import java.util.Queue;
 
 import org.apache.log4j.Logger;
@@ -31,10 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.text.DefaultCaret;
-
 import Variables.StartCoordinate;
+import lejos.pc.comm.NXTInfo;
 import lejos.robotics.RangeFinder;
 import mainLoop.Main;
 import rp.robotics.MobileRobotWrapper;
@@ -60,7 +51,6 @@ public class Window {
 	protected static JScrollPane scrollPan;
 	protected static JTextArea compleatedJobs;
 	
-	protected static String[] robotName = {"A", "B", "C", "D"};
 	public static int numOfRobots = Main.robots.length;
 	final static Logger logger = Logger.getLogger(Window.class);
 	static final String path = "src/log4j.properties";
@@ -118,7 +108,7 @@ public class Window {
 		//adds the labels for the different robots depending on how many robot there currently are
 		for (int i = 0 ; i < numOfRobots ; i++){
 			robotData.add(new ArrayList<JLabel>());
-			robotData.get(i).add(new JLabel("Robot: " + robotName[i]));
+			robotData.get(i).add(new JLabel("Robot: " + Main.robots[i].name));
 			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
@@ -139,7 +129,7 @@ public class Window {
 			for (JLabel label : robot){
 				boxHolder.add(label);
 			}
-			JButton cancelButton = new JButton("Cancel: " + robotName[count]);
+			JButton cancelButton = new JButton("Cancel: " + Main.robots[count].name);
 			cancelButton.addActionListener(new ButtonPressed());
 			boxHolder.add(cancelButton);
 			count++;
@@ -150,7 +140,7 @@ public class Window {
 			logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
 		}
 		
-		//added panel for the jobs that have been compleated
+		//added panel for the jobs that have been completed
 		JPanel dataHolder = new JPanel();
 		dataHolder.setBorder(BorderFactory.createLineBorder(Color.black));
 		Box boxHolder = Box.createVerticalBox();
@@ -160,11 +150,13 @@ public class Window {
 		Color backgroundC = new Color(238,238,238);
 		compleatedJobs.setBackground(backgroundC);
 		boxHolder.add(jobsCompletedtext);
-		boxHolder.add(compleatedJobs);
+		JScrollPane scrollPane = new JScrollPane(compleatedJobs);
+		scrollPane.setPreferredSize(new Dimension(180, 100));
+		boxHolder.add(scrollPane);
 		dataHolder.add(boxHolder);
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
-		box.add(dataHolder);
+		buttons.add(dataHolder);
 
 			
 		//this places the map on in the panel and on the frame/window
@@ -210,8 +202,8 @@ public class Window {
 		
 		//start pose of the robot this can be changed on the above line
 		GridPose gridStartR1 = new GridPose(startCoordinateR1.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
-		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
-		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR1.getY(), Heading.PLUS_X);
+		GridPose gridStartR2 = new GridPose(startCoordinateR2.getX(), startCoordinateR2.getY(), Heading.PLUS_X);
+		GridPose gridStartR3 = new GridPose(startCoordinateR3.getX(), startCoordinateR3.getY(), Heading.PLUS_X);
 		
 		ArrayList<GridPose> GridPoseStartPositions = new ArrayList<GridPose>();
 		GridPoseStartPositions.add(gridStartR1);
@@ -237,7 +229,7 @@ public class Window {
 			logger.debug("robot " + i + " placed on the screen and threads started");
 			//starts the robot and the label updater		
 			new Thread(robotControllers.get(i)).start();
-			new Thread(new LableUpdater()).start();;
+			new Thread(new LableUpdater()).start();
 		}
 
 		GridMapVisualisation viz = new GridMapVisualisation(map, sim.getMap(), 250f);
@@ -261,7 +253,6 @@ public class Window {
 		JPanel titlePan = new JPanel();
 		titlePan.setBackground(Color.GRAY);
 		JLabel title = new JLabel("                                       Logger");
-		titlePan.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		title.setPreferredSize(new Dimension(275, 30));
 		title.setForeground(Color.WHITE);
@@ -282,34 +273,21 @@ public class Window {
 		return pan;
 	}
 	
-	public static void addCoordinateRobotA(Coordinate newCoordinate){
-		robotControllers.get(0).addToQueue(newCoordinate);
-		logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-	}
-	
-	public static void addCoordinateRobotB(Coordinate newCoordinate){
+	public static void addCoordinateRobot(Coordinate newCoordinate, String id){
 		try{
-			robotControllers.get(1).addToQueue(newCoordinate);
+			getIndex(id).addToQueue(newCoordinate);
 			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 		} catch (Exception e){System.out.println("There is no robot b");}
 	}
 	
-	public static void addCoordinateRobotC(Coordinate newCoordinate){
-		try{
-			robotControllers.get(2).addToQueue(newCoordinate);
-			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		} catch (Exception e){System.out.println("There is no robot c");}
-	}
-	
-	public static void addCoordinateRobot(Coordinate newCoordinate,int id){
-		try{
-			robotControllers.get(id).addToQueue(newCoordinate);
-			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		} catch (Exception e){System.out.println("There is no robot b");}
+	public static DispRobotController getIndex(String id){
+		for (int i = 0; i < robotControllers.size();i++){
+			if (id.equals(Main.robots[i].name)){
+				return robotControllers.get(i);
+			}
+		}
+		return robotControllers.get(0);
 	}
 	
 	
