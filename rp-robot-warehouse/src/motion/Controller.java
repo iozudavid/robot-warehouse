@@ -54,6 +54,8 @@ public class Controller extends RobotProgrammingDemo{
 		lightleft.setFloodlight(true);
 		lightright=new LightSensor(_port3);
 		lightright.setFloodlight(true);
+		
+		receivedSTOP = false;
 	}
 	
 	public void updatePosition(Coordinate cord){
@@ -115,8 +117,7 @@ public class Controller extends RobotProgrammingDemo{
 	
 	}
 	
-	public void moveForward(){
-		
+	public void moveForward(){		
 		
 		pilot.forward();
 		pilot.setTravelSpeed(0.15f);
@@ -143,8 +144,7 @@ public class Controller extends RobotProgrammingDemo{
 				pilot.setTravelSpeed(0.15f);
 				pilot.forward();
 			}
-		}
-		
+		}		
 	}
 	
 	public int getX(){
@@ -155,11 +155,66 @@ public class Controller extends RobotProgrammingDemo{
 	public int getY(){
 		
 		return currentPosition.getY();
+	}	
+	
+	public void followCoordinate(Coordinate next){		
+		
+		int gx = next.getX();
+		int gy = next.getY();
+		
+		if(gx == -1 && gy>0){
+			int n = gy;
+			int i=0;		
+			System.out.println("Waiting for pickup.");
+			
+			while(i<n){
+				int left = n - i;
+				System.out.println("Items picked up: " + i + " --- " + "Items left to pick up: " + left);
+				while(Button.waitForAnyPress() != Button.ID_RIGHT){
+					System.out.println("Press right button.");
+				}
+				i++;
+			}
+			
+			LCD.clear();
+			r.sendMessage("ITEMPICKUP");
+			
+		}else if(gx==-1 && gy==0){
+			
+			System.out.println("Waiting for drop off. Press left button.");
+			while(Button.waitForAnyPress() != Button.ID_LEFT){
+				System.out.println("Press left button.");
+			}
+			
+		}else{
+			
+			int x = this.getX();
+			int y = this.getY();			
+			
+			if(gx == x+1){
+				updateHeading("plusX");
+				moveForward();			
+				
+			}else if( x == (gx + 1)){
+				updateHeading("minusX");
+				moveForward();
+				
+			}else if(y+1 == gy){
+				updateHeading("plusY");
+				moveForward();
+			}else if(gy+1 == y){
+				updateHeading("minusY");
+				moveForward();
+			}else{
+				System.out.println("Coordinate out of range");
+			}
+			updatePosition(next);	
+			
+		}				
+		
 	}
 	
-	
-	public void followPath(Path path){
-		
+	public void followPath(Path path){		
 		
 		System.out.println("Executing job");
 		while(!path.reachedEnd() && !receivedSTOP){
@@ -170,7 +225,6 @@ public class Controller extends RobotProgrammingDemo{
 			
 			Coordinate next = path.getNextCoord();
 			System.out.println(next.getX()+" "+next.getY());
-			//updatePosition(next);
 			
 			int gx = next.getX();
 			int gy = next.getY();
@@ -180,19 +234,19 @@ public class Controller extends RobotProgrammingDemo{
 				Delay.msDelay(2000);
 			}
 			
-			if(gx == x+1){//if(x < gx){
+			if(gx == x+1){
 				updateHeading("plusX");
 				moveForward();
 				
 				
-			}else if( x == (gx + 1)){//}else if(x>gx){
+			}else if( x == (gx + 1)){
 				updateHeading("minusX");
 				moveForward();
 				
-			}else if(y+1 == gy){//}else if(y<gy){
+			}else if(y+1 == gy){
 				updateHeading("plusY");
 				moveForward();
-			}else if(gy+1 == y){//}else if(y>gy){
+			}else if(gy+1 == y){
 				updateHeading("minusY");
 				moveForward();
 			}else{
@@ -212,7 +266,7 @@ public class Controller extends RobotProgrammingDemo{
 			while(Button.waitForAnyPress() != Button.ID_LEFT){
 				System.out.println("Press left button.");
 			}
-		}else{
+		}else if(path.getNumberOFItems() != -1){
 		
 			int i=0;		
 			System.out.println("Waiting for pickup.");
@@ -244,7 +298,7 @@ public class Controller extends RobotProgrammingDemo{
 		leftValue=lightleft.readValue();
 		rightValue=lightright.readValue();
 		
-		while(true){
+		/*while(true){
 
 			Path route = r.getPath();
 			receivedSTOP = false;
@@ -252,7 +306,16 @@ public class Controller extends RobotProgrammingDemo{
 	
 			followPath(route);		
 				
-		}	
-	}
+		}	*/
 		
+		while(true){
+			
+			Coordinate nextCoordinate = r.getCoordinate();
+			receivedSTOP = false;
+			System.out.println("Coordinate received");
+			
+			followCoordinate(nextCoordinate);
+			
+		}
+	}		
 }
