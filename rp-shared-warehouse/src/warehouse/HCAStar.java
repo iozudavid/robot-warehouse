@@ -1,4 +1,4 @@
-package warehouse;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class HCAStar {
 		int j = 0;
 		for (Entry<Coordinate, Coordinate> e : map.entrySet()) {
 			j++;
-			PathFindingMultiRobot path = new PathFindingMultiRobot(new SearchCell(e.getKey()),
+			PF path = new PF(new SearchCell(e.getKey()),
 					new SearchCell(e.getValue()), reserved);
 			paths.add(path.aStar());
 		
@@ -46,32 +46,16 @@ public class HCAStar {
 
 		ArrayList<Path> a=new ArrayList<Path>();
 		i = 1;
-		
+
 		for (ArrayList<Coordinate> p : paths) {
-			a.add(new Path(p,1));
+			a.add(new Path(p));
 			for (Coordinate c : p) {
-		//		System.out.println(i + ": " + c.getX() + " " + c.getY());
+			//	System.out.println(i + ": " + c.getX() + " " + c.getY());
 			}
 			i++;
 		}
-		//System.out.println(a.size());
 		
 		return a;
-	}
-	
-	public static void main(String[] args){
-		LinkedHashMap a=new LinkedHashMap();
-	//	a.put(new Coordinate(0,0), new Coordinate(3,2));
-		a.put(new Coordinate(11,7), new Coordinate(3,2));
-		a.put(new Coordinate(6,0), new Coordinate(6,2));
-		HCAStar b=new HCAStar(a);
-		
-		for(Path c:b.startFindingPaths()){
-			for(Coordinate n:c.get()){
-				System.out.println(n.getX()+" "+n.getY());
-			}
-			
-		}
 	}
 
 }

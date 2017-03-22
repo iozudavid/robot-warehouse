@@ -1,6 +1,7 @@
-package warehouse;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import rp.robotics.mapping.GridMap;
@@ -16,14 +17,22 @@ public class PathFindingDinamic {
 	protected Map<SearchCell, Integer> level;
 	protected Map<SearchCell, SearchCell> predecessor;
 	protected GridMap map = MapUtils.createRealWarehouse();
-	public PathFindingDinamic(SearchCell start, SearchCell goal, ArrayList<SearchCell> obstacles) {
-		this.start = start;
-		this.goal = goal;
+	public PathFindingDinamic(SearchCell start, SearchCell goal, ArrayList<Coordinate> arrayList) {
+		this.start = new SearchCell(new Coordinate(start.xcoord,start.ycoord));
+		this.goal = new SearchCell(new Coordinate(goal.xcoord,goal.ycoord));
 		this.obstacles = new ArrayList<>();
-		for(SearchCell a:obstacles){
-			this.obstacles.add(new SearchCell(new Coordinate(a.xcoord,a.ycoord)));
+		for (int i = 0; i < map.getXSize(); i++) {
+			for (int j = 0; j < map.getYSize(); j++) {
+				if (map.isObstructed(i, j)) {
+					obstacles.add(new SearchCell(new Coordinate(i, j)));
+					
+				}
+			}
 		}
-	
+		for(Coordinate a:arrayList){
+		//	System.out.println("--------------------obstacle"+a.getX()+" "+a.getY());
+			this.obstacles.add(new SearchCell(new Coordinate(a.getX(),a.getY())));
+		}
 		openList = new ArrayList<>();
 		closedList = new ArrayList<>();
 		level = new HashMap<>();
@@ -130,6 +139,21 @@ public class PathFindingDinamic {
 		graph.put(start, l);
 		predecessor.put(start, start);
 		openList.add(currentCell);
+		
+		boolean ok=false;
+		for(SearchCell a:obstacles){
+			if(a.xcoord==goal.xcoord && a.ycoord==goal.ycoord){
+				ok=true;
+			}
+		}
+		
+		if(ok==true){
+			ArrayList<Coordinate> a=new ArrayList<>();
+			for(int i=0;i<45;i++){
+				a.add(new Coordinate(0,0));
+			}
+			return a;
+		}
 	
 		while (openList.isEmpty()==false) {
 			
@@ -172,6 +196,9 @@ public class PathFindingDinamic {
 				break;
 			}
 			
+		}
+		if(openList.isEmpty()==true){
+			return new ArrayList<Coordinate>();
 		}
 		for (Entry<SearchCell, ArrayList<SearchCell>> e : graph.entrySet()) {
 			if (e.getKey().xcoord == goal.xcoord && e.getKey().ycoord == goal.ycoord) {
