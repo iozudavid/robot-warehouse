@@ -52,8 +52,8 @@ public class Window {
 	protected static JTextArea compleatedJobs;
 	
 	public static int numOfRobots = Main.robots.length;
-	final static Logger logger = Logger.getLogger(Window.class);
-	static final String path = "src/log4j.properties";
+	//final static Logger logger = Logger.getLogger(Window.class);
+	//static final String path = "src/log4j.properties";
 
 	/**
 	 * Launch the application.
@@ -79,7 +79,7 @@ public class Window {
 	 * Create the application.
 	 */
 	public Window() {
-		PropertyConfigurator.configure(path);
+		//PropertyConfigurator.configure(path);
 		initialize();
 	}
 
@@ -114,7 +114,7 @@ public class Window {
 			robotData.get(i).add(new JLabel("Reward: "));
 			robotData.get(i).add(new JLabel("Total reward: "));
 			robotData.get(i).add(new JLabel("Items: "));
-			logger.debug("Robot " + i + " JLabels has been created");
+			//logger.debug("Robot " + i + " JLabels has been created");
 		}
 		
 		
@@ -137,7 +137,7 @@ public class Window {
 			box.add(new JLabel(" "));
 			box.add(dataHolder);
 			dataHolder.add(boxHolder);
-			logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
+			//logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
 		}
 		
 		//added panel for the jobs that have been completed
@@ -226,7 +226,7 @@ public class Window {
 			//adds the robot to an array to be accessed later
 			robotControllers.add(new DispRobotController(wrapper.getRobot(), map, GridPoseStartPositions.get(i), ranger, startCoordinateR1));
 			
-			logger.debug("robot " + i + " placed on the screen and threads started");
+			//logger.debug("robot " + i + " placed on the screen and threads started");
 			//starts the robot and the label updater		
 			new Thread(robotControllers.get(i)).start();
 			new Thread(new LableUpdater()).start();
@@ -276,7 +276,7 @@ public class Window {
 	public static void addCoordinateRobot(Coordinate newCoordinate, String id){
 		try{
 			getIndex(id).addToQueue(newCoordinate);
-			logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
+			//logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 		} catch (Exception e){System.out.println("There is no robot b");}
 	}
