@@ -35,11 +35,17 @@ public class Controller extends RobotProgrammingDemo{
 	private LightSensor lightright;
 	private int leftValue;
 	private int rightValue;
+	private boolean receivedSTOP;
+	
+	
+	public void setReceivedSTOP(boolean b){
+		
+		this.receivedSTOP = b;
+	}
 	
 	public Controller(WheeledRobotConfiguration _robot, SensorPort _port, Coordinate  startCoord, SensorPort _port2, SensorPort _port3){
 		
 		robot = new WheeledRobotSystem(_robot);
-		//ranger = new UltrasonicSensor(_port);
 		pilot = robot.getPilot();
 		currentPosition = startCoord;
 		currentHeading = "plusX";
@@ -154,10 +160,9 @@ public class Controller extends RobotProgrammingDemo{
 	
 	public void followPath(Path path){
 		
-		//ArrayList<String> directions = new ArrayList<String>();
 		
 		System.out.println("Executing job");
-		while(!path.reachedEnd()){
+		while(!path.reachedEnd() && !receivedSTOP){
 			
 			int x = this.getX();
 			int y = this.getY();
@@ -165,28 +170,40 @@ public class Controller extends RobotProgrammingDemo{
 			
 			Coordinate next = path.getNextCoord();
 			System.out.println(next.getX()+" "+next.getY());
-			updatePosition(next);
+			//updatePosition(next);
 			
 			int gx = next.getX();
 			int gy = next.getY();
 			
-			if(x < gx){
+			if(next.equals(currentPosition)){
+				
+				Delay.msDelay(2000);
+			}
+			
+			if(gx == x+1){//if(x < gx){
 				updateHeading("plusX");
 				moveForward();
 				
 				
-			}else if(x>gx){
+			}else if( x == (gx + 1)){//}else if(x>gx){
 				updateHeading("minusX");
 				moveForward();
 				
-			}else if(y<gy){
+			}else if(y+1 == gy){//}else if(y<gy){
 				updateHeading("plusY");
 				moveForward();
-			}else if(y>gy){
+			}else if(gy+1 == y){//}else if(y>gy){
 				updateHeading("minusY");
 				moveForward();
+			}else{
+				System.out.println("coordinate out of range");
 			}
-			//updatePosition(next);
+			updatePosition(next);
+		}
+		
+		if(receivedSTOP){
+			pilot.stop();
+			return;
 		}
 		
 		if(path.getNumberOFItems() == 0){
@@ -200,7 +217,7 @@ public class Controller extends RobotProgrammingDemo{
 			int i=0;		
 			System.out.println("Waiting for pickup.");
 			
-			while(i<=path.getNumberOFItems()){
+			while(i<path.getNumberOFItems()){
 				int left = path.getNumberOFItems() - i;
 				System.out.println("Items picked up: " + i + " --- " + "Items left to pick up: " + left);
 				while(Button.waitForAnyPress() != Button.ID_RIGHT){
@@ -220,8 +237,9 @@ public class Controller extends RobotProgrammingDemo{
 		r = new RobotClient();
 		r.waitForConnection();
 		
-		//pilot.rotate(-90);
-		//Delay.msDelay(5000);
+		MessageReader reader = new MessageReader(this, r);
+		reader.start();
+		
 		Delay.msDelay(500);
 		leftValue=lightleft.readValue();
 		rightValue=lightright.readValue();
@@ -229,6 +247,7 @@ public class Controller extends RobotProgrammingDemo{
 		while(true){
 
 			Path route = r.getPath();
+			receivedSTOP = false;
 			System.out.println("Path received");
 	
 			followPath(route);		
