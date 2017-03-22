@@ -1,5 +1,7 @@
 package warehouse;
 
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -44,10 +46,9 @@ public class Test {
 	public static void main(String[] args) {
 		LinkedHashMap<Coordinate, Coordinate> h = new LinkedHashMap<Coordinate, Coordinate>();
 		
-		h.put(new Coordinate(2, 2), new Coordinate(2, 6));
-		h.put(new Coordinate(2, 5), new Coordinate(2, 5));
-		
-	//	h.put(new Coordinate(0, 4), new Coordinate(0, 6));
+		h.put(new Coordinate(2, 1), new Coordinate(2, 6));
+		h.put(new Coordinate(2, 4), new Coordinate(3, 7));	
+		h.put(new Coordinate(3, 3), new Coordinate(5, 6));
 		
 
 		// h.put(new Coordinate(0, 0), new Coordinate(0, 5));
