@@ -39,25 +39,24 @@ public class RobotClient {
 	
 	//Send a string based message (i.e. a command)
 	public void sendMessage(String msg){
-		queue.addMessage(msg);
+		queue.addOutgoingMessage(new Message(msg));
 	}
 	
 	//Send a coordinate to the server
 	public void sendCoordinate(Coordinate c){
-		String strCoord = c.getX()+","+c.getY();
-		queue.addMessage(strCoord);
+		queue.addOutgoingMessage(new Message(c));
 	}
 	
 	public Path getPath(){
-		return queue.getPath();
+		return queue.getReceivedPath();
 	}
 	//Returns top of received message queue
-//	public String getReceivedMessage(){
-//		return queue.getReceivedMessage();
-//	}
-//	
-//	//Returns top of received coordinates queue
-//	public Coordinate getCoordinate(){
-//		return queue.getReceivedCoordinate();
-//	}
+	public String getReceivedMessage(){
+		return queue.getReceivedString();
+	}
+	
+	//Returns top of received coordinates queue
+	public Coordinate getCoordinate(){
+		return queue.getReceivedCoordinate();
+	}
 }

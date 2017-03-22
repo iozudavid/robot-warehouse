@@ -49,34 +49,23 @@ public class RobotServer {
 				}
 			}
 		} catch (NXTCommException nxt) {
-			System.err.println(nxt);
+			System.out.println(nxt);
 		}
 
 	}
 
 	//Adds message to the queue for the nxt specified
-	private void sendMessage(String nxtName, String msg) {
-		robotTable.addMessage(nxtName, msg);
+	public void sendMessage(String nxtName, String msg) {
+		robotTable.addMessage(nxtName,new Message("server",msg));
 	}
 	
 	//Adds a coordinate set to be sent to the nxt specified
-	private void sendCoordinates(String nxtName,Coordinate c){
-		String strCoord = c.getX()+","+c.getY();
-		robotTable.addMessage(nxtName, strCoord);
+	public void sendCoordinate(String nxtName,Coordinate c){
+		robotTable.addMessage(nxtName, new Message("server",c));
 	}
 	
-	public void sendPath (String nxtName,Path p){
-		this.sendMessage(nxtName,"PATHSTART");
-		while (!p.reachedEnd()){
-			this.sendCoordinates(nxtName, p.getNextCoord());
-		}
-		this.sendMessage(nxtName, "NUMOFITEMS");
-		this.sendMessage(nxtName, Integer.toString(p.getNumberOFItems()));
-		//this.sendMessage(nxtName, "PATHEND");
-	}
-	
-	public void sendStopCommand(String nxtName){
-		this.sendMessage(nxtName, "STOP");
+	public void sendPath(String nxtName,Path p){
+		robotTable.addMessage(nxtName, new Message("server",p));
 	}
 	
 	//Gets top of the message queue (in a message object)

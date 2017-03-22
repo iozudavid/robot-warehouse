@@ -5,8 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import warehouse.Coordinate;
-
 public class RobotTable {
 	// Outgoing table
 	private ConcurrentMap<String, MessageQueue> queueTable = new ConcurrentHashMap<String, MessageQueue>();
@@ -20,15 +18,15 @@ public class RobotTable {
 	// For outing table queueTable
 	public void addRobot(String robotName) {
 		queueTable.putIfAbsent(robotName, new MessageQueue());
-//		receivedMessages.putIfAbsent(robotName, new ReceivedQueue());
-//		receivedCoordinates.putIfAbsent(robotName, new ReceivedQueue());
+		//receivedMessages.putIfAbsent(robotName, new ReceivedQueue());
+		//receivedCoordinates.putIfAbsent(robotName, new ReceivedQueue());
 	}
 
 	public MessageQueue getMessages(String robotName) {
 		return queueTable.get(robotName);
 	}
 
-	public boolean addMessage(String robotName, String msg) {
+	public boolean addMessage(String robotName, Message msg) {
 		MessageQueue robotQueue = queueTable.get(robotName);
 		if (robotQueue != null) {
 			robotQueue.offer(msg);
@@ -39,40 +37,42 @@ public class RobotTable {
 
 	// For incoming table for STRINGS
 	public void addReceivedMessage(Message msg) {
+		//ReceivedQueue robotQueue = receivedMessages.get(sender);
 		receivedMessages.offer(msg);
 	}
 
 	public Message takeReceivedMessage() {
+		//ReceivedQueue robotQueue = receivedMessages.get(nxtName);
 		try {
-			return receivedMessages.take();
+			return (receivedMessages.take());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e);
 		}
 		return null;
 	}
 
 	public boolean isReceivedEmpty() {
+		//ReceivedQueue robotQueue = receivedMessages.get(nxtName);
 		return receivedMessages.isEmpty();
 	}
 
 	// For incoming table for COORDINATES
 	public void addReceivedCoordinate(Message c) {
+		//ReceivedQueue robotQueue = receivedMessages.get(nxtName);
 		receivedCoordinates.offer(c);
 	}
 
 	public Message takeReceivedCoordinate() {
-		while (true) {
-			try {
-				return (receivedCoordinates.take());
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			return receivedCoordinates.take();
+		} catch (InterruptedException e) {
+			System.err.println(e);
 		}
+		return null;
 	}
 
 	public boolean isCoordinateEmpty() {
+		//ReceivedQueue robotQueue = receivedMessages.get(nxtName);
 		return receivedCoordinates.isEmpty();
 	}
 }

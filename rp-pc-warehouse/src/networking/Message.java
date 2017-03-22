@@ -1,15 +1,18 @@
 package networking;
 
 import warehouse.Coordinate;
+import warehouse.Path;
 
 public class Message {
 	//Class that just contains information about a received message, no
 	//complex calculations just getters and setters
-	
 	private String sender;
 	private String msg;
 	private Coordinate coord;
+	
 	private boolean isCoordinate;
+	private Path path;
+	private boolean isPath;
 	
 	public Message(String sender,String msg){
 		this.sender = sender;
@@ -23,7 +26,13 @@ public class Message {
 		this.isCoordinate = true;
 	}
 
-	public String getSender() {
+	public Message(String sender,Path p){
+		this.sender = sender;
+		this.path = p;
+		this.isPath = true;
+	}
+
+	public String getSender(){
 		return sender;
 	}
 
@@ -35,7 +44,16 @@ public class Message {
 		return coord;
 	}
 	
+	public Path getPath(){
+		return path;
+	}
+	
 	public boolean isCoordinate(){
 		return isCoordinate;
 	}
+
+	public boolean isPath() {
+		return isPath;
+	}
+
 }

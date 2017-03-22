@@ -2,8 +2,10 @@ package networking;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import warehouse.Coordinate;
+import warehouse.Path;
 
 public class RobotClientReceiver extends Thread {
 
@@ -18,13 +20,33 @@ public class RobotClientReceiver extends Thread {
 	public void run() {
 		try {
 			while (true) {
-				String message = fromServer.readUTF();
-				if (message != null) {
-					if (message.equals("STOP")) {
-						//TODO: add stop code
-					} else {
-						queue.addReceivedMessage(message);
+				int mode = fromServer.readInt();
+				if (mode == 0) {
+					// Coordinate
+					String coordinateStr = fromServer.readUTF();
+					queue.addReceivedCoordinate(toCoordinate(coordinateStr));
+				} else if (mode == 1) {
+					// Path
+					ArrayList<Coordinate> coordinates = new ArrayList<Coordinate>();
+					int numOfItems = 0;
+					String msgStart = fromServer.readUTF();
+					while (!msgStart.equals("PATHSTART")) {
+						msgStart = fromServer.readUTF();
 					}
+					String receivedMessage = fromServer.readUTF();
+					while (isCoordinate(receivedMessage)) {
+						coordinates.add(toCoordinate(receivedMessage));
+						receivedMessage = fromServer.readUTF();
+					}
+					if (receivedMessage.equals("NUMOFITEMS")) {
+						receivedMessage = fromServer.readUTF();
+						numOfItems = Integer.parseInt(receivedMessage);
+					}
+					queue.addReceivedPath(new Path(coordinates, numOfItems));
+				} else if (mode == 2) {
+					// String
+					String receivedMessage1 = fromServer.readUTF();
+					queue.addReceivedString(receivedMessage1);
 				}
 			}
 		} catch (IOException e) {
