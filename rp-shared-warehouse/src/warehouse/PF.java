@@ -173,7 +173,7 @@ public class PF {
 
 	public ArrayList<Coordinate> aStar() {
 	
-		if(start.xcoord==goal.xcoord && start.xcoord==goal.ycoord){
+		if(start.xcoord==goal.xcoord && start.ycoord==goal.ycoord){
 			ArrayList<Coordinate> a=new ArrayList<>();
 			a.add(new Coordinate(goal.xcoord,goal.ycoord));
 			return a;
@@ -214,10 +214,12 @@ public class PF {
 				}
 			}
 			
+			if(l2.size()<level.get(openList.get(0))){
 			int number=l2.size();
 			while(number!=level.get(openList.get(0))){
 			l2.add(openList.get(0));
 			number++;
+			}
 			}
 			
 			for (Entry<SearchCell, ArrayList<SearchCell>> e : graph.entrySet()) {

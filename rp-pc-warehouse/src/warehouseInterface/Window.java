@@ -28,6 +28,7 @@ import Variables.StartCoordinate;
 import lejos.pc.comm.NXTInfo;
 import lejos.robotics.RangeFinder;
 import mainLoop.Main;
+import mainLoop.Main2;
 import rp.robotics.MobileRobotWrapper;
 import rp.robotics.mapping.GridMap;
 import rp.robotics.mapping.MapUtils;
@@ -283,7 +284,7 @@ public class Window {
 	
 	public static DispRobotController getIndex(String id){
 		for (int i = 0; i < robotControllers.size();i++){
-			if (id.equals(Main.robots[i].name)){
+			if (id.equals(Main2.robots[i].name)){
 				return robotControllers.get(i);
 			}
 		}

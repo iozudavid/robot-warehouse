@@ -9,6 +9,7 @@ import javax.print.attribute.standard.Finishings;
 
 import Variables.Messages;
 import jobPackage.JobAssignment;
+import lejos.nxt.remote.NXTCommRequest;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 import networking.Message;
@@ -58,14 +59,6 @@ public class Main {
 		startToDestinations.put(nxtCoordinates[0][0],nxtCoordinates[0][1]);
 		startToDestinations.put(nxtCoordinates[1][0],nxtCoordinates[1][1]);
 		startToDestinations.put(nxtCoordinates[2][0],nxtCoordinates[2][1]);
-//		startToDestinations.put(jobs.getRobotJobAssignment(robots[0].name).getCoordinate(), jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
-//		startToDestinations.put(jobs.getRobotJobAssignment(robots[1].name).getCoordinate(), jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
-//		startToDestinations.put(jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
-
-//		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[0].name).nextCoordinate());
-//		System.out.println(jobs.getRobotJobAssignment(robots[1].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[1].name).nextCoordinate());
-//		System.out.println(jobs.getRobotJobAssignment(robots[2].name).getCoordinate()+" "+ jobs.getRobotJobAssignment(robots[2].name).nextCoordinate());
-
 			
 		HCAStar astar = new HCAStar(startToDestinations);
 		ArrayList<Path> paths = astar.startFindingPaths();
@@ -106,8 +99,6 @@ public class Main {
 							{jobs.getRobotJobAssignment(robots[2].name).getCoordinate(), jobs.getRobotJobAssignment(robots[2].name).nextCoordinate()}
 							
 					};
-					
-					
 					
 					for(int i = 0;i<nxtCoordinates.length;i++){
 						System.out.println("Robot "+i);

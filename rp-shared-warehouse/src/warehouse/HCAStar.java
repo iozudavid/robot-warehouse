@@ -51,7 +51,7 @@ public class HCAStar {
 		i = 1;
 
 		for (ArrayList<Coordinate> p : paths) {
-			a.add(new Path(p));
+			a.add(new Path(p,0));
 			for (Coordinate c : p) {
 			//	System.out.println(i + ": " + c.getX() + " " + c.getY());
 			}

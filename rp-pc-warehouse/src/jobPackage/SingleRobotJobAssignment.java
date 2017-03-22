@@ -73,6 +73,16 @@ public class SingleRobotJobAssignment {
 		return coord;
 
 	}
+	
+	public void addItem(Item item, int num){
+		List<Item> jobItems = job.returnItems();
+		List<Item> temp = new ArrayList<Item>();
+		temp.add(item);
+		for (int i = 0; i<jobItems.size();i++){
+			temp.add(jobItems.get(i));
+		}
+		job.addItem(item, num);
+	}
 
 	public Coordinate getCoordinate() {
 		return coord;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import jobPackage.SingleRobotJobAssignment;
 import lejos.pc.comm.NXTInfo;
-import mainLoop.Main;
+import mainLoop.Main2;
 import rp.systems.StoppableRunnable;
 
 public class LableUpdater implements StoppableRunnable {
@@ -16,35 +16,35 @@ public class LableUpdater implements StoppableRunnable {
 	@Override
 	public void run() {
 		try {
-			NXTInfo[] robots = Main.robots;
-			String compleatedJobsSoFar = Main.jobs.getCompleatedJobs().toString();
+			NXTInfo[] robots = Main2.robots;
+			String compleatedJobsSoFar = Main2.jobs.getCompleatedJobs().toString();
 			while (m_running) {
 
 				for (int i = 0; i < Window.robotControllers.size(); i++) {
-					currentReward = Main.jobs.getRobotJobAssignment(robots[i].name).getReward();
+					currentReward = Main2.jobs.getRobotJobAssignment(robots[i].name).getReward();
 
-					if (!(currentReward == Main.jobs.getRobotJobAssignment(robots[i].name).getReward())) {
+					if (!(currentReward == Main2.jobs.getRobotJobAssignment(robots[i].name).getReward())) {
 						totalReward = totalReward + currentReward;
-						currentReward = Main.jobs.getRobotJobAssignment(robots[i].name).getReward();
+						currentReward = Main2.jobs.getRobotJobAssignment(robots[i].name).getReward();
 					}
 					
 					Window.robotData.get(i).get(1)
 							.setText("Position: " + Window.robotControllers.get(i).getCurrentLocation().getX() + ","
 									+ Window.robotControllers.get(i).getCurrentLocation().getY());
 					Window.robotData.get(i).get(2)
-							.setText("Job: " + Main.jobs.getRobotJobAssignment(robots[i].name).getJobName());
+							.setText("Job: " + Main2.jobs.getRobotJobAssignment(robots[i].name).getJobName());
 					Window.robotData.get(i).get(3).setText("Reward: " + currentReward);
 					Window.robotData.get(i).get(4).setText("Total Reward: " + totalReward);
 					Window.robotData.get(i).get(5)
-							.setText("Next items: " + Main.jobs.getRobotJobAssignment(robots[i].name).items().toString());
+							.setText("Next items: " + Main2.jobs.getRobotJobAssignment(robots[i].name).items().toString());
 
 					Thread.sleep(40);
 				}
 							
 
-				if (!(compleatedJobsSoFar == Main.jobs.getCompleatedJobs().toString())){
-					compleatedJobsSoFar = Main.jobs.getCompleatedJobs().toString();
-					Window.compleatedJobs.setText(Main.jobs.getCompleatedJobs().toString());
+				if (!(compleatedJobsSoFar == Main2.jobs.getCompleatedJobs().toString())){
+					compleatedJobsSoFar = Main2.jobs.getCompleatedJobs().toString();
+					Window.compleatedJobs.setText(Main2.jobs.getCompleatedJobs().toString());
 				}
 			}
 		} catch (InterruptedException e) {

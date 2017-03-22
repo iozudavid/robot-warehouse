@@ -74,7 +74,7 @@ public class Controller extends RobotProgrammingDemo{
 			pilot.rotate(-90);
 			currentHeading = heading;
 		}else if(currentHeading.equals(heading)){
-			Delay.msDelay(1800);
+			Delay.msDelay(800);
 			
 		}else{
 			
@@ -162,6 +162,13 @@ public class Controller extends RobotProgrammingDemo{
 		int gx = next.getX();
 		int gy = next.getY();
 		
+		if(gx == -5 || gy ==-5){
+			System.out.println("waiting");
+			updatePosition(currentPosition);
+			return;
+			
+		}
+		
 		if(gx == -1 && gy>0){
 			int n = gy;
 			int i=0;		
@@ -178,6 +185,7 @@ public class Controller extends RobotProgrammingDemo{
 			
 			LCD.clear();
 			r.sendMessage("ITEMPICKUP");
+			updatePosition(currentPosition);
 			
 		}else if(gx==-1 && gy==0){
 			
@@ -185,6 +193,7 @@ public class Controller extends RobotProgrammingDemo{
 			while(Button.waitForAnyPress() != Button.ID_LEFT){
 				System.out.println("Press left button.");
 			}
+			updatePosition(currentPosition);
 			
 		}else{
 			
@@ -193,22 +202,29 @@ public class Controller extends RobotProgrammingDemo{
 			
 			if(gx == x+1){
 				updateHeading("plusX");
-				moveForward();			
+				moveForward();
+				updatePosition(next);
 				
 			}else if( x == (gx + 1)){
 				updateHeading("minusX");
 				moveForward();
+				updatePosition(next);
 				
 			}else if(y+1 == gy){
 				updateHeading("plusY");
 				moveForward();
+				updatePosition(next);
 			}else if(gy+1 == y){
 				updateHeading("minusY");
 				moveForward();
+				updatePosition(next);
+			}else if(next.equals(currentPosition)){
+				updatePosition(next);
 			}else{
 				System.out.println("Coordinate out of range");
+				updatePosition(currentPosition);
 			}
-			updatePosition(next);	
+				
 			
 		}				
 		
@@ -291,8 +307,8 @@ public class Controller extends RobotProgrammingDemo{
 		r = new RobotClient();
 		r.waitForConnection();
 		
-		MessageReader reader = new MessageReader(this, r);
-		reader.start();
+		//MessageReader reader = new MessageReader(this, r);
+		//reader.start();
 		
 		Delay.msDelay(500);
 		leftValue=lightleft.readValue();
@@ -312,7 +328,7 @@ public class Controller extends RobotProgrammingDemo{
 			
 			Coordinate nextCoordinate = r.getCoordinate();
 			receivedSTOP = false;
-			System.out.println("Coordinate received");
+			System.out.println("Coordinate received "+ nextCoordinate.toString());
 			
 			followCoordinate(nextCoordinate);
 			

@@ -16,7 +16,7 @@ public class ExpRobot {
 	
 	public static void main(String[] args){
 		Button.waitForAnyPress();
-		RobotProgrammingDemo robot = new Controller(RobotConfigs.EXPRESS_BOT, SensorPort.S3, new Coordinate(11,7), SensorPort.S1, SensorPort.S4);
+		RobotProgrammingDemo robot = new Controller(RobotConfigs.EXPRESS_BOT, SensorPort.S3, new Coordinate(6,0), SensorPort.S1, SensorPort.S4);
 		robot.run();
 	}
 	
