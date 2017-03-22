@@ -1,5 +1,4 @@
-
-
+package warehouse;
 
 public class Coordinate {
 	
@@ -17,5 +16,10 @@ public class Coordinate {
 	
 	public int getY(){
 		return y;
+	}
+	
+	@Override
+	public String toString(){
+		return "(" + x + "," + y + ")";
 	}
 }

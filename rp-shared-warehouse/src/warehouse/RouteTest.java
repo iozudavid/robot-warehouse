@@ -1,4 +1,4 @@
-
+package warehouse;
 
 import static org.junit.Assert.*;
 
