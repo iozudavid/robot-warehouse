@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import jobPackage.SingleRobotJobAssignment;
 import lejos.pc.comm.NXTInfo;
+import mainLoop.Main;
 import mainLoop.Main2;
 import rp.systems.StoppableRunnable;
 
@@ -20,28 +21,20 @@ public class LableUpdater implements StoppableRunnable {
 			String compleatedJobsSoFar = Main2.jobs.getCompleatedJobs().toString();
 			while (m_running) {
 
-				for (int i = 0; i < Window.robotControllers.size(); i++) {
-					currentReward = Main2.jobs.getRobotJobAssignment(robots[i].name).getReward();
-
-					if (!(currentReward == Main2.jobs.getRobotJobAssignment(robots[i].name).getReward())) {
-						totalReward = totalReward + currentReward;
-						currentReward = Main2.jobs.getRobotJobAssignment(robots[i].name).getReward();
-					}
-					
+				for (int i = 0; i < Window.robotControllers.size(); i++) {				
 					Window.robotData.get(i).get(1)
 							.setText("Position: " + Window.robotControllers.get(i).getCurrentLocation().getX() + ","
 									+ Window.robotControllers.get(i).getCurrentLocation().getY());
 					Window.robotData.get(i).get(2)
 							.setText("Job: " + Main2.jobs.getRobotJobAssignment(robots[i].name).getJobName());
-					Window.robotData.get(i).get(3).setText("Reward: " + currentReward);
+					Window.robotData.get(i).get(3).setText("Reward: " + Main2.jobs.returnTotalReward());
 					Window.robotData.get(i).get(4).setText("Total Reward: " + totalReward);
 					Window.robotData.get(i).get(5)
 							.setText("Next items: " + Main2.jobs.getRobotJobAssignment(robots[i].name).items().toString());
 
 					Thread.sleep(40);
 				}
-							
-
+				
 				if (!(compleatedJobsSoFar == Main2.jobs.getCompleatedJobs().toString())){
 					compleatedJobsSoFar = Main2.jobs.getCompleatedJobs().toString();
 					Window.compleatedJobs.setText(Main2.jobs.getCompleatedJobs().toString());

@@ -37,6 +37,7 @@ public class SingleRobotJobAssignment {
 			Window.logMessage(name + " going to drop off");
 			numOfItems = 0;
 			itemIndex = 0;
+			JobAssignment.totalReward = JobAssignment.totalReward + job.getReward();
 			JobAssignment.addCompleatedJob(job);
 			JobAssignment.removeCompleatedJob(job);
 			job = JobAssignment.nextJob(getCoordinate());
@@ -44,8 +45,8 @@ public class SingleRobotJobAssignment {
 			weightSum = 0;
 
 		} else {
-			prevItem = item;
 			item = job.returnItems().get(itemIndex);
+			prevItem = item;
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
 
@@ -84,9 +85,18 @@ public class SingleRobotJobAssignment {
 		for (int i = 0; i<jobItems.size();i++){
 			temp.add(jobItems.get(i));
 		}
-		job.addItem(item, num);
+		job.addToHashTable(prevItem.rName(), num);
+		job.setItems(temp);
 	}
-
+	
+	public void setCurrentCoordinate(Coordinate coord){
+		this.coord = coord;
+	}
+	
+	public String getItemName(){
+		return item.rName();
+	}
+	
 	public Coordinate getCoordinate() {
 		return coord;
 	}

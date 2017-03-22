@@ -66,8 +66,11 @@ public class Job {
 	}
 	
 	public void removeItem(Item item){
-		queueTable.remove(item.rName());
 		list.remove(item);
+	}
+	
+	public void addToHashTable(String name, int num){
+		queueTable.putIfAbsent(name, num);
 	}
 	
 	@Override

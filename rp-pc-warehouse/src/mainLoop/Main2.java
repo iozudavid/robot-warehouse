@@ -51,6 +51,7 @@ public class Main2 {
 			//resolve solution put in place
 			
 			//Resolves same start coordinates (maybe)
+			/*
 			if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1])
 					&& nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])) {
 				jobs.getRobotJobAssignment(robots[0].name)
@@ -72,6 +73,7 @@ public class Main2 {
 						.addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
 				nxtCoordinates[2][1] = nxtCoordinates[2][0];
 			}
+			*/
 
 			//Resolves same start and end coordinates (maybe)
 			for (int i = 0;i<nxtCoordinates.length;i++){
@@ -80,6 +82,7 @@ public class Main2 {
 						if (nxtCoordinates[i][1].isEqual(nxtCoordinates[j][0])){
 							jobs.getRobotJobAssignment(robots[i].name)
 							.addItem(jobs.getRobotJobAssignment(robots[i].name).getNumOfItems());
+							jobs.getRobotJobAssignment(robots[i].name).setCurrentCoordinate(nxtCoordinates[i][0]);
 							nxtCoordinates[i][1] = nxtCoordinates[i][0];
 						}
 					}

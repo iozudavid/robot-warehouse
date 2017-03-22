@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 import warehouse.Coordinate;
 import warehouse.jobInput.Item;
@@ -358,6 +359,31 @@ public class JobAssignmentTest {
 
 		assertTrue(JATestClass.getRobotJobAssignment("Phil").getCoordinate().getX() == 6);
 		assertTrue(JATestClass.getRobotJobAssignment("Phil").getCoordinate().getY() == 0);
+	}
+	
+	@Test
+	public void addItemTest(){
+		NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
+				new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil", "0016530A631F") };
+		
+		JobAssignment jobs = new JobAssignment(robots);
+		
+		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("bg"));
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 2);
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getReward() == 5.57f);
+		jobs.getRobotJobAssignment(robots[0].name).addItem(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems());
+		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("bg"));
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 2);
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getReward() == 5.57f);
+		
+		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
+		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
+		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
+		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
+		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
 	}
 	
 	@Test

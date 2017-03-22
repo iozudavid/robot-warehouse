@@ -29,6 +29,7 @@ public class JobAssignment {
 	protected SingleRobotJobAssignment RobotC;
 	static ConcurrentMap<String, SingleRobotJobAssignment> robotAssignments = new ConcurrentHashMap<String, SingleRobotJobAssignment>();
 	public static ArrayList<Coordinate> dropOffs;
+	protected static float totalReward = 0f;
 
 	public JobAssignment(NXTInfo[] robots) {
 
@@ -99,6 +100,10 @@ public class JobAssignment {
 			}
 		}
 		return false;
+	}
+	
+	public float returnTotalReward(){
+		return totalReward;
 	}
 
 	public static Coordinate startPositionSelector(String name) {
