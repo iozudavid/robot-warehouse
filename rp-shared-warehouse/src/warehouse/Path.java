@@ -6,11 +6,13 @@ public class Path{
 	
 	private int numberOfItems;
 	private ArrayList<Coordinate> list;
+	private boolean isWait;
 	
 	public Path( ArrayList<Coordinate> _coordlist,int numberOfItems){
 			this.numberOfItems = 0;
 			this.numberOfItems = numberOfItems;
-		list = _coordlist;
+			this.list = _coordlist;
+			this.isWait = (this.list.size() == 1);
 	}
 	
 	public void setNumberOfItems(int num){
@@ -40,6 +42,10 @@ public class Path{
 
 	public int getNumberOFItems(){
 		return numberOfItems;
+	}
+	
+	public boolean getIsWait(){
+		return isWait;
 	}
 	
 	//Should be removed

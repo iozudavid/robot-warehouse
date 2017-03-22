@@ -21,12 +21,14 @@ public class SingleRobotJobAssignment {
 	private final float maxWeight = 50;
 	private int numOfItems;
 	public boolean cancelCurrentJob = false;
+	private Item prevItem;
 
 	public SingleRobotJobAssignment(String name) {
-		coord = JobAssignment.startPositionSelector(name);
+		this.coord = JobAssignment.startPositionSelector(name);
 		this.name = name;
-		job = JobAssignment.nextJob(getCoordinate());
-		item = job.returnItems().get(itemIndex);
+		this.job = JobAssignment.nextJob(getCoordinate());
+		this.item = job.returnItems().get(itemIndex);
+		this.prevItem = item;
 	}
 
 	public synchronized Coordinate nextCoordinate() {
@@ -42,6 +44,7 @@ public class SingleRobotJobAssignment {
 			weightSum = 0;
 
 		} else {
+			prevItem = item;
 			item = job.returnItems().get(itemIndex);
 			Float itemsWeight = item.rWeight() * getNumOfItems();
 			weightSum += itemsWeight;
@@ -74,10 +77,10 @@ public class SingleRobotJobAssignment {
 
 	}
 	
-	public void addItem(Item item, int num){
+	public void addItem(int num){
 		List<Item> jobItems = job.returnItems();
 		List<Item> temp = new ArrayList<Item>();
-		temp.add(item);
+		temp.add(this.prevItem);
 		for (int i = 0; i<jobItems.size();i++){
 			temp.add(jobItems.get(i));
 		}
@@ -98,6 +101,10 @@ public class SingleRobotJobAssignment {
 
 	public int getNumOfItems() {
 		return numOfItems;
+	}
+	
+	public Item getPrevItem(){
+		return prevItem;
 	}
 
 	public float getReward() {
