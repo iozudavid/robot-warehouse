@@ -103,6 +103,11 @@ public class SingleRobotJobAssignment {
 	public float getReward() {
 		return item.rValue();
 	}
+	
+	public float getWeight() {
+		return item.rWeight();
+	}
+
 
 	public String name() {
 		return this.name;
