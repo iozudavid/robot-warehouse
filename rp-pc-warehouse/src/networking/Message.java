@@ -4,6 +4,7 @@ import warehouse.Coordinate;
 import warehouse.Path;
 
 public class Message {
+	//Butt
 	//Class that just contains information about a received message, no
 	//complex calculations just getters and setters
 	private String sender;
