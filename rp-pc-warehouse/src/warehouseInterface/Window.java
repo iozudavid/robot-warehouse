@@ -113,7 +113,6 @@ public class Window {
 			robotData.get(i).add(new JLabel("Position: "));
 			robotData.get(i).add(new JLabel("Job: ")); 
 			robotData.get(i).add(new JLabel("Reward: "));
-			robotData.get(i).add(new JLabel("Total reward: "));
 			robotData.get(i).add(new JLabel("Items: "));
 			//logger.debug("Robot " + i + " JLabels has been created");
 		}
@@ -138,9 +137,9 @@ public class Window {
 			box.add(new JLabel(" "));
 			box.add(dataHolder);
 			dataHolder.add(boxHolder);
-			//logger.debug("Robot " + (count-1) + " lables and buttons added to the screen");
+			//logger.debug("Robot " + (count-1) + " labels and buttons added to the screen");
 		}
-		
+				
 		//added panel for the jobs that have been completed
 		JPanel dataHolder = new JPanel();
 		dataHolder.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -158,7 +157,6 @@ public class Window {
 		box.add(new JLabel(" "));
 		box.add(new JLabel(" "));
 		buttons.add(dataHolder);
-
 			
 		//this places the map on in the panel and on the frame/window
 		JLayeredPane grid = new JLayeredPane();
@@ -279,7 +277,7 @@ public class Window {
 			getIndex(id).addToQueue(newCoordinate);
 			//logger.debug("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
 			//Window.logMessage("coordinate " + "(" + newCoordinate.getX() + "," + newCoordinate.getY() + ")" + " added");
-		} catch (Exception e){System.out.println("There is no robot b");}
+		} catch (Exception e){System.out.println("There is no robot");}
 	}
 	
 	public static DispRobotController getIndex(String id){

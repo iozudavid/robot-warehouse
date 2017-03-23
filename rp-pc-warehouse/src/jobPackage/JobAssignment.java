@@ -62,7 +62,7 @@ public class JobAssignment {
 	}
 
 	public static synchronized Job nextJob(Coordinate current) {
-		if ((currentJobIndex + 1) == jobs.size()) {
+		if ((currentJobIndex) == jobs.size()) {
 			currentJobIndex = 0;
 		}
 		jobs.get(currentJobIndex).setItems(TSsort(jobs.get(currentJobIndex), current));

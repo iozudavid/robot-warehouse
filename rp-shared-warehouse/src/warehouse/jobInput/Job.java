@@ -15,6 +15,9 @@ public class Job {
 
 	public Job(String name) {
 		this.name = name;
+		for(Item i : list){
+			reward += i.rValue();
+		}
 	}
 
 	public void addItem(Item i, Integer n) {
@@ -39,9 +42,6 @@ public class Job {
 	}
 
 	public float getReward() {
-		for(Item i : list){
-			reward += i.rValue();
-		}
 		return reward;
 	}
 	

@@ -28,8 +28,7 @@ public class LableUpdater implements StoppableRunnable {
 					Window.robotData.get(i).get(2)
 							.setText("Job: " + Main2.jobs.getRobotJobAssignment(robots[i].name).getJobName());
 					Window.robotData.get(i).get(3).setText("Reward: " + Main2.jobs.getRobotJobAssignment(robots[i].name).getReward());
-					Window.robotData.get(i).get(4).setText("Total Reward: " + totalReward);
-					Window.robotData.get(i).get(5)
+					Window.robotData.get(i).get(4)
 							.setText("Next items: " + Main2.jobs.getRobotJobAssignment(robots[i].name).items().toString());
 
 					Thread.sleep(40);

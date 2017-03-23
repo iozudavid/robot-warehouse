@@ -38,6 +38,7 @@ public class SingleRobotJobAssignment {
 			numOfItems = 0;
 			itemIndex = 0;
 			JobAssignment.totalReward = JobAssignment.totalReward + job.getReward();
+			Window.logMessage("The current total reward is: " + JobAssignment.totalReward);
 			JobAssignment.addCompleatedJob(job);
 			JobAssignment.removeCompleatedJob(job);
 			job = JobAssignment.nextJob(getCoordinate());
@@ -142,10 +143,12 @@ public class SingleRobotJobAssignment {
 	// needs to have a message sent the robot when the cancelCurrentJob variable
 	// is true
 	// then the next path should be sent
-	public void cancelJob() {
-		job = JobAssignment.nextJob(getCoordinate());
+	public void cancelJob() {		
+		Window.logMessage("job " + job.returnN() + " has been cancelled");
 		itemIndex = 0;
-		cancelCurrentJob = true;
+		JobAssignment.removeCompleatedJob(job);
+		job = JobAssignment.nextJob(getCoordinate());
+		weightSum = 0;
 	}
 	
 	public static <T> boolean listEqualsNoOrder(List<T> l1, List<T> l2) {

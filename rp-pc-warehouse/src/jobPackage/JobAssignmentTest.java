@@ -67,30 +67,24 @@ public class JobAssignmentTest {
 		assertTrue(c.getX() == 2 && c.getY() == 3);
 		
 		c = job.RobotC.nextCoordinate();
-		assertTrue(c.getX() == 2 && c.getY() == 5);
+		assertTrue(c.getX() == 2 && c.getY() == 2);
 		
 		c = job.RobotA.nextCoordinate();
-		System.out.println(c);
-		assertTrue(c.getX() == 2 && c.getY() == 6);
+		assertTrue(c.getX() == 2 && c.getY() == 5);
 		
 		c = job.RobotB.nextCoordinate();
-		System.out.println(c);
 		assertTrue(c.getX() == 2 && c.getY() == 4);
 		
 		c = job.RobotC.nextCoordinate();
-		System.out.println(c);
-		assertTrue(c.getX() == 4 && c.getY() == 7);
+		assertTrue(c.getX() == 2 && c.getY() == 3);
 		
 		c = job.RobotA.nextCoordinate();
-		System.out.println(c);
-		assertTrue(c.getX() == 4 && c.getY() == 7);
+		assertTrue(c.getX() == 2 && c.getY() == 6);
 		
 		c = job.RobotB.nextCoordinate();
-		System.out.println(c);
 		assertTrue(c.getX() == 2 && c.getY() == 5);
 		
 		c = job.RobotC.nextCoordinate();
-		System.out.println(c);
 		assertTrue(c.getX() == 2 && c.getY() == 4);
 	}
 		
@@ -370,20 +364,13 @@ public class JobAssignmentTest {
 		JobAssignment jobs = new JobAssignment(robots);
 		
 		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("bg"));
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 2);
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getReward() == 5.57f);
+		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getItemName());
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("ac"));
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 1);
 		jobs.getRobotJobAssignment(robots[0].name).addItem(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems());
 		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("bg"));
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 2);
-		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getReward() == 5.57f);
-		
-		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
-		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
-		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
-		jobs.getRobotJobAssignment(robots[0].name).nextCoordinate();
-		System.out.println(jobs.getRobotJobAssignment(robots[0].name).getJobName());
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getItemName().equals("ac"));
+		assertTrue(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems() == 1);
 	}
 	
 	@Test

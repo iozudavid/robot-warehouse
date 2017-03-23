@@ -11,11 +11,11 @@ public class ButtonPressed implements ActionListener{
 	//this will be run when the different cancel buttons are pressed
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().substring(8).equals("A")){
+		if (e.getActionCommand().substring(8).equals(Main2.robots[0].name)){
 			Main2.jobs.getRobotJobAssignment(Main.robots[0].name).cancelJob();
-		} else if (e.getActionCommand().substring(8).equals("B")){
+		} else if (e.getActionCommand().substring(8).equals(Main2.robots[1].name)){
 			Main2.jobs.getRobotJobAssignment(Main.robots[1].name).cancelJob();
-		} else if (e.getActionCommand().substring(8).equals("C")){
+		} else if (e.getActionCommand().substring(8).equals(Main2.robots[2].name)){
 			Main2.jobs.getRobotJobAssignment(Main.robots[2].name).cancelJob();
 		}
 	}
