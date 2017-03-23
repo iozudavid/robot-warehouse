@@ -39,6 +39,7 @@ public class JobAssignment {
 
 		dropOffs = Reading.returnDropOffs();
 		jobs = Reading.returnJobs();
+		jobs = SortJobs.sortByCancellation(jobs);
 		jobs = SortJobs.sortByReward(jobs);
 
 		for (NXTInfo nxt : robots) {
