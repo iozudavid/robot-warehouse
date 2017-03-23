@@ -18,13 +18,13 @@ public class PF {
 	float mntDistance;
 	protected ArrayList<SearchCell> obstacles;
 	protected ArrayList<SearchCell> openList;
-	//protected ArrayList<SearchCell> closedList;
 	protected LinkedHashMap<SearchCell, ArrayList<SearchCell>> graph;
 	protected Map<SearchCell, Integer> level;
 	protected Map<SearchCell, SearchCell> predecessor;
 	protected GridMap map = MapUtils.createRealWarehouse();
 	LinkedHashMap<Integer, ArrayList<Coordinate>> reserved;
 	int obstaclesNumber;
+	boolean equal;
 
 	public PF(SearchCell start, SearchCell goal, LinkedHashMap<Integer, ArrayList<Coordinate>> reserved) {
 		this.start = start;
@@ -39,13 +39,12 @@ public class PF {
 			}
 		}
 		openList = new ArrayList<>();
-//		closedList = new ArrayList<>();
 		level = new HashMap<>();
 		graph = new LinkedHashMap<>();
 		predecessor = new HashMap<>();
 		this.reserved = reserved;
 		obstaclesNumber = obstacles.size();
-
+		equal=true;
 	}
 
 	public static void selectionSortOpenList(ArrayList<SearchCell> list) {
@@ -80,15 +79,6 @@ public class PF {
 	public Coordinate getLocation(int time) {
 		return aStar().get(time);
 	}
-
-/*	public boolean isInClosedList(SearchCell state) {
-		for (SearchCell c : closedList) {
-			if (c.xcoord == state.xcoord && c.ycoord == state.ycoord) {
-				return true;
-			}
-		}
-		return false;
-	}*/
 
 	public boolean isInReserved(SearchCell a, int i){
 		for(Entry<Integer,ArrayList<Coordinate>> b:reserved.entrySet()){
@@ -170,13 +160,39 @@ public class PF {
 		}
 		return result;
 	}
+	
+	public void isEqual(int i){
+		if(reserved.get(i-1).size()>reserved.get(i).size()){
+			equal=false;
+		}
+	}
 
 	public ArrayList<Coordinate> aStar() {
-	
-		if(start.xcoord==goal.xcoord && start.ycoord==goal.ycoord){
-			ArrayList<Coordinate> a=new ArrayList<>();
-			a.add(new Coordinate(goal.xcoord,goal.ycoord));
-			return a;
+		ArrayList<Coordinate> lastPositions=new ArrayList<>();
+		
+		if(reserved.size()>0){
+			int positions=0;
+			positions=reserved.get(0).size();
+			System.out.println(positions);
+		for(Entry<Integer,ArrayList<Coordinate>> e: reserved.entrySet()){
+			if(e.getValue().size()<positions){
+				System.out.println(reserved.get(e.getKey()-1).get(0).getX()+" "+reserved.get(e.getKey()-1).get(0).getY());
+				lastPositions.add(reserved.get(e.getKey()-1).get(0));
+				break;
+			}
+		}
+		
+		for(Coordinate c:reserved.get(reserved.size()-1)){
+			lastPositions.add(c);
+		}
+		
+		for(Coordinate a:lastPositions){
+			if(a.getX()==goal.xcoord && a.getY()==goal.ycoord){
+				ArrayList<Coordinate> finalPath = new ArrayList<>();
+				finalPath.add(new Coordinate(start.xcoord,start.ycoord));
+				return finalPath;
+			}
+		}
 		}
 		ArrayList<Coordinate> finalPath = new ArrayList<>();
 		start.setG(0);
@@ -187,13 +203,13 @@ public class PF {
 		}
 		else
 			start.setH(start.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), new LinkedHashMap<Integer, ArrayList<Coordinate>>(), 1));
-//		System.out.println("actual size:"+start.H);
+
 		SearchCell currentCell = start;
 		int expandingLevel = 0;
 		level.put(currentCell, expandingLevel);
 		ArrayList<SearchCell> l = new ArrayList<SearchCell>();
 		l.add(start);
-	//	graph.put(start, l);
+	
 		predecessor.put(start, start);
 		int i = 0;
 		int count=0;
@@ -201,9 +217,7 @@ public class PF {
 		boolean repeat=false;
 				
 		while (openList.isEmpty()==false) {
-			
-		//	Delay.msDelay(5000);
-	//		System.out.println("---------------current:"+currentCell.xcoord+" "+currentCell.ycoord);
+		
 			
 			ArrayList<SearchCell> l2 = new ArrayList<SearchCell>();
 			for (Entry<SearchCell, ArrayList<SearchCell>> e : graph.entrySet()) {
@@ -224,7 +238,7 @@ public class PF {
 			
 			for (Entry<SearchCell, ArrayList<SearchCell>> e : graph.entrySet()) {
 				if(e.getKey().xcoord==openList.get(0).xcoord && e.getKey().ycoord==openList.get(0).ycoord){
-				//	System.out.println("exista:"+e.getKey().xcoord+" "+e.getKey().ycoord);
+			
 					graph.remove(e.getKey());		
 					break;
 				}
@@ -242,12 +256,11 @@ public class PF {
 			}
 			
 			if(level.get(currentCell)>20){
-				break;
+				//break;
 			}
 			
-	//		System.out.println("count:"+i);
 			i++;
-	//		System.out.println("current: "+currentCell.xcoord+" "+currentCell.ycoord);
+
 			
 			if(count>0){
 				level.replace(currentCell, level.get(currentCell)+1);
@@ -255,8 +268,6 @@ public class PF {
 				
 			}
 		count=0;
-			//Delay.msDelay(5000);
-			//if(level.get(currentCell)>=val){
 		
 		
 			if(reserved.size()==1 && obstaclesNumber==obstacles.size()){
@@ -265,20 +276,23 @@ public class PF {
 				}
 			}
 			if (level.get(currentCell)+1+count < reserved.size()) {
+				
+				isEqual(level.get(currentCell)+1);
 
-				if (level.get(currentCell)+count != 0) {
+				if (level.get(currentCell)+count != 0 && equal==true) {
 					while (obstacles.size() != obstaclesNumber) {
 						
 						obstacles.remove(obstacles.size() - 1);
 						
 					}
 				}
+				else if(level.get(currentCell) !=0 && equal==false){
+					obstacles.remove(obstacles.size()-1);
+				}
 				for (Entry<Integer, ArrayList<Coordinate>> e : reserved.entrySet()) {
 					if (e.getKey() == level.get(currentCell)+1+count) {
 						for (Coordinate c : e.getValue()) {
-					
 							obstacles.add(new SearchCell(c));
-						//	System.out.println("-----------------added: "+c.getX()+" "+c.getY());
 						}
 						break;
 					}
@@ -299,23 +313,12 @@ public class PF {
 			}
 	
 		
-			//}
+			
 			ArrayList<SearchCell> successors = new ArrayList<>();
 			successors = getSuccessors(currentCell);
-		//	if(reserved.size()>level.get(currentCell)+1)
-			//System.out.println("obstacle: "+ reserved.get(level.get(currentCell)+1).get(0).getX()+" "+reserved.get(level.get(currentCell)+1).get(0).getY());
 			for (SearchCell cell : successors) {
-			//	if (isInClosedList(cell) == true) {
-				//} else 
 					if (isInOpenList(cell) == true) {
-					
-			//		System.out.println("INAINTEEEEEEEEEEEEFMMVIATA");
-					for(SearchCell a:openList){
-					//	System.out.println(a.xcoord+" "+a.ycoord+" -> "+a.getF());
-					}
-					
-					
-				//	System.out.println("SAMIBAGPOLAANMATA");
+
 					expandingLevel = level.get(currentCell) + 1;
 					SearchCell a2=null;
 					for(SearchCell a:openList){
@@ -324,12 +327,9 @@ public class PF {
 						}
 					}
 					openList.remove(a2);
-				//	System.out.println("------------------"+a2.getF());
+			
 					int n=0;
-				//	n=level.get(currentCell) + 1+cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), reserved,val+expandingLevel);
-				//	System.out.println("---------------------------------------"+n);
 				
-				//		System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaa");
 						expandingLevel = level.get(currentCell) + 1;
 						a2.setG(expandingLevel);
 				
@@ -339,14 +339,8 @@ public class PF {
 						}
 						else
 							a2.setH(cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), getMap(expandingLevel), reserved.size()-1));
-					//	System.out.println("actual size:"+a2.H);
-						level.replace(a2, expandingLevel);
-					//	predecessor.replace(a2, currentCell);
-					//	System.out.println("iaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+a2.getF());
-						
-					//	ArrayList<SearchCell> da=graph.get(a2);
-					//	da.add(new SearchCell(new Coordinate(cell.xcoord,cell.ycoord)));
-					//	graph.replace(a2, da);
+		
+						level.replace(a2, expandingLevel);			
 						
 						openList.add(a2);
 						
@@ -357,16 +351,12 @@ public class PF {
 					cell.setG(expandingLevel);
 					if(reserved.size()>expandingLevel){
 					cell.setH(cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), getMap(expandingLevel),expandingLevel));
-				//	System.out.println("actual size:"+cell.H);
+				
 					}
-			//		else if(reserved.size()>0)
-				//		cell.setH(WHCAStar.getHeuristics(new SearchCell(new Coordinate(cell.xcoord,cell.ycoord)), new SearchCell(new Coordinate(goal.xcoord, goal.ycoord))
-					//			, reserved.get(reserved.size()-1)));
-				//	System.out.println("heuristic: "+cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), reserved.get(expandingLevel+1)));
-					
+		
 					else
 						cell.setH(cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), getMap(expandingLevel), reserved.size()-1));
-				//	System.out.println("actual size:"+cell.H);
+				
 					openList.add(cell);
 					level.put(cell, expandingLevel);
 					predecessor.put(cell, currentCell);
@@ -375,56 +365,19 @@ public class PF {
 			}
 
 			currentCell.G+=1;
-		//	currentCell.setH(currentCell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), reserved,val+expandingLevel));
 			if(reserved.size()>expandingLevel){
 				currentCell.setH(currentCell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), getMap(expandingLevel), expandingLevel));
-			//	System.out.println("actual size:"+currentCell.H);
 				}
-		//		else if(reserved.size()>0)
-			//		cell.setH(WHCAStar.getHeuristics(new SearchCell(new Coordinate(cell.xcoord,cell.ycoord)), new SearchCell(new Coordinate(goal.xcoord, goal.ycoord))
-				//			, reserved.get(reserved.size()-1)));
-			//	System.out.println("heuristic: "+cell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), reserved.get(expandingLevel+1)));
-				
+			
 				else
 					currentCell.setH(currentCell.heuristicsSingleAStar(new Coordinate(goal.xcoord, goal.ycoord), getMap(expandingLevel), reserved.size()-1));
 
-		//	System.out.println("DUPAAAAAAAAAAAAAAAAAAAAAAAAAAAFMMVIATA");
-			for(SearchCell a:openList){
-			//	System.out.println(a.xcoord+" "+a.ycoord+" -> "+a.getF());
-			}
-			
-			
-	//		System.out.println("INAINTEEEEEEEEEEEEEEEEEEEE");
-			for(SearchCell a:openList){
-		//		System.out.println(a.xcoord+" "+a.ycoord+" -> "+a.H);
-			}
-			
-			selectionSortOpenList(openList);
-			
-			
-			
-		//	System.out.println("OBSTACOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-			for(Entry<Integer,ArrayList<Coordinate>>a:reserved.entrySet()){
-			//	System.out.println(a.getValue().get(0).getX()+" "+a.getValue().get(0).getY());
-			}
-			
+		
+			selectionSortOpenList(openList);	
 			
 			if(openList.isEmpty()==true)
 				break;
 			
-			
-			
-		//	System.out.println("-------------");
-	//		System.out.println("current2 "+currentCell.xcoord+" "+currentCell.ycoord);
-			for(SearchCell a:openList){
-		//		System.out.println(a.xcoord+" "+a.ycoord+" "+a.H);
-			}
-	
-		//	System.out.println(obstacles.get(obstacles.size()-1).xcoord+" "+obstacles.get(obstacles.size()-1).ycoord);
-			
-			if(isGoal(currentCell) && isInReserved(currentCell, level.get(currentCell))){
-			//	closedList.remove(currentCell);
-			}
 			
 			boolean ok1=false;
 			boolean ok2=false;
@@ -464,31 +417,7 @@ public class PF {
 			SearchCell cop=currentCell;
 			currentCell = openList.get(0);
 			
-	//		System.out.println("-----------------------------CURRENT----------------------"+currentCell.xcoord+" "+currentCell.ycoord+" -> "+level.get(currentCell));
-			
-	//		System.out.println("ATENTIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE current "+currentCell.xcoord+" "+currentCell.ycoord);
-			for(SearchCell a:openList){
-		//		System.out.println(a.xcoord+" "+a.ycoord+" "+a.H);
-			}
-			
-	/*		System.out.println("-------------");
-		//	System.out.println("current "+currentCell.xcoord+" "+currentCell.ycoord);
-			for(SearchCell a:openList){
-			
-				System.out.println(a.xcoord+" "+a.ycoord+" -> "+a.H);
-			}
-			
-		//	System.out.println("current "+currentCell.xcoord+" "+currentCell.ycoord);
-			for(SearchCell a:openList){
-			//	System.out.println(a.xcoord+" "+a.ycoord+" "+a.getF());
-			}*/
-			
-		//	Delay.msDelay(5000);
-		
-		
 		}
-
-	//	System.out.println("escape");
 		
 		finalPath.add(new Coordinate(start.xcoord,start.ycoord));
 		for (Entry<SearchCell, ArrayList<SearchCell>> e : graph.entrySet()) {
@@ -496,15 +425,9 @@ public class PF {
 				for (SearchCell c : e.getValue()){
 					
 					finalPath.add(new Coordinate(c.xcoord, c.ycoord));
-			//		System.out.println(c.xcoord+" "+c.ycoord);
-					
 					
 				}
 		}
-		}
-	//	System.out.println("*****************************"+start.xcoord+" "+start.ycoord+" ;"+goal.xcoord+" "+goal.ycoord+"->"+finalPath.size());
-		for(Coordinate a:finalPath){
-	//		System.out.println(a.getX()+" "+a.getY());
 		}
 		return finalPath;
 	

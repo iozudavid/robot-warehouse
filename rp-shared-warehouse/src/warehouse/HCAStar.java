@@ -42,7 +42,13 @@ public class HCAStar {
 				i++;
 				}
 		
-			
+			if(reserved.size()>paths.get(paths.size()-1).size()){
+				int nr=paths.get(paths.size()-1).size();
+				while(nr!=reserved.size()){
+					reserved.get(nr).add(paths.get(paths.size()-1).get(paths.get(paths.size()-1).size()-1));
+					nr++;
+				}
+			}
 			i = 0;
 
 		}
@@ -52,9 +58,7 @@ public class HCAStar {
 
 		for (ArrayList<Coordinate> p : paths) {
 			a.add(new Path(p,0));
-			for (Coordinate c : p) {
-			//	System.out.println(i + ": " + c.getX() + " " + c.getY());
-			}
+			
 			i++;
 		}
 		

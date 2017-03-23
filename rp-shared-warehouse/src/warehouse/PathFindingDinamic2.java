@@ -57,7 +57,7 @@ public class PathFindingDinamic2 {
 				}
 			}
 		}
-	//	System.out.println(reserved.size());
+	
 		obstaclesNumber = obstacles.size();
 		
 	}
@@ -166,9 +166,7 @@ public class PathFindingDinamic2 {
 		openList.add(currentCell);
 		
 		while (openList.isEmpty()==false) {
-	
-	//System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
-			//Delay.msDelay(1000);
+
 			if(isGoal(currentCell)){
 				boolean ok=false;
 				for(Entry<Integer,ArrayList<Coordinate>> a:reserved.entrySet()){
@@ -183,8 +181,6 @@ public class PathFindingDinamic2 {
 				if(ok==true)
 				break;
 			}
-			
-		//	if(level.get(currentCell)>=val){
 			
 			if (level.get(currentCell)+count+1 < reserved.size()) {
 				if (level.get(currentCell)+count != 0) {
@@ -220,10 +216,7 @@ public class PathFindingDinamic2 {
 				}
 				
 			}
-		//	}
-			
-		//	System.out.println("OBSTACOOOOOOOOOOOL"+obstacles.get(obstacles.size()-1).xcoord+" "+obstacles.get(obstacles.size()-1).ycoord);
-			
+		
 			
 			ArrayList<SearchCell> successors = new ArrayList<>();
 			successors = getSuccessors(currentCell);
@@ -260,9 +253,6 @@ public class PathFindingDinamic2 {
 						
 						if(c.getX()==openList.get(0).xcoord && c.getY()==openList.get(0).ycoord){
 							ok1=true;
-					//		System.out.println("da2");
-					//		System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
-					//		System.out.println("urmatorul: "+reserved.get(level.get(currentCell)+1+val).get(0).getX()+" "+reserved.get(level.get(currentCell)+1+val).get(0).getY());
 						}
 					}
 					}
@@ -271,9 +261,7 @@ public class PathFindingDinamic2 {
 					if(e.getValue()!=null){
 					for (Coordinate c : e.getValue()) {
 						if(c.getX()==predecessor.get(openList.get(0)).xcoord && c.getY()==predecessor.get(openList.get(0)).ycoord){
-					//		System.out.println("daaaaaaaaaaaa");
-				//			System.out.println(c.getX()+" "+c.getY());
-						//	System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
+					
 							ok2=true;
 						}
 					}
@@ -283,10 +271,8 @@ public class PathFindingDinamic2 {
 			}
 			
 			if(ok1==true && ok2==true){
-		//		System.out.println("nuuuuuuuuuuuu");
-			//	System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
+	
 				openList.remove(0);
-			//	System.out.println(openList.get(0).xcoord+" "+openList.get(0).ycoord);
 			}
 			
 			if(openList.isEmpty()==true)
@@ -301,8 +287,6 @@ public class PathFindingDinamic2 {
 				}
 			}
 			
-			//System.out.println(currentCell.xcoord+" "+currentCell.ycoord);
-			//System.out.println("--------"+obstacles.get(obstacles.size()-1).xcoord+" "+obstacles.get(obstacles.size()-1).ycoord);
 			
 			
 			l2.add(openList.get(0));
@@ -318,20 +302,11 @@ public class PathFindingDinamic2 {
 			if (e.getKey().xcoord == goal.xcoord && e.getKey().ycoord == goal.ycoord) {
 				for (SearchCell c : e.getValue()){
 					finalPath.add(new Coordinate(c.xcoord, c.ycoord));
-				//	System.out.println(c.xcoord+" "+c.ycoord);
+				
 				}
 			}
 		}
-	//	System.out.println("AICIFMM");
-		for(SearchCell a:obstacles){
-			//System.out.println("o:"+a.xcoord+" "+a.ycoord);
-		}
-		for (Coordinate c : finalPath){
-			
-		//	finalPath.add(new Coordinate(c.xcoord, c.ycoord));
-			//System.out.println(c.getX()+" "+c.getY());
-		}
-		//System.out.println("path size:"+finalPath.size());
+	
 		return finalPath;
 	}
 	public static void main(String[] args) {

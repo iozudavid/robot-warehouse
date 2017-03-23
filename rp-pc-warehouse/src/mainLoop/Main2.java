@@ -20,7 +20,7 @@ public class Main2 {
 
 	public static JobAssignment jobs;
 
-	public static NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "0016530C73B0"),
+	public static NXTInfo[] robots = { new NXTInfo(NXTCommFactory.BLUETOOTH, "NXT", "001653155F9B"),
 			new NXTInfo(NXTCommFactory.BLUETOOTH, "William", "00165308E546"),
 			new NXTInfo(NXTCommFactory.BLUETOOTH, "Phil", "0016530A631F") };
 
@@ -50,7 +50,9 @@ public class Main2 {
 			//The two following sections MAY result in deadlocks and there needs to be a check and 
 			//resolve solution put in place
 			
-			//Resolves same start coordinates (maybe)
+			boolean[] isWait = {false,false,false};
+			
+			//Resolves same end coordinates (maybe)
 			/*
 			if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1])
 					&& nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])) {
@@ -59,21 +61,31 @@ public class Main2 {
 				jobs.getRobotJobAssignment(robots[1].name)
 						.addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
 				nxtCoordinates[0][1] = nxtCoordinates[0][0];
-				nxtCoordinates[0][1] = nxtCoordinates[0][0];
+				nxtCoordinates[1][1] = nxtCoordinates[1][0];
+				isWait[0] = true;
+				isWait[1] = true;
+				jobs.getRobotJobAssignment(robots[0].name).setCurrentCoordinate(nxtCoordinates[0][0]);
+				jobs.getRobotJobAssignment(robots[1].name).setCurrentCoordinate(nxtCoordinates[1][0]);
 			} else if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1])) {
 				jobs.getRobotJobAssignment(robots[0].name)
 						.addItem(jobs.getRobotJobAssignment(robots[0].name).getNumOfItems());
 				nxtCoordinates[0][1] = nxtCoordinates[0][0];
+				isWait[0] = true;
+				jobs.getRobotJobAssignment(robots[0].name).setCurrentCoordinate(nxtCoordinates[0][0]);
 			} else if (nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])) {
 				jobs.getRobotJobAssignment(robots[1].name)
 						.addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
 				nxtCoordinates[1][1] = nxtCoordinates[1][0];
+				isWait[1] = true;
+				jobs.getRobotJobAssignment(robots[1].name).setCurrentCoordinate(nxtCoordinates[1][0]);
 			} else if (nxtCoordinates[0][1].isEqual(nxtCoordinates[2][1])) {
 				jobs.getRobotJobAssignment(robots[2].name)
 						.addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
 				nxtCoordinates[2][1] = nxtCoordinates[2][0];
+				isWait[2] = true;
+				jobs.getRobotJobAssignment(robots[2].name).setCurrentCoordinate(nxtCoordinates[2][0]);
 			}
-			*/
+			
 
 			//Resolves same start and end coordinates (maybe)
 			for (int i = 0;i<nxtCoordinates.length;i++){
@@ -88,6 +100,29 @@ public class Main2 {
 					}
 				}
 			}
+			*/
+			if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1]) && nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])){
+				jobs.getRobotJobAssignment(robots[1].name).addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
+				jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+				System.out.println("all robots equal");
+			}else {
+				if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1])){
+					jobs.getRobotJobAssignment(robots[1].name).addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
+					System.out.println("robots equal");
+				}
+				if (nxtCoordinates[0][1].isEqual(nxtCoordinates[2][1])){
+					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					System.out.println("robots equal");
+				}
+				if (nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])){
+					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					System.out.println("robots equal");
+				}
+				if (nxtCoordinates[0][1].isEqual(nxtCoordinates[2][1])){
+					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					System.out.println("robots equal");
+				}
+			}
 			
 			startToDestinations.put(nxtCoordinates[0][0], nxtCoordinates[0][1]);
 			startToDestinations.put(nxtCoordinates[1][0], nxtCoordinates[1][1]);
@@ -99,6 +134,7 @@ public class Main2 {
 			printPaths(paths);
 
 			boolean[] finishedPaths = { false, false, false };
+			ArrayList<String> receivedRobots = new ArrayList<String>();
 			int count = 0;
 			int received = 0;
 			while (true) {
@@ -126,13 +162,14 @@ public class Main2 {
 					System.out.println(nxtCoordinate.toString() + " sent to robot");
 					Window.addCoordinateRobot(nxtCoordinate, robots[0].name);
 				} else if (!finishedPaths[0]) {
-					if (paths.get(0).getIsWait()) {
+					if (isWait[0]) {
 						rs.sendCoordinate(robots[0].name, new Coordinate(-5, -5));
 					} else {
 						rs.sendCoordinate(robots[0].name,
 								new Coordinate(-1, jobs.getRobotJobAssignment(robots[0].name).getNumOfItems()));
 					}
 					finishedPaths[0] = true;
+					receivedRobots.add(robots[0].name);
 					received++;
 				}
 				if (!paths.get(1).reachedEnd()) {
@@ -141,13 +178,14 @@ public class Main2 {
 					System.out.println(nxtCoordinate.toString() + " sent to robot");
 					Window.addCoordinateRobot(nxtCoordinate, robots[1].name);
 				} else if (!finishedPaths[1]) {
-					if (paths.get(1).getIsWait()) {
+					if (isWait[1]) {
 						rs.sendCoordinate(robots[1].name, new Coordinate(-5, -5));
 					} else {
 						rs.sendCoordinate(robots[1].name,
 								new Coordinate(-1, jobs.getRobotJobAssignment(robots[1].name).getNumOfItems()));
 					}
 					finishedPaths[1] = true;
+					receivedRobots.add(robots[1].name);
 					received++;
 				}
 				if (!paths.get(2).reachedEnd()) {
@@ -156,22 +194,30 @@ public class Main2 {
 					System.out.println(nxtCoordinate.toString() + " sent to robot");
 					Window.addCoordinateRobot(nxtCoordinate, robots[2].name);
 				} else if (!finishedPaths[2]) {
-					if (paths.get(2).getIsWait()) {
+					if (isWait[2]) {
 						rs.sendCoordinate(robots[2].name, new Coordinate(-5, -5));
 					} else {
 						rs.sendCoordinate(robots[2].name,
 								new Coordinate(-1, jobs.getRobotJobAssignment(robots[2].name).getNumOfItems()));
 					}
 					finishedPaths[2] = true;
+					receivedRobots.add(robots[2].name);
 					received++;
 				}
 				while (count != (3 - received)) {
 					Message receivedMsg = rs.getReceivedCoordinate();
-					System.out.println(receivedMsg.getCoord().toString());
-					count++;
+					if (!receivedRobots.contains(receivedMsg.getSender())){
+						System.out.println(receivedMsg.getCoord().toString());
+						count++;
+					}
 				}
 				if (finishedPaths[0] && finishedPaths[1] && finishedPaths[2]) {
 					Arrays.fill(finishedPaths, false);
+					int counter = 0;
+					while (counter != 3){
+						rs.getReceivedMessage();
+						counter++;
+					}
 					break;
 				}
 				count = 0;

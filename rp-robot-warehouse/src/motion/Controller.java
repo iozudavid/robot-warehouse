@@ -66,19 +66,34 @@ public class Controller extends RobotProgrammingDemo{
 	
 	public void updateHeading(String heading){
 		
-		if((currentHeading.equals("plusX")&&heading.equals("minusY"))||
+		
+		if(currentHeading.equals(heading)){
+			Delay.msDelay(1800);
+			
+		}else if((currentHeading.equals("plusX")&&heading.equals("minusY"))||
 			(currentHeading.equals("minusY")&&heading.equals("minusX"))||
 			(currentHeading.equals("minusX")&&heading.equals("plusY")) ||
 			(currentHeading.equals("plusY")&&heading.equals("plusX"))){
 			
+			
 			pilot.rotate(-90);
+			Delay.msDelay(900);
 			currentHeading = heading;
-		}else if(currentHeading.equals(heading)){
-			Delay.msDelay(800);
+		}else if((heading.equals("plusX")&&currentHeading.equals("minusY"))||
+				(heading.equals("minusY")&&currentHeading.equals("minusX"))||
+				(heading.equals("minusX")&&currentHeading.equals("plusY")) ||
+				(heading.equals("plusY")&&currentHeading.equals("plusX"))){
+			
+			pilot.rotate(90);
+			Delay.msDelay(900);
+			currentHeading = heading;
 			
 		}else{
 			
-			while(!heading.equals(currentHeading)){				
+			pilot.rotate(180);
+			currentHeading=heading;
+			
+			/*while(!heading.equals(currentHeading)){				
 				
 				switch (currentHeading) {
 				case "plusX":
@@ -106,7 +121,8 @@ public class Controller extends RobotProgrammingDemo{
 				default:
 					break;
 				}
-			}			
+			}	*/
+			
 		}		
 	}
 	
@@ -169,7 +185,7 @@ public class Controller extends RobotProgrammingDemo{
 			
 		}
 		
-		if(gx == -1 && gy>0){
+		else if(gx == -1 && gy>0){
 			int n = gy;
 			int i=0;		
 			System.out.println("Waiting for pickup.");
@@ -181,11 +197,14 @@ public class Controller extends RobotProgrammingDemo{
 					System.out.println("Press right button.");
 				}
 				i++;
-			}
+			}		
+			
+			updateHeading(currentHeading);
+			
+			r.sendMessage("ITEMPICKUP");
+			//updatePosition(currentPosition);
 			
 			LCD.clear();
-			r.sendMessage("ITEMPICKUP");
-			updatePosition(currentPosition);
 			
 		}else if(gx==-1 && gy==0){
 			
@@ -193,8 +212,11 @@ public class Controller extends RobotProgrammingDemo{
 			while(Button.waitForAnyPress() != Button.ID_LEFT){
 				System.out.println("Press left button.");
 			}
-			updatePosition(currentPosition);
+			updateHeading(currentHeading);			
 			
+			r.sendMessage("Droped");
+			//updatePosition(currentPosition);
+			LCD.clear();
 		}else{
 			
 			int x = this.getX();
@@ -219,6 +241,7 @@ public class Controller extends RobotProgrammingDemo{
 				moveForward();
 				updatePosition(next);
 			}else if(next.equals(currentPosition)){
+				updateHeading(currentHeading);
 				updatePosition(next);
 			}else{
 				System.out.println("Coordinate out of range");
