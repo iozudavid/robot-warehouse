@@ -215,7 +215,7 @@ ArrayList<Path> a=new ArrayList<Path>();
 		i = 1;
 		
 		for (Entry<Coordinate, ArrayList<Coordinate>> e : eachPath.entrySet()) {
-			a.add(new Path(e.getValue()));
+			a.add(new Path(e.getValue(),0));
 			for (Coordinate c : e.getValue()) {
 			System.out.println(i + ": " + c.getX() + " " + c.getY());
 			}
