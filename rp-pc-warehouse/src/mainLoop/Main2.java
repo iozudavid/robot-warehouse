@@ -53,19 +53,25 @@ public class Main2 {
 			if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1]) && nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])){
 				jobs.getRobotJobAssignment(robots[1].name).addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
 				jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+				jobs.getRobotJobAssignment(robots[1].name).setCurrentCoordinate(nxtCoordinates[1][0]);
+				jobs.getRobotJobAssignment(robots[2].name).setCurrentCoordinate(nxtCoordinates[2][0]);
 				System.out.println("all robots equal");
 			}else {
 				if (nxtCoordinates[0][1].isEqual(nxtCoordinates[1][1])){
 					jobs.getRobotJobAssignment(robots[1].name).addItem(jobs.getRobotJobAssignment(robots[1].name).getNumOfItems());
+					jobs.getRobotJobAssignment(robots[1].name).setCurrentCoordinate(nxtCoordinates[1][0]);
 					System.out.println("robots equal");
 				}else if (nxtCoordinates[0][1].isEqual(nxtCoordinates[2][1])){
 					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					jobs.getRobotJobAssignment(robots[2].name).setCurrentCoordinate(nxtCoordinates[2][0]);
 					System.out.println("robots equal");
 				} else if (nxtCoordinates[1][1].isEqual(nxtCoordinates[2][1])){
 					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					jobs.getRobotJobAssignment(robots[2].name).setCurrentCoordinate(nxtCoordinates[2][0]);
 					System.out.println("robots equal");
 				} else if (nxtCoordinates[0][1].isEqual(nxtCoordinates[2][1])){
 					jobs.getRobotJobAssignment(robots[2].name).addItem(jobs.getRobotJobAssignment(robots[2].name).getNumOfItems());
+					jobs.getRobotJobAssignment(robots[2].name).setCurrentCoordinate(nxtCoordinates[2][0]);
 					System.out.println("robots equal");
 				}
 			}
